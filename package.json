@@ -2,7 +2,7 @@
   "name": "my-website",
   "version": "1.0.0",
   "description": "Will Dixon's personal website, built with NextJS and ChakraUI!",
-  "main": "index.js",
+  "main": "home.tsx",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -13,8 +13,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@chakra-ui/next-js": "^2.1.4",
+    "@chakra-ui/react": "^2.7.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "framer-motion": "^10.12.21",
     "next": "^13.4.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.4.2",
+    "@types/react": "18.2.15",
+    "typescript": "5.1.6"
   }
 }
