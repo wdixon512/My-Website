@@ -7,6 +7,7 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import Image from "next/image";
 import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { PRIMARY_NAV_ITEMS } from "../data/primary-nav-data";
 
