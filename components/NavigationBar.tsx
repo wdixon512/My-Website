@@ -2,12 +2,12 @@ import {
   Button,
   Circle,
   Flex,
-  Img,
   Stack,
   Switch,
   useColorMode,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import Image from "next/image";
 import { PRIMARY_NAV_ITEMS } from "../data/primary-nav-data";
 
 type NavigationBarProps = {};
@@ -19,7 +19,13 @@ export const NavigationBar = (props: NavigationBarProps) => {
     <Flex w="full" maxH="16" px="6" my="4" gap="12">
       <Circle flex="1" overflow="hidden" maxW="16">
         <Link href="/home">
-          <Img rounded={12} src="me-sam-agios-nikolaos.jpg" objectFit="fill" />
+          <Image
+            src="/me-sam-agios-nikolaos.jpg"
+            alt="My Fiance and I in Agios Nikolaos, Crete"
+            width={64}
+            height={64}
+            objectFit="fill"
+          />
         </Link>
       </Circle>
       <Stack
