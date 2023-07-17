@@ -7,7 +7,7 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import Image from "next/image";
+import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { PRIMARY_NAV_ITEMS } from "../data/primary-nav-data";
 
 type NavigationBarProps = {};
@@ -43,9 +43,9 @@ export const NavigationBar = (props: NavigationBarProps) => {
       </Stack>
       <Flex>
         <Flex w="full" justify="flex-end" flex="1" gap="6" align="center">
-          <Switch onChange={toggleColorMode} colorScheme="red">
-            {colorMode === "dark" ? "Light" : "Dark"} Mode
-          </Switch>
+          <Button onClick={toggleColorMode}>
+            {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+          </Button>
           <Button colorScheme="red">Contact Me</Button>
         </Flex>
       </Flex>
