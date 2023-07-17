@@ -1,15 +1,11 @@
 import {
-  Box,
   Button,
   Circle,
-  Container,
   Flex,
-  IconButton,
   Img,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
   Stack,
+  Switch,
+  useColorMode,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { PRIMARY_NAV_ITEMS } from "../data/primary-nav-data";
@@ -17,6 +13,8 @@ import { PRIMARY_NAV_ITEMS } from "../data/primary-nav-data";
 type NavigationBarProps = {};
 
 export const NavigationBar = (props: NavigationBarProps) => {
+  const { colorMode, toggleColorMode } = useColorMode();
+
   return (
     <Flex w="full" maxH="16" px="6" my="4" gap="12">
       <Circle flex="1" overflow="hidden" maxW="16">
@@ -38,8 +36,11 @@ export const NavigationBar = (props: NavigationBarProps) => {
         ))}
       </Stack>
       <Flex>
-        <Flex w="full" justify="flex-end" flex="1" align="center">
-          <Button>Contact Me</Button>
+        <Flex w="full" justify="flex-end" flex="1" gap="6" align="center">
+          <Switch onChange={toggleColorMode} colorScheme="red">
+            {colorMode === "dark" ? "Light" : "Dark"} Mode
+          </Switch>
+          <Button colorScheme="red">Contact Me</Button>
         </Flex>
       </Flex>
     </Flex>
