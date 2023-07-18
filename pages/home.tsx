@@ -4,7 +4,7 @@ export function Home({ Component, pageProps }) {
   return (
     <Container>
       Welcome to my website!
-      <Box>here is the box</Box>
+      <Box></Box>
     </Container>
   );
 }
