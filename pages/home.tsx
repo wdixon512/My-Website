@@ -1,7 +1,7 @@
 import { Box, Container, Fade, Flex, Heading, Text } from "@chakra-ui/react";
 import { useEffect, useState, useContext } from "react";
 import Stars, { Star } from "../components/Star";
-import { GameContext } from "../contexts/GameContext";
+import { GameContext } from "../components/contexts/GameContext";
 import { MainMenu } from "../components/MainMenu";
 import { NUM_STARS } from "../data/stars-data";
 

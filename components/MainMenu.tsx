@@ -1,6 +1,6 @@
 import { ChakraProps, Fade, Flex, Heading, Text } from "@chakra-ui/react";
 import { useEffect, useState, useContext } from "react";
-import { GameContext } from "../contexts/GameContext";
+import { GameContext } from "./contexts/GameContext";
 
 export type MainMenuProps = ChakraProps;
 

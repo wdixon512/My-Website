@@ -1,7 +1,7 @@
 import { Box, Tooltip } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import Image from "next/image";
-import { GameContext } from "../contexts/GameContext";
+import { GameContext } from "./contexts/GameContext";
 import type { ChakraProps } from "@chakra-ui/react";
 
 export type StarsProps = ChakraProps;
@@ -10,10 +10,15 @@ export const Star = (props: StarsProps) => {
   const staticStar = "/static/images/static-star.png";
   const animatedStar = "/static/images/animated-star.gif";
 
-  const [starSrc, setStarSrc] = useState(staticStar);
-  const [clicked, setClicked] = useState(false);
+  const { activeStar, setActiveStar } = useContext(GameContext);
 
-  const { setActiveStar } = useContext(GameContext);
+  const isActiveStar = activeStar === this;
+
+  // console.log("current star is active: ", isActiveStar);
+
+  const [starSrc, setStarSrc] = useState(
+    isActiveStar ? animatedStar : staticStar
+  );
 
   return (
     <Tooltip label="Click me!" rounded="" bg="marioRed.500">
@@ -24,15 +29,11 @@ export const Star = (props: StarsProps) => {
         alt="star"
         onMouseOver={() => setStarSrc(animatedStar)}
         onMouseOut={() => {
-          if (!clicked) {
-            setTimeout(() => {
-              setStarSrc(staticStar);
-            }, 500);
-          }
+          setTimeout(() => {
+            setStarSrc(staticStar);
+          }, 500);
         }}
         onClick={() => {
-          setClicked(true);
-          setStarSrc(animatedStar);
           setActiveStar(this);
         }}
       />
