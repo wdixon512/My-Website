@@ -1,10 +1,13 @@
-import { ChakraProvider, useColorMode } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import NavigationBar from "../components/NavigationBar";
-import { useTheme } from "@emotion/react";
+import Fonts from "../components/global/Fonts";
+import theme from "../styles/theme";
+import "../styles/global.css";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
+      <Fonts />
       <NavigationBar />
       <Component {...pageProps} />
     </ChakraProvider>
