@@ -1,6 +1,5 @@
 import { Button, Circle, Flex, Stack, Link } from "@chakra-ui/react";
 import Image from "next/image";
-import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { PRIMARY_NAV_ITEMS } from "../data/primary-nav-data";
 
 type NavigationBarProps = {};

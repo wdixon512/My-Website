@@ -17,7 +17,7 @@ const Fonts = () => (
           src: url('../static/fonts/SM64.ttf') format('truetype');
           font-style: normal;
           font-weight: 100;
-          font-size: 24px;
+          font-size: 48px;
         }`}
   />
 );

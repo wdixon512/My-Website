@@ -14,7 +14,14 @@ function MyApp({ Component, pageProps }) {
     <ChakraProvider theme={theme}>
       <GameContextProvider>
         <Fonts />
-        <Container width="100%" maxW="100%" px="0" mx="0" height="100vh">
+        <Container
+          width="100%"
+          maxW="100%"
+          px="0"
+          mx="0"
+          mb="20"
+          minHeight="100vh"
+        >
           <NavigationBar />
           <Component {...pageProps} />
         </Container>
