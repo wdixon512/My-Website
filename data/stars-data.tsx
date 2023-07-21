@@ -57,25 +57,25 @@ export const STAR_LEVELS: StarLevel[] = [
   {
     id: 2,
     title: "Skillful Summit: Splendid Specialties Showcase",
-    description: "",
+    description: <Text>Sample Text</Text>,
     completed: false,
   },
   {
     id: 3,
     title: "Portfolio Pavilion: Prestige Perusal",
-    description: "",
+    description: <Text>Sample Text</Text>,
     completed: false,
   },
   {
     id: 4,
     title: "Passion Playground: Playful Pursuits",
-    description: "",
+    description: <Text>Sample Text</Text>,
     completed: false,
   },
   {
     id: 5,
     title: "Career Chronicles: Conquests and Challenges",
-    description: "",
+    description: <Text>Sample Text</Text>,
     completed: false,
   },
 ];
