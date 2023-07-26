@@ -2,11 +2,8 @@ import { ChakraProvider, Container } from "@chakra-ui/react";
 import NavigationBar from "../components/NavigationBar";
 import Fonts from "../components/global/Fonts";
 import theme from "../styles/theme";
-import {
-  GameContext,
-  GameContextProvider,
-} from "../components/contexts/GameContext";
-import { useState } from "react";
+import { GameContextProvider } from "../components/contexts/GameContext";
+import "@fontsource/rhodium-libre";
 import "../styles/global.css";
 
 function MyApp({ Component, pageProps }) {
@@ -19,8 +16,9 @@ function MyApp({ Component, pageProps }) {
           maxW="100%"
           px="0"
           mx="0"
-          mb="20"
+          pb="20"
           minHeight="100vh"
+          bgColor="lightSlate.500"
         >
           <NavigationBar />
           <Component {...pageProps} />

@@ -28,10 +28,10 @@ export const MainMenu = (props: MainMenuProps) => {
         bgSize="contain"
       >
         <Flex direction="column" w="fit-content">
-          <Heading as="h1" color="white">
+          <Heading as="h1" color="white" fontFamily="Pixel">
             Welcome
           </Heading>
-          <Text pt="4" color="white">
+          <Text pt="4" color="white" fontFamily="Pixel">
             Press any button to continue...
           </Text>
         </Flex>

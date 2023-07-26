@@ -11,7 +11,7 @@ export function Home({ Component, pageProps }) {
   return (
     <Flex direction="column">
       <MainMenu />
-      <Fade in={gameStarted}>
+      <Fade in={gameStarted} unmountOnExit>
         <Flex direction="column">
           <Heading
             textAlign="center"

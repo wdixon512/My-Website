@@ -9,10 +9,13 @@ const theme = extendTheme({
     marioRed: {
       500: "#F54103",
     },
+    lightSlate: {
+      500: "#d3d3d363",
+    },
   },
   fonts: {
-    heading: `Pixel, sans-serif`,
-    body: `Pixel, sans-serif`,
+    heading: `'Rhodium Libre', sans-serif`,
+    body: `'Rhodium Libre', sans-serif`,
   },
 });
 

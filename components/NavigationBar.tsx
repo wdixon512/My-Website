@@ -5,6 +5,9 @@ import { PRIMARY_NAV_ITEMS } from "../data/primary-nav-data";
 type NavigationBarProps = {};
 
 export const NavigationBar = (props: NavigationBarProps) => {
+  const handleContactClick = () => {
+    alert("Contact form coming soon!");
+  };
   return (
     <Flex w="full" maxH="24" bg="secondary.200" px="6" py="4" gap="12">
       <Circle flex="1" overflow="hidden" maxW="16">
@@ -32,6 +35,7 @@ export const NavigationBar = (props: NavigationBarProps) => {
             _hover={{
               borderBottom: "2px",
             }}
+            fontFamily="Pixel"
           >
             {item.label}
           </Link>
@@ -39,7 +43,12 @@ export const NavigationBar = (props: NavigationBarProps) => {
       </Stack>
       <Flex>
         <Flex w="full" justify="flex-end" flex="1" gap="6" align="center">
-          <Button bg="marioRed.500" color="white">
+          <Button
+            bg="marioRed.500"
+            color="white"
+            fontFamily="Pixel"
+            onClick={handleContactClick}
+          >
             Contact Me
           </Button>
         </Flex>
