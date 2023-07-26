@@ -13,7 +13,7 @@ export const NavigationBar = (props: NavigationBarProps) => {
       <Circle flex="1" overflow="hidden" maxW="16">
         <Link href="/home">
           <Image
-            src="/static/images/me-sam-agios-nikolaos.jpg"
+            src="/static/images/agios-nikolaos.jpg"
             alt="My Fiance and I in Agios Nikolaos, Crete"
             width={64}
             height={64}
