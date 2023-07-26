@@ -1,23 +1,15 @@
-import {
-  Button,
-  Circle,
-  Flex,
-  Stack,
-  Switch,
-  useColorMode,
-} from "@chakra-ui/react";
-import Link from "next/link";
+import { Button, Circle, Flex, Stack, Link } from "@chakra-ui/react";
 import Image from "next/image";
-import { SunIcon, MoonIcon } from "@chakra-ui/icons";
 import { PRIMARY_NAV_ITEMS } from "../data/primary-nav-data";
 
 type NavigationBarProps = {};
 
 export const NavigationBar = (props: NavigationBarProps) => {
-  const { colorMode, toggleColorMode } = useColorMode();
-
+  const handleContactClick = () => {
+    alert("Contact form coming soon!");
+  };
   return (
-    <Flex w="full" maxH="16" px="6" my="4" gap="12">
+    <Flex w="full" maxH="24" bg="secondary.200" px="6" py="4" gap="12">
       <Circle flex="1" overflow="hidden" maxW="16">
         <Link href="/home">
           <Image
@@ -37,17 +29,28 @@ export const NavigationBar = (props: NavigationBarProps) => {
         gap="12"
       >
         {PRIMARY_NAV_ITEMS.map((item, index) => (
-          <Link key={index} href={item.href}>
+          <Link
+            key={index}
+            href={item.href}
+            _hover={{
+              borderBottom: "2px",
+            }}
+            fontFamily="Pixel"
+          >
             {item.label}
           </Link>
         ))}
       </Stack>
       <Flex>
         <Flex w="full" justify="flex-end" flex="1" gap="6" align="center">
-          <Button onClick={toggleColorMode}>
-            {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+          <Button
+            bg="marioRed.500"
+            color="white"
+            fontFamily="Pixel"
+            onClick={handleContactClick}
+          >
+            Contact Me
           </Button>
-          <Button colorScheme="red">Contact Me</Button>
         </Flex>
       </Flex>
     </Flex>

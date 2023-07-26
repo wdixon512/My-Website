@@ -22,7 +22,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "features/home.js"  ],
   "exclude": [
     "node_modules"
   ]
