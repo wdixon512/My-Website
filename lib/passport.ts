@@ -1,5 +1,5 @@
 import { passport } from "passport";
-import { passportSteam } from "passport-steam";
+import passportSteam from "passport-steam";
 
 const SteamStrategy = passportSteam.Strategy;
 
