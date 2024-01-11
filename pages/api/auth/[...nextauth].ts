@@ -1,9 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import NextAuth from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import SteamProvider, { PROVIDER_ID } from "next-auth-steam";
+import "styles/signin.css";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  return NextAuth(req, res, {
+  return NextAuth(req, res, getAuthOptions(req));
+}
+
+export function getAuthOptions(req: NextApiRequest): AuthOptions {
+  return {
     providers: [
       SteamProvider(req, {
         clientSecret: process.env.STEAM_API_KEY!,
@@ -27,5 +32,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         return session;
       },
     },
-  });
+    pages: {
+      signIn: "/auth/steam-login",
+    },
+  };
 }

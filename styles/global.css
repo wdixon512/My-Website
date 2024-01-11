@@ -21,7 +21,7 @@
       blink-caret .75s step-end 1.5s infinite,
       blink-caret-stop 3.5s step-end;
   }
-  
+
   /* The typing effect */
   @keyframes typing {
     from { width: 0 }
