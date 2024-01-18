@@ -1,6 +1,9 @@
 import { Card, Flex, Heading, Img, Text } from "@chakra-ui/react";
 import { PersonaState, SteamProfile } from "next-auth-steam";
 import { useSession } from "next-auth/react";
+import useSWR from "swr";
+
+const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export async function getPlayerSummaries(steamId: string): Promise<any> {
   const res = await fetch(
@@ -16,6 +19,12 @@ export const SteamStats = () => {
   });
 
   const steamUser: SteamProfile = data.user.steam;
+  const { data: steamSummaryData, error } = useSWR(
+    `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.STEAM_API_KEY}&steamids=${steamUser.steamId}`,
+    fetcher
+  );
+
+  console.log(steamSummaryData);
 
   return (
     <Card bgColor={"lightSlate.500"} minH={300}>
