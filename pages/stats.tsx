@@ -1,19 +1,23 @@
-import { Flex, Heading } from "@chakra-ui/react";
+import { Container, Flex, Heading, Text } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import SteamStats from "../components/SteamStats";
 
-export function Stats({ Component, pageProps }) {
-  const session = useSession({
+export function Stats() {
+  const { status } = useSession({
     required: true,
   });
 
-  if (session.status !== "authenticated") {
+  if (status !== "authenticated") {
     return `You're not authenticated`;
   }
 
   return (
-    <Flex>
-      <Heading>Stats</Heading>
-    </Flex>
+    <Container>
+      <Flex direction="column">
+        <Heading>Gamer Stats</Heading>
+        <SteamStats></SteamStats>
+      </Flex>
+    </Container>
   );
 }
 
