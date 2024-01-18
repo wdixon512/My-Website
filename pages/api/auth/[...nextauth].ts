@@ -33,7 +33,8 @@ export function getAuthOptions(req: NextApiRequest): AuthOptions {
       },
     },
     pages: {
-      signIn: "/auth/steam-login",
+      signIn: "/steam-login",
     },
+    secret: process.env.NEXTAUTH_SECRET,
   };
 }

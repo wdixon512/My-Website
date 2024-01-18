@@ -7,7 +7,8 @@ import type {
 } from "next";
 import { getProviders, signIn } from "next-auth/react";
 import { getServerSession } from "next-auth/next";
-import { getAuthOptions } from "../api/auth/[...nextauth]";
+import { getAuthOptions } from "./api/auth/[...nextauth]";
+import { Box, Button, Flex } from "@chakra-ui/react";
 
 interface ISignInProps {
   providers: Record<string, any>;
@@ -22,8 +23,6 @@ export async function getServerSideProps(
     context.res,
     getAuthOptions(context.req as NextApiRequest)
   );
-
-  console.log(session);
 
   // If the user is already logged in, redirect.
   if (session) {
@@ -41,14 +40,12 @@ export default function SignIn({
   providers,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <>
+    <Flex justifyContent="center" h="100vh" alignItems="center">
       {Object.values(providers).map((provider) => (
-        <div key={provider.name}>
-          <button onClick={() => signIn(provider.id)}>
-            Sign in with {provider.name}
-          </button>
-        </div>
+        <Button onClick={() => signIn(provider.id)} colorScheme="orange">
+          Sign in with {provider.name}
+        </Button>
       ))}
-    </>
+    </Flex>
   );
 }
