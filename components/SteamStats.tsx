@@ -3,7 +3,7 @@ import { PersonaState, SteamProfile } from "next-auth-steam";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export async function getPlayerSummaries(steamId: string): Promise<any> {
   const res = await fetch(
