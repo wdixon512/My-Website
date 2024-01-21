@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { GameContext } from "./contexts/GameContext";
 import type { ChakraProps } from "@chakra-ui/react";
-import StarLevel from "../models/StarLevel";
+import StarLevel from "../lib/models/StarLevel";
 
 export type StarsProps = ChakraProps & {
   star: StarLevel;

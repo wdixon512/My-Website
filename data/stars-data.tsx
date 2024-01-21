@@ -1,5 +1,5 @@
 import { Box, Circle, Stack, Text } from "@chakra-ui/react";
-import StarLevel from "../models/StarLevel";
+import StarLevel from "../lib/models/StarLevel";
 import Image from "next/image";
 import Resume from "../components/Resume";
 import { AboutMe } from "../components/AboutMe";

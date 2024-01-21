@@ -1,5 +1,5 @@
 import { createContext, useMemo, useState } from "react";
-import StarLevel from "../../models/StarLevel";
+import StarLevel from "../../lib/models/StarLevel";
 
 export const GameContext = createContext({
   gameStarted: false,

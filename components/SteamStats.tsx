@@ -1,45 +1,74 @@
-import { Card, Flex, Heading, Img, Text } from "@chakra-ui/react";
-import { PersonaState, SteamProfile } from "next-auth-steam";
+import {
+  Card,
+  Flex,
+  Box,
+  Grid,
+  Image,
+  Text,
+  Badge,
+  Spinner,
+  Link,
+} from "@chakra-ui/react";
+import SteamPlayerSummaryData from "@lib/models/steam/SteamPlayerSummaryData";
+import { PersonaState } from "next-auth-steam";
 import { useSession } from "next-auth/react";
-import useSWR from "swr";
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
+type SteamStatsProps = {
+  playerData: SteamPlayerSummaryData;
+};
 
-export async function getPlayerSummaries(steamId: string): Promise<any> {
-  const res = await fetch(
-    `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.STEAM_API_KEY}&steamids=${steamId}`
-  );
-  const data = await res.json();
-  return data;
-}
-
-export const SteamStats = () => {
-  const { data, status } = useSession({
+export const SteamStats = ({ playerData }: SteamStatsProps) => {
+  const { status } = useSession({
     required: true,
   });
 
-  const steamUser: SteamProfile = data.user.steam;
-  const { data: steamSummaryData, error } = useSWR(
-    `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.STEAM_API_KEY}&steamids=${steamUser.steamId}`,
-    fetcher
-  );
+  if (status === "loading") {
+    return <Spinner color="blue.500" />;
+  }
 
-  console.log(steamSummaryData);
+  const formatDate = (timestamp: number): string => {
+    const date = new Date(timestamp * 1000);
+    return date.toLocaleDateString("en-US");
+  };
 
   return (
-    <Card bgColor={"lightSlate.500"} minH={300}>
-      <Flex gap={4}>
-        <Img src={steamUser.avatar} />
-        <Flex direction="column">
-          <Text>{steamUser.personaname}</Text>
-          <Text>{PersonaState[steamUser.personastate]}</Text>
+    <Card
+      bgColor={"gray.700"}
+      minH={300}
+      p={5}
+      borderRadius="lg"
+      boxShadow="xl"
+    >
+      <Grid templateColumns="repeat(2, 1fr)" gap={6}>
+        <Box>
+          <Image src={playerData.avatar} borderRadius="full" boxSize="100px" />
+          <Text fontSize="xl" fontWeight="bold" color="white">
+            {playerData.personaname}
+          </Text>
+          <Badge colorScheme="green">
+            {PersonaState[playerData.personastate]}
+          </Badge>
+          <Text color="gray.300">{playerData.realname}</Text>
+          <Text color="gray.300">{playerData.loccountrycode}</Text>
+        </Box>
+        <Flex direction="column" justifyContent="center">
+          <Text color="white">
+            <Link
+              href={playerData.profileurl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Profile URL
+            </Link>
+          </Text>
+          <Text color="white">
+            Last Logoff: {formatDate(playerData.lastlogoff)}
+          </Text>
+          <Text color="white">
+            Account Created: {formatDate(playerData.timecreated)}
+          </Text>
         </Flex>
-      </Flex>
-      <Flex>
-        <Heading as="h3" size="lg">
-          Games
-        </Heading>
-      </Flex>
+      </Grid>
     </Card>
   );
 };
