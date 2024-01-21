@@ -3,11 +3,10 @@ import {
   Flex,
   IconButton,
   useDisclosure,
-  Stack,
   VStack,
+  Link,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
-import Link from "next/link";
 import { PRIMARY_NAV_ITEMS } from "../data/primary-nav-data";
 
 const HamburgerMenu = () => {
@@ -55,7 +54,9 @@ const HamburgerMenu = () => {
               w="100%"
               borderRadius={"4"}
             >
-              <Link href={item.href}>{item.label}</Link>
+              <Link href={item.href} fontFamily="Pixel">
+                {item.label}
+              </Link>
             </Box>
           ))}
         </VStack>

@@ -27,14 +27,15 @@ export const NavigationBar = (props: NavigationBarProps) => {
           flex="1"
           overflow="hidden"
           maxW="16"
-          height="68px"
+          maxH="16"
           position="relative"
         >
           <Link href="/home">
             <Image
               src="/static/images/agios-nikolaos.jpg"
               alt="My Fiance and I in Agios Nikolaos, Crete"
-              layout="fill"
+              width="128"
+              height="234"
               style={{ objectFit: "cover" }}
             />
           </Link>
