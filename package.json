@@ -19,14 +19,22 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/rhodium-libre": "^5.0.5",
+    "cookie-session": "^2.0.0",
+    "dotenv": "^16.3.1",
     "framer-motion": "^10.12.21",
     "next": "^13.4.10",
+    "next-auth": "^4.24.5",
+    "next-auth-steam": "^0.1.5",
+    "next-connect": "^1.0.0-next.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "swr": "^2.2.4"
   },
   "devDependencies": {
     "@types/node": "20.4.2",
     "@types/react": "18.2.15",
+    "passport": "^0.7.0",
+    "passport-steam": "^1.0.18",
     "typescript": "5.1.6"
   }
 }

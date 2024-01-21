@@ -7,4 +7,8 @@ export const PRIMARY_NAV_ITEMS: PrimaryNavItem[] = [
     label: "Photos",
     href: "/photos",
   },
+  {
+    label: "Steam Stats",
+    href: "/stats",
+  },
 ];
