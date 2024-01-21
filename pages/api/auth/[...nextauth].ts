@@ -12,7 +12,7 @@ export function getAuthOptions(req: NextApiRequest): AuthOptions {
     providers: [
       SteamProvider(req, {
         clientSecret: process.env.STEAM_API_KEY!,
-        callbackUrl: process.env.STEAM_AUTH_CALLBACK_URL!,
+        callbackUrl: process.env.NEXT_PUBLIC_CALLBACK_URL,
       }),
     ],
     callbacks: {
