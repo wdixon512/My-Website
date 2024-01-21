@@ -9,7 +9,7 @@ export const NavigationBar = (props: NavigationBarProps) => {
     alert("Contact form coming soon!");
   };
   return (
-    <Flex w="full" maxH="24" bg="secondary.200" px="6" py="4" gap="12">
+    <Flex w="full" maxH="24" bg="secondary.500" px="6" py="4" gap="12">
       <Circle flex="1" overflow="hidden" maxW="16">
         <Link href="/home">
           <Image
@@ -29,14 +29,7 @@ export const NavigationBar = (props: NavigationBarProps) => {
         gap="12"
       >
         {PRIMARY_NAV_ITEMS.map((item, index) => (
-          <Link
-            key={index}
-            href={item.href}
-            _hover={{
-              borderBottom: "2px",
-            }}
-            fontFamily="Pixel"
-          >
+          <Link key={index} href={item.href} fontFamily="Pixel">
             {item.label}
           </Link>
         ))}
