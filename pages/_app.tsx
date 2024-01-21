@@ -6,12 +6,19 @@ import theme from "../styles/theme";
 import { GameContextProvider } from "../components/contexts/GameContext";
 import "@fontsource/rhodium-libre";
 import "../styles/global.css";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {
   return (
     <ChakraProvider theme={theme}>
       <SessionProvider session={pageProps.session}>
         <GameContextProvider>
+          <Head>
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1"
+            />
+          </Head>
           <Fonts />
           <Container
             width="100%"
