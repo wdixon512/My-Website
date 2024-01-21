@@ -107,7 +107,7 @@ const theme = extendTheme({
       baseStyle: {
         color: "text.500",
         _hover: {
-          bg: "interactive.500",
+          bg: "interactive.100",
         },
       },
       variants: {
