@@ -1,13 +1,15 @@
 import { Container, Flex, Heading, Text } from "@chakra-ui/react";
 import { getSession } from "next-auth/react";
 import SteamStats from "../components/SteamStats";
-import { Session } from "next-auth";
+import { Session, getServerSession } from "next-auth";
 import { PlayerSummary } from "@lib/models/steam/PlayerSummary";
 import {
   fetchPlayerOwnedGames,
   fetchPlayerOwnedGamesWithAchievements,
   fetchPlayerSummaries,
 } from "@lib/services/steamService";
+import { NextApiRequest } from "next";
+import { getAuthOptions } from "./api/auth/[...nextauth]";
 
 type StatsProps = {
   ownedGames: Game[];
@@ -16,13 +18,17 @@ type StatsProps = {
 };
 
 export const getServerSideProps = async (context) => {
-  const session = await getSession(context);
+  const session = await getServerSession(
+    context.req,
+    context.res,
+    getAuthOptions(context.req as NextApiRequest)
+  );
 
   if (!session) {
     return {
       redirect: {
-        destination: "/steam-login", // Adjust this path if your sign-in route is different
-        permanent: false, // This redirect is not permanent
+        destination: "/steam-login",
+        permanent: false,
       },
     };
   }
