@@ -8,16 +8,20 @@ import {
   Badge,
   Spinner,
   Link,
+  VStack,
+  SimpleGrid,
 } from "@chakra-ui/react";
-import SteamPlayerSummaryData from "@lib/models/steam/SteamPlayerSummaryData";
+import { PlayerSummary } from "@lib/models/steam/PlayerSummary";
 import { PersonaState } from "next-auth-steam";
 import { useSession } from "next-auth/react";
+import { TopPlayedGames } from "./TopPlayedGames";
 
 type SteamStatsProps = {
-  playerData: SteamPlayerSummaryData;
+  playerData: PlayerSummary;
+  ownedGames: Game[];
 };
 
-export const SteamStats = ({ playerData }: SteamStatsProps) => {
+export const SteamStats = ({ playerData, ownedGames }: SteamStatsProps) => {
   const { status } = useSession({
     required: true,
   });
@@ -30,6 +34,10 @@ export const SteamStats = ({ playerData }: SteamStatsProps) => {
     const date = new Date(timestamp * 1000);
     return date.toLocaleDateString("en-US");
   };
+
+  const topPlayedGames = ownedGames
+    .sort((a, b) => b.playtime_forever - a.playtime_forever)
+    .slice(0, 3);
 
   return (
     <Card
@@ -68,6 +76,7 @@ export const SteamStats = ({ playerData }: SteamStatsProps) => {
             Account Created: {formatDate(playerData.timecreated)}
           </Text>
         </Flex>
+        <TopPlayedGames topPlayedGames={topPlayedGames} />
       </Grid>
     </Card>
   );

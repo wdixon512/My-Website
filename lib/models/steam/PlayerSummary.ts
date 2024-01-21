@@ -1,4 +1,4 @@
-export type SteamPlayerSummaryData = {
+export interface PlayerSummary {
   steamid: string;
   communityvisibilitystate: number;
   profilestate: number;
@@ -14,7 +14,11 @@ export type SteamPlayerSummaryData = {
   primaryclanid: string;
   timecreated: number;
   personastateflags: number;
-  loccountrycode: string;
-};
+  loccountrycode?: string;
+}
 
-export default SteamPlayerSummaryData;
+export interface PlayerSummariesResponse {
+  response: {
+    players: PlayerSummary[];
+  };
+}
