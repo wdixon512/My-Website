@@ -35,6 +35,6 @@
     "@types/react": "18.2.15",
     "passport": "^0.7.0",
     "passport-steam": "^1.0.18",
-    "typescript": "5.1.6"
+    "typescript": "^5.3.3"
   }
 }

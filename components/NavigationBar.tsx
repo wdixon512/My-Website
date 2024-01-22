@@ -3,6 +3,7 @@ import Image from "next/image";
 import { PRIMARY_NAV_ITEMS } from "../data/primary-nav-data";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import HamburgerMenu from "./HamburgerMenu";
+import SteamLogout from "./steam/SteamLogout";
 
 type NavigationBarProps = {};
 
@@ -67,6 +68,7 @@ export const NavigationBar = (props: NavigationBarProps) => {
             </Button>
           </Flex>
         </Flex>
+        <SteamLogout />
         <HamburgerMenu />
       </Flex>
     </>
