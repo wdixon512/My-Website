@@ -1,6 +1,6 @@
 import { Container, Flex, Heading, Text } from "@chakra-ui/react";
 import { getSession } from "next-auth/react";
-import SteamStats from "../components/SteamStats";
+import SteamStats from "../components/steam/SteamStats";
 import { Session, getServerSession } from "next-auth";
 import { PlayerSummary } from "@lib/models/steam/PlayerSummary";
 import {
