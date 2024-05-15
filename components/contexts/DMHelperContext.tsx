@@ -45,7 +45,13 @@ export const DMHelperContextProvider = ({ children }) => {
             return false;
         }
 
-        const mob: Mob = { mobName, mobHealth };
+        let id = 1;
+        if (mobs.some((m) => m.mobName === mobName)) {
+            // find mob of same name with largest ID and increment by 1
+            id = Math.max(...mobs.filter((m) => m.mobName === mobName).map((m) => m.id)) + 1;
+        }
+
+        const mob: Mob = { mobName, mobHealth, id };
 
         setMobs([...mobs, mob]);
         addFavorite(mob);
