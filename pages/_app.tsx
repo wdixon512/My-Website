@@ -21,8 +21,8 @@ function MyApp({ Component, pageProps }) {
           </Head>
           <Fonts />
           <Container
-            width="100%"
-            maxW="100%"
+            width="100vw"
+            maxW="100vw"
             px="0"
             mx="0"
             pb="20"

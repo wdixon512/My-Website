@@ -20,7 +20,7 @@ export const MobList = () => {
     }
 
     return (
-        <Box p={4} bg='secondary.200' borderWidth={1} borderRadius="md" shadow="md" minW={{ base: '100%', lg: '500px' }} >
+        <Box p={4} bg='secondary.200' borderWidth={1} borderRadius="md" shadow="md" w={{ base: '100%', lg: '500px' }} >
             <List>
                 {sortMobs(mobs).map((mob, index) => (
                     <Flex key={index} justify="space-between" align="center" p={2} borderBottomWidth={1}>

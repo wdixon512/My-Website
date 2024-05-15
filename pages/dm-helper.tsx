@@ -7,8 +7,8 @@ import { MobFavorites } from "../components/dm-helper/MobFavorites";
 export function DMHelper({ Component, pageProps }) {
     return (
         <DMHelperContextProvider>
-            <Container minW={{ base: '100%', lg: '1200px' }} pt='12'>
-                <Flex justifyContent='left' gap='12'>
+            <Container maxW={{ xl: "1200px" }} pt='12' justifyContent={'center'}>
+                <Flex direction={{ base: 'column', lg: 'row' }} justifyContent='center' gap='12'>
                     <Flex direction='column' gap='4'>
                         <MobForm />
                         <MobFavorites />
