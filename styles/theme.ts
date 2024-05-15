@@ -43,14 +43,14 @@ const theme = extendTheme({
       800: "#c5c5c5",
     },
     interactive: {
-      100: "#66ff5b",
-      200: "#59ff50",
-      300: "#4dff46",
-      400: "#40ff3b",
-      500: "#39FF14", // existing Neon Green
-      600: "#33e312",
-      700: "#2dc610",
-      800: "#26a90e",
+      100: "#72c472", // Lighter Green
+      200: "#5db65d", // Slightly darker green
+      300: "#48a848", // Darker green
+      400: "#339a33", // Even darker green
+      500: "#1e8a1e", // Darker green for better contrast
+      600: "#1a7a1a", // Even darker for better contrast
+      700: "#156b15",
+      800: "#105b10",
     },
     error: {
       100: "#f75d68",
@@ -113,8 +113,54 @@ const theme = extendTheme({
       variants: {
         solid: (props) => ({
           bg: props.colorMode === "dark" ? "accent.500" : "primary.500",
+          color: "white",
           _hover: {
             bg: "interactive.500",
+          },
+        }),
+        outline: (props) => ({
+          border: "2px solid",
+          borderColor:
+            props.colorMode === "dark" ? "accent.500" : "primary.500",
+          color: props.colorMode === "dark" ? "accent.500" : "primary.500",
+          _hover: {
+            bg: props.colorMode === "dark" ? "accent.500" : "primary.500",
+            color: "white",
+          },
+        }),
+        ghost: (props) => ({
+          color: props.colorMode === "dark" ? "accent.500" : "primary.500",
+          _hover: {
+            bg: "interactive.100",
+          },
+        }),
+        link: (props) => ({
+          color: props.colorMode === "dark" ? "accent.500" : "primary.500",
+          _hover: {
+            textDecoration: "underline",
+            bg: "transparent",
+          },
+        }),
+        redLink: (props) => ({
+          color: "marioRed.700",
+          _hover: {
+            textDecoration: "underline",
+            bg: "transparent",
+          },
+        }),
+        subtle: (props) => ({
+          bg: props.colorMode === "dark" ? "gray.700" : "gray.200",
+          color:
+            props.colorMode === "dark" ? "whiteAlpha.900" : "blackAlpha.900",
+          _hover: {
+            bg: props.colorMode === "dark" ? "gray.600" : "gray.300",
+          },
+        }),
+        destructive: (props) => ({
+          bg: props.colorMode === "dark" ? "red.600" : "red.500",
+          color: "white",
+          _hover: {
+            bg: props.colorMode === "dark" ? "red.700" : "red.600",
           },
         }),
       },
