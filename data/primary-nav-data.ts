@@ -11,4 +11,8 @@ export const PRIMARY_NAV_ITEMS: PrimaryNavItem[] = [
     label: "Steam Stats",
     href: "/stats",
   },
+  {
+    label: "DM Helper",
+    href: "/dm-helper",
+  },
 ];
