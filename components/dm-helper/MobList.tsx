@@ -38,7 +38,7 @@ export const MobList = () => {
                             <Flex w="full">
                                 <Flex alignItems='center' flex="1">
                                     <Text >
-                                        Mob: <Text as="span" fontWeight='800'>&nbsp;{mob.mobName} {mob.id}</Text>,
+                                        <Text as="span" fontWeight='800'>&nbsp;{mob.mobName} {mob.id}</Text>
                                     </Text>
                                 </Flex>
                                 <Flex flex="1" alignItems='center'>
