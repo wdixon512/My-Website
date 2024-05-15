@@ -9,6 +9,7 @@ export const DMHelperContext = createContext({
     favorites: [] as Mob[],
     setFavorites: (mobs: Mob[]) => null,
     addMob: (mobName: string, mobHealth: string | number) => null,
+    removeMob: (mob: Mob) => null,
 });
 
 export const DMHelperContextProvider = ({ children }) => {
@@ -57,6 +58,10 @@ export const DMHelperContextProvider = ({ children }) => {
         addFavorite(mob);
     }
 
+    const removeMob = (mob: Mob) => {
+        setMobs(mobs.filter((m) => !(m.mobName === mob.mobName && m.id === mob.id)));
+    }
+
     const addFavorite = (mob: Mob) => {
         if (!favorites.some((m) => m.mobName === mob.mobName)) {
             setFavorites([...favorites, mob]);
@@ -97,7 +102,8 @@ export const DMHelperContextProvider = ({ children }) => {
                 setMobs,
                 favorites,
                 setFavorites,
-                addMob
+                addMob,
+                removeMob
             }}
         >
             {children}

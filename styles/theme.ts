@@ -118,6 +118,13 @@ const theme = extendTheme({
             bg: "interactive.500",
           },
         }),
+        redSolid: (props) => ({
+          bg: "marioRed.700",
+          color: "white",
+          _hover: {
+            bg: "marioRed.800",
+          },
+        }),
         outline: (props) => ({
           border: "2px solid",
           borderColor:
