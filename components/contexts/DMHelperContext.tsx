@@ -11,11 +11,13 @@ export const DMHelperContext = createContext({
   setFavorites: (mobs: Mob[]) => null,
   addMob: (mobName: string, mobHealth: string | number) => null,
   removeMob: (mob: Mob) => null,
+  isClient: false,
 });
 
 export const DMHelperContextProvider = ({ children }) => {
   const [mobs, setMobs] = useLocalStorage<Mob[]>("mobs", []);
   const [favorites, setFavorites] = useLocalStorage<Mob[]>("favorites", []);
+  const [isClient, setIsClient] = useState(false);
   const toast = useToast();
 
   const addMob = (mobName: string, mobHealth: string | number) => {
@@ -72,6 +74,10 @@ export const DMHelperContextProvider = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <DMHelperContext.Provider
       value={{
@@ -81,6 +87,7 @@ export const DMHelperContextProvider = ({ children }) => {
         setFavorites,
         addMob,
         removeMob,
+        isClient,
       }}
     >
       {children}

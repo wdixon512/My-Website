@@ -5,12 +5,8 @@ import { DMHelperContext } from "../contexts/DMHelperContext";
 import Mob from "@lib/models/Mob";
 
 export const MobFavorites = () => {
-  const { favorites, addMob, setFavorites } = useContext(DMHelperContext);
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const { favorites, addMob, setFavorites, isClient } =
+    useContext(DMHelperContext);
 
   const handleAddMob = (mob: Mob) => {
     addMob(mob.mobName, mob.mobHealth);

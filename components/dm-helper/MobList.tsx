@@ -15,8 +15,7 @@ import Mob from "@lib/models/Mob";
 import { AnimatePresence, motion } from "framer-motion";
 
 export const MobList = () => {
-  const { mobs, removeMob, setMobs } = useContext(DMHelperContext);
-  const [isClient, setIsClient] = useState(false);
+  const { mobs, removeMob, setMobs, isClient } = useContext(DMHelperContext);
 
   const updateHealth = (mob: Mob, newHealth) => {
     setMobs(
@@ -31,10 +30,6 @@ export const MobList = () => {
   const killMob = (mob: Mob) => {
     removeMob(mob);
   };
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   return (
     <Box
