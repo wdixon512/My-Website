@@ -7,11 +7,12 @@ import {
   Input,
   List,
 } from "@chakra-ui/react";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { DMHelperContext } from "../contexts/DMHelperContext";
 import { sortMobs } from "@lib/util/mobUtils";
 import Mob from "@lib/models/Mob";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
+import AnimatedFlex from "../global/AnimatedFlex";
 
 export const MobList = () => {
   const { mobs, removeMob, setMobs, isClient } = useContext(DMHelperContext);
@@ -42,16 +43,11 @@ export const MobList = () => {
       {isClient && (
         <List>
           <AnimatePresence initial={false}>
-            {sortMobs(mobs).map((mob, index) => (
-              <Flex
-                as={motion.div}
-                key={index}
-                initial={{ opacity: 0, height: 0, overflow: "hidden" }}
-                animate={{ opacity: 1, height: "100%" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition="0.5s linear"
-                justify="space-between"
+            {sortMobs(mobs).map((mob, i) => (
+              <AnimatedFlex
                 align="center"
+                key={i}
+                justify="space-between"
                 p={2}
                 borderBottomWidth={1}
               >
@@ -82,7 +78,7 @@ export const MobList = () => {
                 <Button variant="redSolid" onClick={() => killMob(mob)}>
                   Kill
                 </Button>
-              </Flex>
+              </AnimatedFlex>
             ))}
           </AnimatePresence>
         </List>
