@@ -1,9 +1,9 @@
 import { SessionProvider } from "next-auth/react";
 import { ChakraProvider, Container } from "@chakra-ui/react";
-import NavigationBar from "../components/NavigationBar";
-import Fonts from "../components/global/Fonts";
+import NavigationBar from "@lib/components/NavigationBar";
+import Fonts from "@lib/components/global/Fonts";
 import theme from "../styles/theme";
-import { GameContextProvider } from "../components/contexts/GameContext";
+import { GameContextProvider } from "@lib/components/contexts/GameContext";
 import "@fontsource/rhodium-libre";
 import "../styles/global.css";
 import Head from "next/head";

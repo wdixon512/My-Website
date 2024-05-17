@@ -7,7 +7,7 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
-import { PRIMARY_NAV_ITEMS } from "../data/primary-nav-data";
+import { PRIMARY_NAV_ITEMS } from "@data/primary-nav-data";
 
 const HamburgerMenu = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

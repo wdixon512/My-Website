@@ -4,7 +4,7 @@
   "description": "Will Dixon's personal website, built with NextJS and ChakraUI!",
   "main": "home.tsx",
   "scripts": {
-    "dev": "next dev -p 5173",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

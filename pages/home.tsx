@@ -1,10 +1,10 @@
 import { Fade, Flex, Heading } from "@chakra-ui/react";
 import { useContext } from "react";
-import { Star } from "../components/Star";
-import { GameContext } from "../components/contexts/GameContext";
-import { MainMenu } from "../components/MainMenu";
+import { Star } from "@lib/components/Star";
+import { GameContext } from "@lib/components/contexts/GameContext";
+import { MainMenu } from "@lib/components/MainMenu";
 import { STAR_LEVELS } from "../data/stars-data";
-import { StarDescription } from "../components/StarDescription";
+import { StarDescription } from "@lib/components/StarDescription";
 
 export function Home({ Component, pageProps }) {
   const { gameStarted, activeStar } = useContext(GameContext);

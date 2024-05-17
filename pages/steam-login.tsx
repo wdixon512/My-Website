@@ -64,7 +64,7 @@ export default function SignIn({
                   width={36}
                   height={36}
                 />
-              } // Replace with your local Steam icon image path
+              }
             >
               Sign in with {provider.name}
             </Button>

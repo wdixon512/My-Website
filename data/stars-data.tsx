@@ -1,8 +1,7 @@
-import { Box, Circle, Stack, Text } from "@chakra-ui/react";
-import StarLevel from "../lib/models/StarLevel";
-import Image from "next/image";
-import Resume from "../components/Resume";
-import { AboutMe } from "../components/AboutMe";
+import { Text } from "@chakra-ui/react";
+import StarLevel from "@lib/models/StarLevel";
+import Resume from "@lib/components/Resume";
+import { AboutMe } from "@lib/components/AboutMe";
 
 export const NUM_STARS = 5;
 
