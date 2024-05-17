@@ -1,4 +1,7 @@
-export const sortMobs = (mobs) => {
+import Mob from "@lib/models/Mob";
+
+export const sortMobs = (mobs: Mob[]) => {
+  if (!mobs) return [];
   return mobs.sort((a, b) => {
     // First, sort by mobName
     if (a.mobName.toLowerCase() < b.mobName.toLowerCase()) return -1;
