@@ -1,4 +1,3 @@
-"use client";
 import { Box, Button, Flex } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { DMHelperContext } from "../contexts/DMHelperContext";

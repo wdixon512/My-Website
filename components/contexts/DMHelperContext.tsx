@@ -1,4 +1,3 @@
-"use client";
 import { createContext, useEffect, useState } from "react";
 import Mob from "@lib/models/Mob";
 import { useToast } from "@chakra-ui/react";
