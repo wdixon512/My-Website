@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import Mob from "@lib/models/Mob";
 import { useToast } from "@chakra-ui/react";
 import useLocalStorage from "@lib/hooks/useLocalStorage";
+import { randomUUID } from "crypto";
 
 export const DMHelperContext = createContext({
   mobs: [] as Mob[],
@@ -46,25 +47,23 @@ export const DMHelperContextProvider = ({ children }) => {
       return false;
     }
 
-    let id = 1;
+    let mobNumber = 1;
     if (mobs.some((m) => m.mobName === mobName)) {
       // find mob of same name with largest ID and increment by 1
-      id =
+      mobNumber =
         Math.max(
-          ...mobs.filter((m) => m.mobName === mobName).map((m) => m.id)
+          ...mobs.filter((m) => m.mobName === mobName).map((m) => m.mobNumber)
         ) + 1;
     }
 
-    const mob: Mob = { mobName, mobHealth, id };
+    const mob: Mob = new Mob(mobName, mobHealth, mobNumber);
 
     setMobs([...mobs, mob]);
     addFavorite(mob);
   };
 
   const removeMob = (mob: Mob) => {
-    setMobs(
-      mobs.filter((m) => !(m.mobName === mob.mobName && m.id === mob.id))
-    );
+    setMobs(mobs.filter((m) => !(m.id === mob.id)));
   };
 
   const addFavorite = (mob: Mob) => {

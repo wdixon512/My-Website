@@ -1,34 +1,22 @@
-import {
-  Box,
-  Button,
-  Text,
-  Flex,
-  FormControl,
-  Input,
-  List,
-} from "@chakra-ui/react";
+import { Box, List } from "@chakra-ui/react";
 import { useContext } from "react";
 import { DMHelperContext } from "../contexts/DMHelperContext";
 import { sortMobs } from "@lib/util/mobUtils";
 import Mob from "@lib/models/Mob";
-import { AnimatePresence } from "framer-motion";
-import AnimatedFlex from "../global/AnimatedFlex";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import MobItem from "./MobItem";
 
 export const MobList = () => {
-  const { mobs, removeMob, setMobs, isClient } = useContext(DMHelperContext);
+  const { mobs, setMobs, isClient } = useContext(DMHelperContext);
 
-  const updateHealth = (mob: Mob, newHealth) => {
-    setMobs(
-      mobs.map((m) =>
-        m.id === mob.id && m.mobName == mob.mobName
-          ? { ...m, mobHealth: newHealth }
-          : m
-      )
-    );
-  };
+  const handleDragEnd = (result) => {
+    if (!result.destination) return;
 
-  const killMob = (mob: Mob) => {
-    removeMob(mob);
+    const reorderedMobs = Array.from(mobs);
+    const [removed] = reorderedMobs.splice(result.source.index, 1);
+    reorderedMobs.splice(result.destination.index, 0, removed);
+
+    setMobs(reorderedMobs);
   };
 
   return (
@@ -41,47 +29,32 @@ export const MobList = () => {
       w={{ base: "100%", lg: "500px" }}
     >
       {isClient && (
-        <List>
-          <AnimatePresence initial={false}>
-            {sortMobs(mobs).map((mob, i) => (
-              <AnimatedFlex
-                align="center"
-                key={i}
-                justify="space-between"
-                p={2}
-                borderBottomWidth={1}
-              >
-                <Flex w="full">
-                  <Flex alignItems="center" flex="1">
-                    <Text>
-                      <Text as="span" fontWeight="800">
-                        &nbsp;{mob.mobName} {mob.id}
-                      </Text>
-                    </Text>
-                  </Flex>
-                  <Flex flex="1" alignItems="center">
-                    <Text>Health:</Text>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        fontWeight="800"
-                        value={mob.mobHealth}
-                        onChange={(e) =>
-                          updateHealth(mob, parseInt(e.target.value))
-                        }
-                        w="90px"
-                        ml={2}
-                      />
-                    </FormControl>
-                  </Flex>
-                </Flex>
-                <Button variant="redSolid" onClick={() => killMob(mob)}>
-                  Kill
-                </Button>
-              </AnimatedFlex>
-            ))}
-          </AnimatePresence>
-        </List>
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="mobList">
+            {(provided) => (
+              <List ref={provided.innerRef} {...provided.droppableProps}>
+                {mobs.map((mob: Mob, i) => (
+                  <Draggable
+                    key={mob.id}
+                    draggableId={mob.id.toString()}
+                    index={i}
+                  >
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <MobItem mob={mob} />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </List>
+            )}
+          </Droppable>
+        </DragDropContext>
       )}
     </Box>
   );

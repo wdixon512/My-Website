@@ -27,6 +27,7 @@
     "next-auth-steam": "^0.1.5",
     "next-connect": "^1.0.0-next.4",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
     "swr": "^2.2.4"
   },
