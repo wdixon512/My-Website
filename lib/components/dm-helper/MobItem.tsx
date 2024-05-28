@@ -27,7 +27,9 @@ export const MobItem: React.FC<MobItemProps> = ({
 
   const updateHealth = (mob: Mob, newHealth) => {
     setMobs(
-      mobs.map((m) => (m.id === mob.id ? { ...m, mobHealth: newHealth } : m))
+      mobs.map((m) =>
+        m.id === mob.id ? new Mob(m.mobName, newHealth, m.mobNumber) : m
+      )
     );
   };
 

@@ -1,5 +1,5 @@
 export default class Mob {
-  id: string;
+  private _id?: string;
   mobName: string;
   mobHealth: number;
   mobNumber?: number;
@@ -8,6 +8,19 @@ export default class Mob {
     this.mobName = mobName;
     this.mobHealth = mobHealth;
     this.mobNumber = mobNumber;
-    this.id = `${this.mobName}_${this.mobNumber}`;
+    this._id = `${this.mobName}_${this.mobNumber}`;
+  }
+
+  // Getter for id
+  get id(): string {
+    if (!this._id) {
+      this._id = `${this.mobName}_${this.mobNumber}`;
+    }
+    return this._id;
+  }
+
+  // Setter for id, in case you want to set it manually
+  set id(value: string) {
+    this._id = value;
   }
 }
