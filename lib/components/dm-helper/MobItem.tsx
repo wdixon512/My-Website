@@ -8,26 +8,38 @@ import {
 } from "@chakra-ui/react";
 import AnimatedFlex from "@components/global/AnimatedFlex";
 import Mob from "@lib/models/Mob";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { DMHelperContext } from "../contexts/DMHelperContext";
 import React from "react";
 
 interface MobItemProps extends FlexProps {
   mob: Mob;
+  handleDrop?: (id: string | number, x: number, y: number) => void;
 }
 
-export const MobItem: React.FC<MobItemProps> = ({ mob, ...props }) => {
+export const MobItem: React.FC<MobItemProps> = ({
+  mob,
+  handleDrop,
+  ...props
+}) => {
   const { mobs, removeMob, setMobs } = useContext(DMHelperContext);
+  // const [isDragging, setIsDragging] = useState(false);
 
   const updateHealth = (mob: Mob, newHealth) => {
     setMobs(
-      mobs.map((m) =>
-        m.id === mob.id && m.mobName == mob.mobName
-          ? { ...m, mobHealth: newHealth }
-          : m
-      )
+      mobs.map((m) => (m.id === mob.id ? { ...m, mobHealth: newHealth } : m))
     );
   };
+
+  // const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+  //   e.dataTransfer.setData("text/plain", JSON.stringify(mob));
+  //   setIsDragging(true);
+  // };
+
+  // const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+  //   handleDrop(mob.id, e.clientX, e.clientY);
+  //   setIsDragging(false);
+  // };
 
   return (
     <AnimatedFlex
@@ -36,13 +48,16 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, ...props }) => {
       justify="space-between"
       p={2}
       borderBottomWidth={1}
+      _hover={{ bg: "secondary.600", cursor: "pointer" }}
+      // onDragStart={handleDragStart}
+      // onDragEnd={handleDragEnd}
       {...props}
     >
       <Flex w="full">
         <Flex alignItems="center" flex="1">
           <Text>
             <Text as="span" fontWeight="800">
-              &nbsp;{mob.mobName} {mob.id}
+              &nbsp;{mob.mobName} {mob.mobNumber}
             </Text>
           </Text>
         </Flex>
