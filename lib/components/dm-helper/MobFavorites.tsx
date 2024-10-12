@@ -1,8 +1,8 @@
-import { Box, Button, Flex } from "@chakra-ui/react";
+import { Button, Flex } from "@chakra-ui/react";
 import { useContext } from "react";
 import { DMHelperContext } from "../contexts/DMHelperContext";
-import Mob from "@lib/models/Mob";
-import { AnimatePresence, motion } from "framer-motion";
+import Mob from "@lib/models/dm-helper/Mob";
+import { AnimatePresence } from "framer-motion";
 import AnimatedFlex from "../global/AnimatedFlex";
 
 export const MobFavorites = () => {
@@ -10,7 +10,7 @@ export const MobFavorites = () => {
     useContext(DMHelperContext);
 
   const handleAddMob = (mob: Mob) => {
-    addMob(mob.mobName, mob.mobHealth, mob.mobInitiative);
+    addMob(mob.name, mob.health, mob.initiative);
   };
 
   const clearFavorites = () => {
@@ -37,7 +37,7 @@ export const MobFavorites = () => {
                     width="fit"
                     onClick={() => handleAddMob(mob)}
                   >
-                    Quick Add: {mob.mobName}
+                    Quick Add: {mob.name}
                   </Button>
                 </AnimatedFlex>
               ))}

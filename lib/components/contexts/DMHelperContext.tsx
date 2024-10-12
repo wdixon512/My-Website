@@ -1,8 +1,7 @@
 import { createContext, useEffect, useState } from "react";
-import Mob from "@lib/models/Mob";
+import Mob from "@lib/models/dm-helper/Mob";
 import { useToast } from "@chakra-ui/react";
 import useLocalStorage from "@lib/hooks/useLocalStorage";
-import { randomUUID } from "crypto";
 
 export const DMHelperContext = createContext({
   mobs: [] as Mob[],
@@ -49,11 +48,11 @@ export const DMHelperContextProvider = ({ children }) => {
     }
 
     let mobNumber = 1;
-    if (mobs.some((m) => m.mobName === mobName)) {
+    if (mobs.some((m) => m.name === mobName)) {
       // find mob of same name with largest ID and increment by 1
       mobNumber =
         Math.max(
-          ...mobs.filter((m) => m.mobName === mobName).map((m) => m.mobNumber)
+          ...mobs.filter((m) => m.name === mobName).map((m) => m.number)
         ) + 1;
     }
 

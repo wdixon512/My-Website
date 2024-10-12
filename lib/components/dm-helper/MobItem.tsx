@@ -7,7 +7,7 @@ import {
   FlexProps,
 } from "@chakra-ui/react";
 import AnimatedFlex from "@components/global/AnimatedFlex";
-import Mob from "@lib/models/Mob";
+import Mob from "@lib/models/dm-helper/Mob";
 import { useContext, useState } from "react";
 import { DMHelperContext } from "../contexts/DMHelperContext";
 import React from "react";
@@ -27,7 +27,7 @@ export const MobItem: React.FC<MobItemProps> = ({
   const updateHealth = (mob: Mob, newHealth) => {
     setMobs(
       mobs.map((m) =>
-        m.id === mob.id ? new Mob(m.mobName, newHealth, m.mobNumber) : m
+        m.id === mob.id ? new Mob(m.name, newHealth, m.number) : m
       )
     );
   };
@@ -45,11 +45,11 @@ export const MobItem: React.FC<MobItemProps> = ({
       <Flex w="full">
         <Flex alignItems="center" flex="1">
           <Text>
-            {mob.mobInitiative && (
-              <Text as="span" fontWeight="800">({mob.mobInitiative})</Text>
+            {mob.initiative && (
+              <Text as="span" fontWeight="800">({mob.initiative})</Text>
             )}
             <Text as="span" fontWeight="800">
-              &nbsp;{mob.mobName} {mob.mobNumber > 1 ? `#${mob.mobNumber}` : ""}
+              &nbsp;{mob.name} {mob.number > 1 ? `#${mob.number}` : ""}
             </Text>
           </Text>
 
@@ -60,7 +60,7 @@ export const MobItem: React.FC<MobItemProps> = ({
             <Input
               type="number"
               fontWeight="800"
-              value={mob.mobHealth || undefined}
+              value={mob.health || undefined}
               onChange={(e) => updateHealth(mob, parseInt(e.target.value))}
               w="90px"
               ml={2}

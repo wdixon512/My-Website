@@ -2,9 +2,9 @@ import { Box, List } from "@chakra-ui/react";
 import { useContext } from "react";
 import { DMHelperContext } from "../contexts/DMHelperContext";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import Mob from "@lib/models/Mob";
+import Mob from "@lib/models/dm-helper/Mob";
 import MobItem from "./MobItem";
-import { sortMobsByInitiative } from "@lib/util/mobUtils";
+import { sortEntitiesByInitiative } from "@lib/util/mobUtils";
 
 export const MobList = () => {
   const { mobs, setMobs, isClient } = useContext(DMHelperContext);
@@ -33,7 +33,7 @@ export const MobList = () => {
           <Droppable droppableId="mobList">
             {(provided) => (
               <List ref={provided.innerRef} {...provided.droppableProps}>
-                {sortMobsByInitiative(mobs).map((mob: Mob, i) => (
+                {sortEntitiesByInitiative(mobs).map((mob: Mob, i) => (
                   <Draggable key={mob.id} draggableId={mob.id} index={i}>
                     {(provided) => (
                       <div
