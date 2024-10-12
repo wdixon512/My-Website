@@ -1,9 +1,8 @@
 import { Box, List } from "@chakra-ui/react";
 import { useContext } from "react";
 import { DMHelperContext } from "../contexts/DMHelperContext";
-import { sortMobs } from "@lib/util/mobUtils";
-import Mob from "@lib/models/Mob";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import Mob from "@lib/models/Mob";
 import MobItem from "./MobItem";
 
 export const MobList = () => {

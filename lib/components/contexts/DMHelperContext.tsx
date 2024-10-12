@@ -9,7 +9,7 @@ export const DMHelperContext = createContext({
   setMobs: (mobs: Mob[]) => null,
   favorites: [] as Mob[],
   setFavorites: (mobs: Mob[]) => null,
-  addMob: (mobName: string, mobHealth: string | number) => null,
+  addMob: (mobName: string, mobHealth: number | undefined, mobInitiative: number | undefined) => null,
   removeMob: (mob: Mob) => null,
   isClient: false,
 });
@@ -20,7 +20,7 @@ export const DMHelperContextProvider = ({ children }) => {
   const [isClient, setIsClient] = useState(false);
   const toast = useToast();
 
-  const addMob = (mobName: string, mobHealth: string | number): boolean => {
+  const addMob = (mobName: string, mobHealth: number | undefined, mobInitiative: number | undefined): boolean => {
     if (mobName.trim() === "") {
       toast({
         title: "Error",
@@ -36,8 +36,6 @@ export const DMHelperContextProvider = ({ children }) => {
     if (typeof mobHealth === "string") {
       mobHealth = parseInt(mobHealth, 10);
     }
-
-    console.log(mobHealth);
 
     if (!isNaN(mobHealth) && mobHealth !== null && mobHealth <= 0) {
       toast({
@@ -59,7 +57,7 @@ export const DMHelperContextProvider = ({ children }) => {
         ) + 1;
     }
 
-    const mob: Mob = new Mob(mobName, mobHealth, mobNumber);
+    const mob: Mob = new Mob(mobName, mobHealth, mobNumber, mobInitiative);
 
     setMobs([...mobs, mob]);
     addFavorite(mob);

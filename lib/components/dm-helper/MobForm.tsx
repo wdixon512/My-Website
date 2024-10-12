@@ -1,18 +1,17 @@
 import {
   Box,
   Button,
-  Flex,
   FormControl,
   FormLabel,
   Input,
-  useToast,
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import { DMHelperContext } from "../contexts/DMHelperContext";
 
 export const MobForm = () => {
   const [mobName, setMobName] = useState("");
-  const [mobHealth, setMobHealth] = useState("");
+  const [mobHealth, setMobHealth] = useState<number | undefined>(undefined);
+  const [mobInitiative, setMobInitiative] = useState<number | undefined>(undefined);
 
   const { setMobs, addMob } = useContext(DMHelperContext);
 
@@ -23,9 +22,10 @@ export const MobForm = () => {
   const handleAddMob = (e) => {
     e.preventDefault();
 
-    if (addMob(mobName, mobHealth)) {
+    if (addMob(mobName, mobHealth, mobInitiative)) {
       setMobName("");
-      setMobHealth("");
+      setMobHealth(undefined);
+      setMobInitiative(undefined);
     }
   };
 
@@ -51,12 +51,23 @@ export const MobForm = () => {
         />
       </FormControl>
       <FormControl mb={4}>
+        <FormLabel color="blackAlpha.900">Mob Initiative</FormLabel>
+        <Input
+          type="number"
+          color="blackAlpha.700"
+          value={mobInitiative}
+          onChange={(e) => setMobInitiative(parseInt(e.target.value))}
+          placeholder="Enter mob initiative"
+          required={false}
+        />
+      </FormControl>
+      <FormControl mb={4}>
         <FormLabel color="blackAlpha.900">Mob Health</FormLabel>
         <Input
           type="number"
           color="blackAlpha.700"
           value={mobHealth}
-          onChange={(e) => setMobHealth(e.target.value)}
+          onChange={(e) => setMobHealth(parseInt(e.target.value))}
           placeholder="Enter mob health"
           required={false}
         />

@@ -10,7 +10,7 @@ export const MobFavorites = () => {
     useContext(DMHelperContext);
 
   const handleAddMob = (mob: Mob) => {
-    addMob(mob.mobName, mob.mobHealth);
+    addMob(mob.mobName, mob.mobHealth, mob.mobInitiative);
   };
 
   const clearFavorites = () => {

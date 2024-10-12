@@ -40,17 +40,19 @@ export const MobItem: React.FC<MobItemProps> = ({
       p={2}
       borderBottomWidth={1}
       _hover={{ bg: "secondary.600", cursor: "pointer" }}
-      // onDragStart={handleDragStart}
-      // onDragEnd={handleDragEnd}
       {...props}
     >
       <Flex w="full">
         <Flex alignItems="center" flex="1">
           <Text>
+            {mob.mobInitiative && (
+              <Text as="span" fontWeight="800">({mob.mobInitiative})</Text>
+            )}
             <Text as="span" fontWeight="800">
-              &nbsp;{mob.mobName} {mob.mobNumber}
+              &nbsp;{mob.mobName} {mob.mobNumber > 1 ? `#${mob.mobNumber}` : ""}
             </Text>
           </Text>
+
         </Flex>
         <Flex flex="1" alignItems="center">
           <Text>Health:</Text>
