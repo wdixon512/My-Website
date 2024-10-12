@@ -23,7 +23,6 @@ export const MobItem: React.FC<MobItemProps> = ({
   ...props
 }) => {
   const { mobs, removeMob, setMobs } = useContext(DMHelperContext);
-  // const [isDragging, setIsDragging] = useState(false);
 
   const updateHealth = (mob: Mob, newHealth) => {
     setMobs(
@@ -32,16 +31,6 @@ export const MobItem: React.FC<MobItemProps> = ({
       )
     );
   };
-
-  // const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-  //   e.dataTransfer.setData("text/plain", JSON.stringify(mob));
-  //   setIsDragging(true);
-  // };
-
-  // const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
-  //   handleDrop(mob.id, e.clientX, e.clientY);
-  //   setIsDragging(false);
-  // };
 
   return (
     <AnimatedFlex
@@ -69,7 +58,7 @@ export const MobItem: React.FC<MobItemProps> = ({
             <Input
               type="number"
               fontWeight="800"
-              value={mob.mobHealth}
+              value={mob.mobHealth || undefined}
               onChange={(e) => updateHealth(mob, parseInt(e.target.value))}
               w="90px"
               ml={2}

@@ -20,7 +20,7 @@ export const DMHelperContextProvider = ({ children }) => {
   const [isClient, setIsClient] = useState(false);
   const toast = useToast();
 
-  const addMob = (mobName: string, mobHealth: string | number) => {
+  const addMob = (mobName: string, mobHealth: string | number): boolean => {
     if (mobName.trim() === "") {
       toast({
         title: "Error",
@@ -29,6 +29,7 @@ export const DMHelperContextProvider = ({ children }) => {
         duration: 3000,
         isClosable: true,
       });
+
       return false;
     }
 
@@ -36,7 +37,9 @@ export const DMHelperContextProvider = ({ children }) => {
       mobHealth = parseInt(mobHealth, 10);
     }
 
-    if (isNaN(mobHealth) || mobHealth <= 0) {
+    console.log(mobHealth);
+
+    if (!isNaN(mobHealth) && mobHealth !== null && mobHealth <= 0) {
       toast({
         title: "Error",
         description: "Mob health must be a positive number.",
@@ -60,6 +63,8 @@ export const DMHelperContextProvider = ({ children }) => {
 
     setMobs([...mobs, mob]);
     addFavorite(mob);
+
+    return true;
   };
 
   const removeMob = (mob: Mob) => {

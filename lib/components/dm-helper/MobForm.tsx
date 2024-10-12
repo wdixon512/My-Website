@@ -23,10 +23,10 @@ export const MobForm = () => {
   const handleAddMob = (e) => {
     e.preventDefault();
 
-    addMob(mobName, mobHealth);
-
-    setMobName("");
-    setMobHealth("");
+    if (addMob(mobName, mobHealth)) {
+      setMobName("");
+      setMobHealth("");
+    }
   };
 
   return (
@@ -47,6 +47,7 @@ export const MobForm = () => {
           color="blackAlpha.700"
           onChange={(e) => setMobName(e.target.value)}
           placeholder="Enter mob name"
+          required={true}
         />
       </FormControl>
       <FormControl mb={4}>
@@ -57,6 +58,7 @@ export const MobForm = () => {
           value={mobHealth}
           onChange={(e) => setMobHealth(e.target.value)}
           placeholder="Enter mob health"
+          required={false}
         />
       </FormControl>
       <Button type="submit" variant="solid" width="full">

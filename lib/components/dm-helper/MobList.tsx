@@ -34,7 +34,7 @@ export const MobList = () => {
             {(provided) => (
               <List ref={provided.innerRef} {...provided.droppableProps}>
                 {mobs.map((mob: Mob, i) => (
-                  <Draggable key={mob.id} draggableId={mob.id} index={i}>
+                  <Draggable key={mob.mobNumber} draggableId={mob.mobNumber.toString()} index={i}>
                     {(provided) => (
                       <div
                         ref={provided.innerRef}
