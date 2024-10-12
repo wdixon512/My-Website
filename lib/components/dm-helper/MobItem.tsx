@@ -22,7 +22,7 @@ export const MobItem: React.FC<MobItemProps> = ({
   handleDrop,
   ...props
 }) => {
-  const { mobs, removeMob, setMobs } = useContext(DMHelperContext);
+  const { mobs, removeEntity: removeMob, setEntities: setMobs } = useContext(DMHelperContext);
 
   const updateHealth = (mob: Mob, newHealth) => {
     setMobs(

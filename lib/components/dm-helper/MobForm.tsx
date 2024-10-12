@@ -9,23 +9,23 @@ import { useContext, useState } from "react";
 import { DMHelperContext } from "../contexts/DMHelperContext";
 
 export const MobForm = () => {
-  const [mobName, setMobName] = useState("");
-  const [mobHealth, setMobHealth] = useState<number | undefined>(undefined);
-  const [mobInitiative, setMobInitiative] = useState<number | undefined>(undefined);
+  const [name, setname] = useState("");
+  const [health, sethealth] = useState<number | undefined>(undefined);
+  const [initiative, setinitiative] = useState<number | undefined>(undefined);
 
-  const { setMobs, addMob } = useContext(DMHelperContext);
+  const { setEntities: setMobs, addMob } = useContext(DMHelperContext);
 
   const clearMobs = () => {
     setMobs([]);
   };
 
-  const handleAddMob = (e) => {
+  const handleaddMob = (e) => {
     e.preventDefault();
 
-    if (addMob(mobName, mobHealth, mobInitiative)) {
-      setMobName("");
-      setMobHealth(undefined);
-      setMobInitiative(undefined);
+    if (addMob(name, health, initiative)) {
+      setname("");
+      sethealth(undefined);
+      setinitiative(undefined);
     }
   };
 
@@ -37,15 +37,15 @@ export const MobForm = () => {
       borderWidth={1}
       borderRadius="md"
       shadow="md"
-      onSubmit={handleAddMob}
+      onSubmit={handleaddMob}
     >
       <FormControl mb={4}>
         <FormLabel color="blackAlpha.900">Mob Name</FormLabel>
         <Input
           type="text"
-          value={mobName}
+          value={name}
           color="blackAlpha.700"
-          onChange={(e) => setMobName(e.target.value)}
+          onChange={(e) => setname(e.target.value)}
           placeholder="Enter mob name"
           required={true}
         />
@@ -55,8 +55,8 @@ export const MobForm = () => {
         <Input
           type="number"
           color="blackAlpha.700"
-          value={mobInitiative}
-          onChange={(e) => setMobInitiative(parseInt(e.target.value))}
+          value={initiative}
+          onChange={(e) => setinitiative(parseInt(e.target.value))}
           placeholder="Enter mob initiative"
           required={false}
         />
@@ -66,8 +66,8 @@ export const MobForm = () => {
         <Input
           type="number"
           color="blackAlpha.700"
-          value={mobHealth}
-          onChange={(e) => setMobHealth(parseInt(e.target.value))}
+          value={health}
+          onChange={(e) => sethealth(parseInt(e.target.value))}
           placeholder="Enter mob health"
           required={false}
         />

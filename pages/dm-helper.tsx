@@ -1,7 +1,7 @@
 import { Container, Flex } from "@chakra-ui/react";
 import { MobForm } from "@lib/components/dm-helper/MobForm";
 import { DMHelperContextProvider } from "@lib/components/contexts/DMHelperContext";
-import { MobList } from "@lib/components/dm-helper/MobList";
+import { EntityList } from "@lib/components/dm-helper/EntityList";
 import { MobFavorites } from "@lib/components/dm-helper/MobFavorites";
 
 export function DMHelper({ Component, pageProps }) {
@@ -17,7 +17,7 @@ export function DMHelper({ Component, pageProps }) {
             <MobForm />
             <MobFavorites />
           </Flex>
-          <MobList />
+          <EntityList />
         </Flex>
       </Container>
     </DMHelperContextProvider>

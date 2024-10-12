@@ -2,21 +2,21 @@ import { Box, List } from "@chakra-ui/react";
 import { useContext } from "react";
 import { DMHelperContext } from "../contexts/DMHelperContext";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { sortEntitiesByInitiative } from "@lib/util/mobUtils";
 import Mob from "@lib/models/dm-helper/Mob";
 import MobItem from "./MobItem";
-import { sortEntitiesByInitiative } from "@lib/util/mobUtils";
 
-export const MobList = () => {
-  const { mobs, setMobs, isClient } = useContext(DMHelperContext);
+export const EntityList = () => {
+  const { entities, setEntities, isClient } = useContext(DMHelperContext);
 
   const handleDragEnd = (result) => {
     if (!result.destination) return;
 
-    const reorderedMobs = Array.from(mobs);
-    const [removed] = reorderedMobs.splice(result.source.index, 1);
-    reorderedMobs.splice(result.destination.index, 0, removed);
+    const reorderedEntities = Array.from(entities);
+    const [removed] = reorderedEntities.splice(result.source.index, 1);
+    reorderedEntities.splice(result.destination.index, 0, removed);
 
-    setMobs(reorderedMobs);
+    setEntities(reorderedEntities);
   };
 
   return (
@@ -30,10 +30,10 @@ export const MobList = () => {
     >
       {isClient && (
         <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="mobList">
+          <Droppable droppableId="EntityList">
             {(provided) => (
               <List ref={provided.innerRef} {...provided.droppableProps}>
-                {sortEntitiesByInitiative(mobs).map((mob: Mob, i) => (
+                {sortEntitiesByInitiative(entities).map((mob: Mob, i) => (
                   <Draggable key={mob.id} draggableId={mob.id} index={i}>
                     {(provided) => (
                       <div
