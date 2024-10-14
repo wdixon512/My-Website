@@ -17,6 +17,7 @@ import {
   Input,
   useDisclosure,
   Slide,
+  useToast,
 } from "@chakra-ui/react";
 import { MobForm } from "@lib/components/dm-helper/MobForm";
 import { HeroForm } from "@lib/components/dm-helper/HeroForm";
@@ -35,6 +36,7 @@ export const DMHelperComponent = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
   const [initiativeRolls, setInitiativeRolls] = useState<number[]>([]);
+  const toast = useToast();
 
   const startCombat = () => {
     if (heroes.length > 0) {
@@ -68,19 +70,35 @@ export const DMHelperComponent = () => {
   };
 
   const handleDone = () => {
-    const updatedHeroes: Hero[] = heroes.map((hero, index) => ({
+    // Check if some heroes still have undefined or null initiative rolls
+    if (initiativeRolls.some((roll) => roll === undefined || roll === null)) {
+      toast({
+        title: "Warning",
+        description:
+          "Initiative setting was aborted. Please set all initiatives before closing.",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      });
+      onClose(); // Simply close the modal without applying any changes
+      return; // Abort the process here
+    }
+
+    // Apply initiative rolls only if all are set
+    const updatedHeroes = heroes.map((hero, index) => ({
       ...hero,
       initiative: initiativeRolls[index],
     }));
 
+    // Update entities with the modified heroes
     setEntities((prevEntities: Entity[]) =>
-      prevEntities.map((entity: Entity) =>
+      prevEntities.map((entity) =>
         entity.type === EntityType.HERO
-          ? (updatedHeroes.find((h) => h.id === entity.id) as Entity) || entity
+          ? updatedHeroes.find((h) => h.id === entity.id) || entity
           : entity
       )
     );
-    onClose();
+    onClose(); // Close the modal after changes are applied
   };
 
   return (
