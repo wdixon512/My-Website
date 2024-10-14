@@ -3,11 +3,13 @@ import { useContext } from "react";
 import { DMHelperContext } from "../contexts/DMHelperContext";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { sortEntitiesByInitiative } from "@lib/util/mobUtils";
-import Mob from "@lib/models/dm-helper/Mob";
 import MobItem from "./MobItem";
+import Entity, { EntityType } from "@lib/models/dm-helper/Entity";
+import HeroItem from "./HeroItem";
 
 export const EntityList = () => {
-  const { entities, setEntities, isClient } = useContext(DMHelperContext);
+  const { entities, setEntities, combatStarted, isClient } =
+    useContext(DMHelperContext);
 
   const handleDragEnd = (result) => {
     if (!result.destination) return;
@@ -33,15 +35,19 @@ export const EntityList = () => {
           <Droppable droppableId="EntityList">
             {(provided) => (
               <List ref={provided.innerRef} {...provided.droppableProps}>
-                {sortEntitiesByInitiative(entities).map((mob: Mob, i) => (
-                  <Draggable key={mob.id} draggableId={mob.id} index={i}>
+                {sortEntitiesByInitiative(entities).map((entity: Entity, i) => (
+                  <Draggable key={entity.id} draggableId={entity.id} index={i}>
                     {(provided) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                       >
-                        <MobItem mob={mob} />
+                        {entity.type === EntityType.MOB ? (
+                          <MobItem mob={entity} />
+                        ) : (
+                          combatStarted && <HeroItem hero={entity} />
+                        )}
                       </div>
                     )}
                   </Draggable>

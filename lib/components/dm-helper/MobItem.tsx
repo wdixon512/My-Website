@@ -22,11 +22,15 @@ export const MobItem: React.FC<MobItemProps> = ({
   handleDrop,
   ...props
 }) => {
-  const { mobs, removeEntity: removeMob, setEntities: setMobs } = useContext(DMHelperContext);
+  const {
+    entities,
+    removeEntity: removeMob,
+    setEntities: setMobs,
+  } = useContext(DMHelperContext);
 
   const updateHealth = (mob: Mob, newHealth) => {
     setMobs(
-      mobs.map((m) =>
+      entities.map((m) =>
         m.id === mob.id ? new Mob(m.name, newHealth, m.number) : m
       )
     );
@@ -46,13 +50,14 @@ export const MobItem: React.FC<MobItemProps> = ({
         <Flex alignItems="center" flex="1">
           <Text>
             {mob.initiative && (
-              <Text as="span" fontWeight="800">({mob.initiative})</Text>
+              <Text as="span" fontWeight="800">
+                ({mob.initiative})
+              </Text>
             )}
             <Text as="span" fontWeight="800">
               &nbsp;{mob.name} {mob.number > 1 ? `#${mob.number}` : ""}
             </Text>
           </Text>
-
         </Flex>
         <Flex flex="1" alignItems="center">
           <Text>Health:</Text>

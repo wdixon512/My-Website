@@ -1,28 +1,48 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useMemo } from "react";
 import Mob from "@lib/models/dm-helper/Mob";
 import { useToast } from "@chakra-ui/react";
 import useLocalStorage from "@lib/hooks/useLocalStorage";
-import Entity from "@lib/models/dm-helper/Entity";
+import Entity, { EntityType } from "@lib/models/dm-helper/Entity";
 import Hero from "@lib/models/dm-helper/Hero";
 
 export const DMHelperContext = createContext({
   entities: [] as Entity[],
-  setEntities: (entities: Entity[]) => null,
+  setEntities: (() => null) as React.Dispatch<React.SetStateAction<Entity[]>>,
   removeEntity: (mob: Mob) => null,
-  addMob: (name: string, health: number | undefined, initiative: number | undefined) => null,
-  addHero: (name: string, health: number | undefined, initiative: number | undefined) => null,
+  addMob: (
+    name: string,
+    health: number | undefined,
+    initiative: number | undefined
+  ) => null,
+  addHero: (
+    name: string,
+    health: number | undefined,
+    initiative: number | undefined
+  ) => null,
   mobFavorites: [] as Mob[],
   setMobFavorites: (mobs: Mob[]) => null,
   isClient: false,
+  heroes: [] as Hero[],
+  combatStarted: false,
+  setCombatStarted: (started: boolean) => null,
+  clearMobs: () => null,
 });
 
 export const DMHelperContextProvider = ({ children }) => {
   const [entities, setEntities] = useLocalStorage<Entity[]>("entities", []);
-  const [mobFavorites, setMobFavorites] = useLocalStorage<Mob[]>("mobFavorites", []);
+  const [mobFavorites, setMobFavorites] = useLocalStorage<Mob[]>(
+    "mobFavorites",
+    []
+  );
   const [isClient, setIsClient] = useState(false);
+  const [combatStarted, setCombatStarted] = useState(false);
   const toast = useToast();
 
-  const addMob = (name: string, health: number | undefined, initiative: number | undefined): boolean => {
+  const addMob = (
+    name: string,
+    health: number | undefined,
+    initiative: number | undefined
+  ): boolean => {
     if (!validateName(name) || !validateMobHealth(health)) return false;
 
     const number = getNextEntityNumber(name);
@@ -34,7 +54,11 @@ export const DMHelperContextProvider = ({ children }) => {
     return true;
   };
 
-  const addHero = (name: string, health: number | undefined, initiative: number | undefined): boolean => {
+  const addHero = (
+    name: string,
+    health: number | undefined,
+    initiative: number | undefined
+  ): boolean => {
     if (!validateName(name) || !validateMobHealth(health)) return false;
 
     const number = getNextEntityNumber(name);
@@ -58,7 +82,7 @@ export const DMHelperContextProvider = ({ children }) => {
     }
 
     return true;
-  }
+  };
 
   const validateMobHealth = (health: number | undefined): boolean => {
     if (!isNaN(health) && health !== null && health <= 0) {
@@ -73,12 +97,11 @@ export const DMHelperContextProvider = ({ children }) => {
     }
 
     return true;
-  }
+  };
 
   const getNextEntityNumber = (name: string) => {
     let mobNumber = 1;
     if (entities.some((m) => m.name === name)) {
-      // find mob of same name with largest ID and increment by 1
       mobNumber =
         Math.max(
           ...entities.filter((m) => m.name === name).map((m) => m.number)
@@ -86,7 +109,7 @@ export const DMHelperContextProvider = ({ children }) => {
     }
 
     return mobNumber;
-  }
+  };
 
   const removeEntity = (mob: Mob) => {
     setEntities(entities.filter((m) => !(m.id === mob.id)));
@@ -97,6 +120,16 @@ export const DMHelperContextProvider = ({ children }) => {
       setMobFavorites([...mobFavorites, mob]);
     }
   };
+
+  const clearMobs = () => {
+    setEntities(entities.filter((entity) => entity.type !== EntityType.MOB));
+  };
+
+  const heroes = useMemo(() => {
+    return entities?.filter(
+      (entity) => entity.type === EntityType.HERO
+    ) as Hero[];
+  }, [entities]);
 
   useEffect(() => {
     setIsClient(true);
@@ -113,6 +146,10 @@ export const DMHelperContextProvider = ({ children }) => {
         mobFavorites,
         setMobFavorites,
         isClient,
+        heroes,
+        combatStarted,
+        setCombatStarted,
+        clearMobs,
       }}
     >
       {children}

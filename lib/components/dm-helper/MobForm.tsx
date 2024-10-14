@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-} from "@chakra-ui/react";
+import { Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import { DMHelperContext } from "../contexts/DMHelperContext";
 
@@ -13,13 +7,9 @@ export const MobForm = () => {
   const [health, sethealth] = useState<number | undefined>(undefined);
   const [initiative, setinitiative] = useState<number | undefined>(undefined);
 
-  const { setEntities: setMobs, addMob } = useContext(DMHelperContext);
+  const { addMob, clearMobs } = useContext(DMHelperContext);
 
-  const clearMobs = () => {
-    setMobs([]);
-  };
-
-  const handleaddMob = (e) => {
+  const handleAddMob = (e) => {
     e.preventDefault();
 
     if (addMob(name, health, initiative)) {
@@ -37,7 +27,7 @@ export const MobForm = () => {
       borderWidth={1}
       borderRadius="md"
       shadow="md"
-      onSubmit={handleaddMob}
+      onSubmit={handleAddMob}
     >
       <FormControl mb={4}>
         <FormLabel color="blackAlpha.900">Mob Name</FormLabel>
