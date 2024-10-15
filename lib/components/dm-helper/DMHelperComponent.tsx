@@ -18,92 +18,86 @@ import {
   useDisclosure,
   Slide,
   useToast,
-} from "@chakra-ui/react";
-import { MobForm } from "@lib/components/dm-helper/MobForm";
-import { HeroForm } from "@lib/components/dm-helper/HeroForm";
-import { DMHelperContext } from "@lib/components/contexts/DMHelperContext";
-import { EntityList } from "@lib/components/dm-helper/EntityList";
-import { MobFavorites } from "@lib/components/dm-helper/MobFavorites";
-import { HeroList } from "@lib/components/dm-helper/HeroList";
-import { useContext, useState } from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import Entity, { EntityType } from "@lib/models/dm-helper/Entity";
-import Hero from "@lib/models/dm-helper/Hero";
+} from '@chakra-ui/react'
+import { MobForm } from '@lib/components/dm-helper/MobForm'
+import { HeroForm } from '@lib/components/dm-helper/HeroForm'
+import { DMHelperContext } from '@lib/components/contexts/DMHelperContext'
+import { EntityList } from '@lib/components/dm-helper/EntityList'
+import { MobFavorites } from '@lib/components/dm-helper/MobFavorites'
+import { HeroList } from '@lib/components/dm-helper/HeroList'
+import { useContext, useState } from 'react'
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
+import Entity, { EntityType } from '@lib/models/dm-helper/Entity'
 
 export const DMHelperComponent = () => {
-  const { combatStarted, setCombatStarted, heroes, setEntities } =
-    useContext(DMHelperContext);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
-  const [initiativeRolls, setInitiativeRolls] = useState<number[]>([]);
-  const toast = useToast();
+  const { combatStarted, setCombatStarted, heroes, setEntities } = useContext(DMHelperContext)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [currentHeroIndex, setCurrentHeroIndex] = useState(0)
+  const [initiativeRolls, setInitiativeRolls] = useState<number[]>([])
+  const toast = useToast()
 
   const startCombat = () => {
     if (heroes.length > 0) {
-      // Initialize initiative rolls with undefined values for each hero
-      setInitiativeRolls(new Array(heroes.length).fill(undefined));
-      onOpen();
+      setInitiativeRolls(new Array(heroes.length).fill(undefined))
+      onOpen()
     }
-    setCombatStarted(true);
-  };
+    setCombatStarted(true)
+  }
 
   const endCombat = () => {
-    setCombatStarted(false);
-  };
+    setCombatStarted(false)
+  }
 
   const handleInitiativeChange = (value: string) => {
-    const updatedRolls = [...initiativeRolls];
-    updatedRolls[currentHeroIndex] = Number(value);
-    setInitiativeRolls(updatedRolls);
-  };
+    const updatedRolls = [...initiativeRolls]
+    updatedRolls[currentHeroIndex] = Number(value)
+    setInitiativeRolls(updatedRolls)
+  }
 
   const handleNextHero = () => {
     if (currentHeroIndex < heroes.length - 1) {
-      setCurrentHeroIndex(currentHeroIndex + 1);
+      setCurrentHeroIndex(currentHeroIndex + 1)
     }
-  };
+  }
 
   const handlePreviousHero = () => {
     if (currentHeroIndex > 0) {
-      setCurrentHeroIndex(currentHeroIndex - 1);
+      setCurrentHeroIndex(currentHeroIndex - 1)
     }
-  };
+  }
 
   const handleDone = () => {
     // Check if some heroes still have undefined or null initiative rolls
     if (initiativeRolls.some((roll) => roll === undefined || roll === null)) {
       toast({
-        title: "Warning",
-        description:
-          "Initiative setting was aborted. Please set all initiatives before closing.",
-        status: "warning",
+        title: 'Warning',
+        description: 'Initiative setting was aborted. Please set all initiatives before closing.',
+        status: 'warning',
         duration: 3000,
         isClosable: true,
-      });
-      onClose(); // Simply close the modal without applying any changes
-      return; // Abort the process here
+      })
+      onClose()
+      return
     }
 
     // Apply initiative rolls only if all are set
     const updatedHeroes = heroes.map((hero, index) => ({
       ...hero,
       initiative: initiativeRolls[index],
-    }));
+    }))
 
     // Update entities with the modified heroes
     setEntities((prevEntities: Entity[]) =>
       prevEntities.map((entity) =>
-        entity.type === EntityType.HERO
-          ? updatedHeroes.find((h) => h.id === entity.id) || entity
-          : entity
+        entity.type === EntityType.HERO ? updatedHeroes.find((h) => h.id === entity.id) || entity : entity
       )
-    );
-    onClose(); // Close the modal after changes are applied
-  };
+    )
+    onClose()
+  }
 
   return (
     <>
-      <Tabs display="flex" flexDir="column" alignContent={"center"}>
+      <Tabs display="flex" flexDir="column" alignContent={'center'}>
         <TabList
           alignSelf="center"
           border="2px solid"
@@ -113,34 +107,14 @@ export const DMHelperComponent = () => {
           w="fit-content"
           bgColor="secondary.500"
         >
-          <Tab
-            _selected={{ color: "white", bg: "primary.200" }}
-            borderRadius="lg"
-            fontWeight="bold"
-          >
-            <Img
-              src="/static/images/sword.png"
-              alt="sword-icon"
-              w="20px"
-              h="20px"
-              mr="1"
-            />
+          <Tab _selected={{ color: 'white', bg: 'primary.200' }} borderRadius="lg" fontWeight="bold">
+            <Img src="/static/images/sword.png" alt="sword-icon" w="20px" h="20px" mr="1" />
             <Text as="span" lineHeight="24px">
               Combat
             </Text>
           </Tab>
-          <Tab
-            _selected={{ color: "white", bg: "primary.200" }}
-            borderRadius="lg"
-            fontWeight="bold"
-          >
-            <Img
-              src="/static/images/knight.png"
-              alt="knight"
-              w="20px"
-              h="20px"
-              mr="1"
-            />
+          <Tab _selected={{ color: 'white', bg: 'primary.200' }} borderRadius="lg" fontWeight="bold">
+            <Img src="/static/images/knight.png" alt="knight" w="20px" h="20px" mr="1" />
             <Text as="span" lineHeight="24px">
               Heroes
             </Text>
@@ -150,11 +124,7 @@ export const DMHelperComponent = () => {
         <TabPanels>
           {/* Combat Tab */}
           <TabPanel>
-            <Flex
-              direction={{ base: "column", lg: "row" }}
-              justifyContent="center"
-              gap="12"
-            >
+            <Flex direction={{ base: 'column', lg: 'row' }} justifyContent="center" gap="12">
               <Flex direction="column" gap="4">
                 <MobForm />
                 <MobFavorites />
@@ -165,9 +135,7 @@ export const DMHelperComponent = () => {
                     End Combat
                   </Button>
                 )}
-                {!combatStarted && (
-                  <Button onClick={() => startCombat()}>Start Combat</Button>
-                )}
+                {!combatStarted && <Button onClick={() => startCombat()}>Start Combat</Button>}
                 <EntityList />
               </Flex>
             </Flex>
@@ -197,16 +165,16 @@ export const DMHelperComponent = () => {
                   type="number"
                   textColor="primary.400"
                   placeholder="Enter initiative"
-                  value={initiativeRolls[currentHeroIndex] || ""}
+                  value={initiativeRolls[currentHeroIndex] || ''}
                   onChange={(e) => handleInitiativeChange(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") {
+                    if (e.key === 'Enter') {
                       // If it's the last hero, trigger handleDone
                       if (currentHeroIndex === heroes.length - 1) {
-                        handleDone();
+                        handleDone()
                       } else {
                         // Otherwise, move to the next hero
-                        handleNextHero();
+                        handleNextHero()
                       }
                     }
                   }}
@@ -214,18 +182,12 @@ export const DMHelperComponent = () => {
               </ModalBody>
               <ModalFooter justifyContent="space-between">
                 {currentHeroIndex > 0 && (
-                  <Button
-                    leftIcon={<ChevronLeftIcon />}
-                    onClick={handlePreviousHero}
-                  >
+                  <Button leftIcon={<ChevronLeftIcon />} onClick={handlePreviousHero}>
                     Previous Hero ({heroes[currentHeroIndex - 1]?.name})
                   </Button>
                 )}
                 {currentHeroIndex < heroes.length - 1 ? (
-                  <Button
-                    rightIcon={<ChevronRightIcon />}
-                    onClick={handleNextHero}
-                  >
+                  <Button rightIcon={<ChevronRightIcon />} onClick={handleNextHero}>
                     Next Hero ({heroes[currentHeroIndex + 1]?.name})
                   </Button>
                 ) : (
@@ -241,5 +203,5 @@ export const DMHelperComponent = () => {
         </ModalContent>
       </Modal>
     </>
-  );
-};
+  )
+}
