@@ -8,6 +8,7 @@ import {
   Input,
   Button,
   useToast,
+  ModalProps,
 } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useContext, useState, useRef } from 'react';
@@ -25,7 +26,7 @@ export const InitiativeModal: React.FC<InitiativeModalProps> = ({ isOpen, heroes
   const { setEntities } = useContext(DMHelperContext);
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
   const [initiativeRolls, setInitiativeRolls] = useState<number[]>([]);
-  const inputRef = useRef<HTMLInputElement>(null); // Create ref to track input value
+  const inputRef = useRef<HTMLInputElement>(null);
   const toast = useToast();
 
   const handleNextHero = () => {
@@ -96,6 +97,10 @@ export const InitiativeModal: React.FC<InitiativeModalProps> = ({ isOpen, heroes
         entity.type === EntityType.HERO ? updatedHeroes.find((h) => h.id === entity.id) || entity : entity
       )
     );
+
+    setInitiativeRolls([]);
+    setCurrentHeroIndex(0);
+
     onClose();
   };
 

@@ -9,8 +9,7 @@ import { useContext } from 'react';
 import { InitiativeModal } from '@lib/components/dm-helper/modals/InititativeModal';
 
 export const DMHelperComponent = () => {
-  const { combatStarted, setCombatStarted, heroes, setEntities, resetHeroInitiatives, isClient } =
-    useContext(DMHelperContext);
+  const { combatStarted, setCombatStarted, heroes, resetHeroInitiatives, isClient } = useContext(DMHelperContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const startCombat = () => {
