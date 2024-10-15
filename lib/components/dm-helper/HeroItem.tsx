@@ -1,10 +1,11 @@
-import { Text, Flex, Button, FlexProps, Icon } from '@chakra-ui/react';
+import { Text, Flex, Button, FlexProps, Icon, useDisclosure } from '@chakra-ui/react';
 import AnimatedFlex from '@components/global/AnimatedFlex';
 import { useContext } from 'react';
 import { DMHelperContext } from '../contexts/DMHelperContext';
 import React from 'react';
 import Hero from '@lib/models/dm-helper/Hero';
 import { FaUserEdit } from 'react-icons/fa';
+import EntityEditModal from './modals/EntityEditModal';
 
 interface HeroItemProps extends FlexProps {
   hero: Hero;
@@ -20,6 +21,11 @@ export const HeroItem: React.FC<HeroItemProps> = ({
   ...props
 }) => {
   const { removeEntity } = useContext(DMHelperContext);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const showEntityEditForm = () => {
+    onOpen();
+  };
 
   return (
     <AnimatedFlex
@@ -53,10 +59,12 @@ export const HeroItem: React.FC<HeroItemProps> = ({
         </Button>
       )}
       {showInitiative && (
-        <Button variant="primarySolid" onClick={() => console.log('edit')}>
+        <Button variant="primarySolid" onClick={() => showEntityEditForm()}>
           <Icon as={FaUserEdit} />
         </Button>
       )}
+
+      <EntityEditModal entity={hero} isOpen={isOpen} onClose={onClose} />
     </AnimatedFlex>
   );
 };

@@ -6,7 +6,7 @@ import { EntityList } from '@lib/components/dm-helper/EntityList';
 import { MobFavorites } from '@lib/components/dm-helper/MobFavorites';
 import { HeroList } from '@lib/components/dm-helper/HeroList';
 import { useContext } from 'react';
-import { InitiativeModal } from '@lib/components/dm-helper/InititativeModal';
+import { InitiativeModal } from '@lib/components/dm-helper/modals/InititativeModal';
 
 export const DMHelperComponent = () => {
   const { combatStarted, setCombatStarted, heroes, setEntities, resetHeroInitiatives, isClient } =
