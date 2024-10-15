@@ -30,7 +30,8 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import Entity, { EntityType } from '@lib/models/dm-helper/Entity';
 
 export const DMHelperComponent = () => {
-  const { combatStarted, setCombatStarted, heroes, setEntities, resetHeroInitiatives } = useContext(DMHelperContext);
+  const { combatStarted, setCombatStarted, heroes, setEntities, resetHeroInitiatives, isClient } =
+    useContext(DMHelperContext);
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
   const [initiativeRolls, setInitiativeRolls] = useState<number[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -134,12 +135,12 @@ export const DMHelperComponent = () => {
                 <MobFavorites />
               </Flex>
               <Flex direction="column" gap="4">
-                {combatStarted && (
+                {isClient && combatStarted && (
                   <Button variant="redSolid" onClick={() => endCombat()}>
                     End Combat
                   </Button>
                 )}
-                {!combatStarted && <Button onClick={() => startCombat()}>Start Combat</Button>}
+                {isClient && !combatStarted && <Button onClick={() => startCombat()}>Start Combat</Button>}
                 <EntityList />
               </Flex>
             </Flex>

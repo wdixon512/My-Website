@@ -11,7 +11,13 @@ interface HeroItemProps extends FlexProps {
   showRemove?: boolean;
 }
 
-export const HeroItem: React.FC<HeroItemProps> = ({ hero, showInitiative = true, showRemove = false, ...props }) => {
+export const HeroItem: React.FC<HeroItemProps> = ({
+  hero,
+  showInitiative = true,
+  showRemove = false,
+  textColor,
+  ...props
+}) => {
   const { removeEntity } = useContext(DMHelperContext);
 
   return (
@@ -32,7 +38,7 @@ export const HeroItem: React.FC<HeroItemProps> = ({ hero, showInitiative = true,
                 ({hero.initiative})
               </Text>
             )}
-            <Text as="span" fontWeight="800">
+            <Text as="span" fontWeight="800" textColor={textColor}>
               &nbsp;{hero.name}
             </Text>
           </Text>

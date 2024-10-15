@@ -25,8 +25,8 @@ export const DMHelperContext = createContext({
 export const DMHelperContextProvider = ({ children }) => {
   const [entities, setEntities] = useLocalStorage<Entity[]>('entities', []);
   const [mobFavorites, setMobFavorites] = useLocalStorage<Mob[]>('mobFavorites', []);
+  const [combatStarted, setCombatStarted] = useLocalStorage<boolean>('combatStarted', false);
   const [isClient, setIsClient] = useState(false);
-  const [combatStarted, setCombatStarted] = useState(false);
   const toast = useToast();
 
   const addMob = (name: string, health: number | undefined, initiative: number | undefined): boolean => {

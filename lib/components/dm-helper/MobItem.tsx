@@ -10,7 +10,7 @@ interface MobItemProps extends FlexProps {
   handleDrop?: (id: string | number, x: number, y: number) => void;
 }
 
-export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, ...props }) => {
+export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ...props }) => {
   const { entities, removeEntity: removeMob, setEntities: setMobs } = useContext(DMHelperContext);
 
   const updateHealth = (mob: Mob, newHealth) => {
@@ -31,11 +31,11 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, ...props }) =
         <Flex alignItems="center" flex="1">
           <Text>
             {mob.initiative && (
-              <Text as="span" fontWeight="800">
+              <Text as="span" fontWeight="800" textColor={textColor}>
                 ({mob.initiative})
               </Text>
             )}
-            <Text as="span" fontWeight="800">
+            <Text as="span" fontWeight="800" textColor={textColor}>
               &nbsp;{mob.name} {mob.number > 1 ? `#${mob.number}` : ''}
             </Text>
           </Text>
