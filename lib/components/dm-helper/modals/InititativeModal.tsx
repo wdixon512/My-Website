@@ -13,7 +13,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useContext, useState, useRef } from 'react';
 import Hero from '@lib/models/dm-helper/Hero';
 import Entity, { EntityType } from '@lib/models/dm-helper/Entity';
-import { DMHelperContext } from '../contexts/DMHelperContext';
+import { DMHelperContext } from '../../contexts/DMHelperContext';
 
 interface InitiativeModalProps {
   isOpen: boolean;
