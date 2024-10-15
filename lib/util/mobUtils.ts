@@ -1,4 +1,4 @@
-import Entity from "@lib/models/dm-helper/Entity";
+import Entity from '@lib/models/dm-helper/Entity';
 
 export const sortEntities = (entities: Entity[]) => {
   if (!entities) return [];
@@ -18,20 +18,11 @@ export const sortEntities = (entities: Entity[]) => {
 
 export const sortEntitiesByInitiative = (entities: Entity[]) => {
   if (!entities) return [];
-  return entities.sort((a, b) => {
-    // Sort by initiative in descending order
-    if (a.initiative > b.initiative) return -1;
-    if (a.initiative < b.initiative) return 1;
-
-    // If initiative is the same, fallback to sorting by name
-    if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-    if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-
-    // If name is also the same, fallback to sorting by id
-    if (a.id < b.id) return -1;
-    if (a.id > b.id) return 1;
-
-    // If all properties are the same, consider them equal
-    return 0;
+  return entities.slice().sort((a, b) => {
+    if (a.initiative !== b.initiative) {
+      return (b.initiative || 0) - (a.initiative || 0);
+    } else {
+      return 0;
+    }
   });
 };

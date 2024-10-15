@@ -1,9 +1,10 @@
-import { Text, Flex, Button, FlexProps } from '@chakra-ui/react';
+import { Text, Flex, Button, FlexProps, Icon } from '@chakra-ui/react';
 import AnimatedFlex from '@components/global/AnimatedFlex';
 import { useContext } from 'react';
 import { DMHelperContext } from '../contexts/DMHelperContext';
 import React from 'react';
 import Hero from '@lib/models/dm-helper/Hero';
+import { FaUserEdit } from 'react-icons/fa';
 
 interface HeroItemProps extends FlexProps {
   hero: Hero;
@@ -28,6 +29,7 @@ export const HeroItem: React.FC<HeroItemProps> = ({
       p={2}
       borderBottomWidth={1}
       _hover={{ bg: 'secondary.600', cursor: 'pointer' }}
+      className="group"
       {...props}
     >
       <Flex w="full">
@@ -48,6 +50,11 @@ export const HeroItem: React.FC<HeroItemProps> = ({
       {showRemove && (
         <Button variant="redSolid" onClick={() => removeEntity(hero)}>
           Remove
+        </Button>
+      )}
+      {showInitiative && (
+        <Button variant="primarySolid" onClick={() => console.log('edit')}>
+          <Icon as={FaUserEdit} />
         </Button>
       )}
     </AnimatedFlex>
