@@ -173,11 +173,9 @@ export const DMHelperComponent = () => {
                   onChange={(e) => handleInitiativeChange(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      // If it's the last hero, trigger handleDone
                       if (currentHeroIndex === heroes.length - 1) {
                         handleDone();
                       } else {
-                        // Otherwise, move to the next hero
                         handleNextHero();
                       }
                     }

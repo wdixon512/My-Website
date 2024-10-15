@@ -8,9 +8,10 @@ import Hero from '@lib/models/dm-helper/Hero';
 interface HeroItemProps extends FlexProps {
   hero: Hero;
   showInitiative?: boolean;
+  showRemove?: boolean;
 }
 
-export const HeroItem: React.FC<HeroItemProps> = ({ hero, showInitiative = true, ...props }) => {
+export const HeroItem: React.FC<HeroItemProps> = ({ hero, showInitiative = true, showRemove = false, ...props }) => {
   const { removeEntity } = useContext(DMHelperContext);
 
   return (
@@ -24,7 +25,7 @@ export const HeroItem: React.FC<HeroItemProps> = ({ hero, showInitiative = true,
       {...props}
     >
       <Flex w="full">
-        <Flex alignItems="center" flex="1">
+        <Flex alignItems="center" flex="1" py={2}>
           <Text>
             {showInitiative && hero.initiative && (
               <Text as="span" fontWeight="800">
@@ -38,9 +39,11 @@ export const HeroItem: React.FC<HeroItemProps> = ({ hero, showInitiative = true,
         </Flex>
         <Flex flex="1" alignItems="center"></Flex>
       </Flex>
-      <Button variant="redSolid" onClick={() => removeEntity(hero)}>
-        Remove
-      </Button>
+      {showRemove && (
+        <Button variant="redSolid" onClick={() => removeEntity(hero)}>
+          Remove
+        </Button>
+      )}
     </AnimatedFlex>
   );
 };
