@@ -1,24 +1,18 @@
-import { createContext, useEffect, useState, useMemo } from "react";
-import Mob from "@lib/models/dm-helper/Mob";
-import { useToast } from "@chakra-ui/react";
-import useLocalStorage from "@lib/hooks/useLocalStorage";
-import Entity, { EntityType } from "@lib/models/dm-helper/Entity";
-import Hero from "@lib/models/dm-helper/Hero";
+import { createContext, useEffect, useState, useMemo } from 'react';
+import Mob from '@lib/models/dm-helper/Mob';
+import { useToast } from '@chakra-ui/react';
+import useLocalStorage from '@lib/hooks/useLocalStorage';
+import Entity, { EntityType } from '@lib/models/dm-helper/Entity';
+import Hero from '@lib/models/dm-helper/Hero';
 
 export const DMHelperContext = createContext({
   entities: [] as Entity[],
   setEntities: (() => null) as React.Dispatch<React.SetStateAction<Entity[]>>,
   removeEntity: (mob: Mob) => null,
-  addMob: (
-    name: string,
-    health: number | undefined,
-    initiative: number | undefined
-  ) => null,
-  addHero: (
-    name: string,
-    health: number | undefined,
-    initiative: number | undefined
-  ) => null,
+  addMob: (name: string, health: number | undefined, initiative: number | undefined) => null,
+  addHero: (name: string, health: number | undefined, initiative: number | undefined) => null,
+  setHeroes: (() => null) as React.Dispatch<React.SetStateAction<Hero[]>>,
+  resetHeroInitiatives: () => null,
   mobFavorites: [] as Mob[],
   setMobFavorites: (mobs: Mob[]) => null,
   isClient: false,
@@ -29,20 +23,13 @@ export const DMHelperContext = createContext({
 });
 
 export const DMHelperContextProvider = ({ children }) => {
-  const [entities, setEntities] = useLocalStorage<Entity[]>("entities", []);
-  const [mobFavorites, setMobFavorites] = useLocalStorage<Mob[]>(
-    "mobFavorites",
-    []
-  );
+  const [entities, setEntities] = useLocalStorage<Entity[]>('entities', []);
+  const [mobFavorites, setMobFavorites] = useLocalStorage<Mob[]>('mobFavorites', []);
   const [isClient, setIsClient] = useState(false);
   const [combatStarted, setCombatStarted] = useState(false);
   const toast = useToast();
 
-  const addMob = (
-    name: string,
-    health: number | undefined,
-    initiative: number | undefined
-  ): boolean => {
+  const addMob = (name: string, health: number | undefined, initiative: number | undefined): boolean => {
     if (!validateName(name) || !validateMobHealth(health)) return false;
 
     const number = getNextEntityNumber(name);
@@ -54,11 +41,7 @@ export const DMHelperContextProvider = ({ children }) => {
     return true;
   };
 
-  const addHero = (
-    name: string,
-    health: number | undefined,
-    initiative: number | undefined
-  ): boolean => {
+  const addHero = (name: string, health: number | undefined, initiative: number | undefined): boolean => {
     if (!validateName(name) || !validateMobHealth(health)) return false;
 
     const number = getNextEntityNumber(name);
@@ -68,12 +51,31 @@ export const DMHelperContextProvider = ({ children }) => {
     return true;
   };
 
+  const setHeroes = (heroes: Hero[]) => {
+    const nonHeroes = entities.filter((entity) => entity.type !== EntityType.HERO);
+    const updatedEntities = [...nonHeroes, ...heroes];
+    setEntities(updatedEntities);
+  };
+
+  const resetHeroInitiatives = () => {
+    const updatedEntities = entities.map((entity) => {
+      if (entity.type === EntityType.HERO) {
+        return {
+          ...entity,
+          initiative: undefined,
+        };
+      }
+      return entity;
+    });
+    setEntities(updatedEntities);
+  };
+
   const validateName = (name: string): boolean => {
-    if (name.trim() === "") {
+    if (name.trim() === '') {
       toast({
-        title: "Error",
-        description: "Mob name cannot be empty.",
-        status: "error",
+        title: 'Error',
+        description: 'Mob name cannot be empty.',
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -87,9 +89,9 @@ export const DMHelperContextProvider = ({ children }) => {
   const validateMobHealth = (health: number | undefined): boolean => {
     if (!isNaN(health) && health !== null && health <= 0) {
       toast({
-        title: "Error",
-        description: "Mob health must be a positive number.",
-        status: "error",
+        title: 'Error',
+        description: 'Mob health must be a positive number.',
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -102,10 +104,7 @@ export const DMHelperContextProvider = ({ children }) => {
   const getNextEntityNumber = (name: string) => {
     let mobNumber = 1;
     if (entities.some((m) => m.name === name)) {
-      mobNumber =
-        Math.max(
-          ...entities.filter((m) => m.name === name).map((m) => m.number)
-        ) + 1;
+      mobNumber = Math.max(...entities.filter((m) => m.name === name).map((m) => m.number)) + 1;
     }
 
     return mobNumber;
@@ -126,9 +125,7 @@ export const DMHelperContextProvider = ({ children }) => {
   };
 
   const heroes = useMemo(() => {
-    return entities?.filter(
-      (entity) => entity.type === EntityType.HERO
-    ) as Hero[];
+    return entities?.filter((entity) => entity.type === EntityType.HERO) as Hero[];
   }, [entities]);
 
   useEffect(() => {
@@ -143,6 +140,8 @@ export const DMHelperContextProvider = ({ children }) => {
         removeEntity,
         addMob,
         addHero,
+        setHeroes,
+        resetHeroInitiatives,
         mobFavorites,
         setMobFavorites,
         isClient,

@@ -18,53 +18,57 @@ import {
   useDisclosure,
   Slide,
   useToast,
-} from '@chakra-ui/react'
-import { MobForm } from '@lib/components/dm-helper/MobForm'
-import { HeroForm } from '@lib/components/dm-helper/HeroForm'
-import { DMHelperContext } from '@lib/components/contexts/DMHelperContext'
-import { EntityList } from '@lib/components/dm-helper/EntityList'
-import { MobFavorites } from '@lib/components/dm-helper/MobFavorites'
-import { HeroList } from '@lib/components/dm-helper/HeroList'
-import { useContext, useState } from 'react'
-import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
-import Entity, { EntityType } from '@lib/models/dm-helper/Entity'
+} from '@chakra-ui/react';
+import { MobForm } from '@lib/components/dm-helper/MobForm';
+import { HeroForm } from '@lib/components/dm-helper/HeroForm';
+import { DMHelperContext } from '@lib/components/contexts/DMHelperContext';
+import { EntityList } from '@lib/components/dm-helper/EntityList';
+import { MobFavorites } from '@lib/components/dm-helper/MobFavorites';
+import { HeroList } from '@lib/components/dm-helper/HeroList';
+import { useContext, useState } from 'react';
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import Entity, { EntityType } from '@lib/models/dm-helper/Entity';
 
 export const DMHelperComponent = () => {
-  const { combatStarted, setCombatStarted, heroes, setEntities } = useContext(DMHelperContext)
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const [currentHeroIndex, setCurrentHeroIndex] = useState(0)
-  const [initiativeRolls, setInitiativeRolls] = useState<number[]>([])
-  const toast = useToast()
+  const { combatStarted, setCombatStarted, heroes, setEntities, resetHeroInitiatives } = useContext(DMHelperContext);
+  const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+  const [initiativeRolls, setInitiativeRolls] = useState<number[]>([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
   const startCombat = () => {
     if (heroes.length > 0) {
-      setInitiativeRolls(new Array(heroes.length).fill(undefined))
-      onOpen()
+      setCurrentHeroIndex(0);
+      resetHeroInitiatives();
+      setInitiativeRolls(new Array(heroes.length).fill(undefined));
+      onOpen();
     }
-    setCombatStarted(true)
-  }
+    setCombatStarted(true);
+  };
 
   const endCombat = () => {
-    setCombatStarted(false)
-  }
+    resetHeroInitiatives();
+    setCurrentHeroIndex(0);
+    setCombatStarted(false);
+  };
 
   const handleInitiativeChange = (value: string) => {
-    const updatedRolls = [...initiativeRolls]
-    updatedRolls[currentHeroIndex] = Number(value)
-    setInitiativeRolls(updatedRolls)
-  }
+    const updatedRolls = [...initiativeRolls];
+    updatedRolls[currentHeroIndex] = Number(value);
+    setInitiativeRolls(updatedRolls);
+  };
 
   const handleNextHero = () => {
     if (currentHeroIndex < heroes.length - 1) {
-      setCurrentHeroIndex(currentHeroIndex + 1)
+      setCurrentHeroIndex(currentHeroIndex + 1);
     }
-  }
+  };
 
   const handlePreviousHero = () => {
     if (currentHeroIndex > 0) {
-      setCurrentHeroIndex(currentHeroIndex - 1)
+      setCurrentHeroIndex(currentHeroIndex - 1);
     }
-  }
+  };
 
   const handleDone = () => {
     // Check if some heroes still have undefined or null initiative rolls
@@ -75,25 +79,25 @@ export const DMHelperComponent = () => {
         status: 'warning',
         duration: 3000,
         isClosable: true,
-      })
-      onClose()
-      return
+      });
+      onClose();
+      return;
     }
 
     // Apply initiative rolls only if all are set
     const updatedHeroes = heroes.map((hero, index) => ({
       ...hero,
       initiative: initiativeRolls[index],
-    }))
+    }));
 
     // Update entities with the modified heroes
     setEntities((prevEntities: Entity[]) =>
       prevEntities.map((entity) =>
         entity.type === EntityType.HERO ? updatedHeroes.find((h) => h.id === entity.id) || entity : entity
       )
-    )
-    onClose()
-  }
+    );
+    onClose();
+  };
 
   return (
     <>
@@ -171,10 +175,10 @@ export const DMHelperComponent = () => {
                     if (e.key === 'Enter') {
                       // If it's the last hero, trigger handleDone
                       if (currentHeroIndex === heroes.length - 1) {
-                        handleDone()
+                        handleDone();
                       } else {
                         // Otherwise, move to the next hero
-                        handleNextHero()
+                        handleNextHero();
                       }
                     }
                   }}
@@ -203,5 +207,5 @@ export const DMHelperComponent = () => {
         </ModalContent>
       </Modal>
     </>
-  )
-}
+  );
+};

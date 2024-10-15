@@ -1,23 +1,16 @@
-import {
-  Text,
-  Flex,
-  FormControl,
-  Input,
-  Button,
-  FlexProps,
-} from "@chakra-ui/react";
-import AnimatedFlex from "@components/global/AnimatedFlex";
-import Mob from "@lib/models/dm-helper/Mob";
-import { useContext } from "react";
-import { DMHelperContext } from "../contexts/DMHelperContext";
-import React from "react";
-import Hero from "@lib/models/dm-helper/Hero";
+import { Text, Flex, Button, FlexProps } from '@chakra-ui/react';
+import AnimatedFlex from '@components/global/AnimatedFlex';
+import { useContext } from 'react';
+import { DMHelperContext } from '../contexts/DMHelperContext';
+import React from 'react';
+import Hero from '@lib/models/dm-helper/Hero';
 
 interface HeroItemProps extends FlexProps {
   hero: Hero;
+  showInitiative?: boolean;
 }
 
-export const HeroItem: React.FC<HeroItemProps> = ({ hero, ...props }) => {
+export const HeroItem: React.FC<HeroItemProps> = ({ hero, showInitiative = true, ...props }) => {
   const { removeEntity } = useContext(DMHelperContext);
 
   return (
@@ -27,13 +20,13 @@ export const HeroItem: React.FC<HeroItemProps> = ({ hero, ...props }) => {
       justify="space-between"
       p={2}
       borderBottomWidth={1}
-      _hover={{ bg: "secondary.600", cursor: "pointer" }}
+      _hover={{ bg: 'secondary.600', cursor: 'pointer' }}
       {...props}
     >
       <Flex w="full">
         <Flex alignItems="center" flex="1">
           <Text>
-            {hero.initiative && (
+            {showInitiative && hero.initiative && (
               <Text as="span" fontWeight="800">
                 ({hero.initiative})
               </Text>
