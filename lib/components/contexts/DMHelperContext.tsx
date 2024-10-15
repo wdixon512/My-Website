@@ -1,76 +1,132 @@
-import { createContext, useEffect, useState } from "react";
-import Mob from "@lib/models/Mob";
-import { useToast } from "@chakra-ui/react";
-import useLocalStorage from "@lib/hooks/useLocalStorage";
-import { randomUUID } from "crypto";
+import { createContext, useEffect, useState, useMemo } from 'react';
+import Mob from '@lib/models/dm-helper/Mob';
+import { useToast } from '@chakra-ui/react';
+import useLocalStorage from '@lib/hooks/useLocalStorage';
+import Entity, { EntityType } from '@lib/models/dm-helper/Entity';
+import Hero from '@lib/models/dm-helper/Hero';
 
 export const DMHelperContext = createContext({
-  mobs: [] as Mob[],
-  setMobs: (mobs: Mob[]) => null,
-  favorites: [] as Mob[],
-  setFavorites: (mobs: Mob[]) => null,
-  addMob: (mobName: string, mobHealth: string | number) => null,
-  removeMob: (mob: Mob) => null,
+  entities: [] as Entity[],
+  setEntities: (() => null) as React.Dispatch<React.SetStateAction<Entity[]>>,
+  removeEntity: (mob: Mob) => null,
+  addMob: (name: string, health: number | undefined, initiative: number | undefined) => null,
+  addHero: (name: string, health: number | undefined, initiative: number | undefined) => null,
+  setHeroes: (() => null) as React.Dispatch<React.SetStateAction<Hero[]>>,
+  resetHeroInitiatives: () => null,
+  mobFavorites: [] as Mob[],
+  setMobFavorites: (mobs: Mob[]) => null,
   isClient: false,
+  heroes: [] as Hero[],
+  combatStarted: false,
+  setCombatStarted: (started: boolean) => null,
+  clearMobs: () => null,
 });
 
 export const DMHelperContextProvider = ({ children }) => {
-  const [mobs, setMobs] = useLocalStorage<Mob[]>("mobs", []);
-  const [favorites, setFavorites] = useLocalStorage<Mob[]>("favorites", []);
+  const [entities, setEntities] = useLocalStorage<Entity[]>('entities', []);
+  const [mobFavorites, setMobFavorites] = useLocalStorage<Mob[]>('mobFavorites', []);
+  const [combatStarted, setCombatStarted] = useLocalStorage<boolean>('combatStarted', false);
   const [isClient, setIsClient] = useState(false);
   const toast = useToast();
 
-  const addMob = (mobName: string, mobHealth: string | number) => {
-    if (mobName.trim() === "") {
+  const addMob = (name: string, health: number | undefined, initiative: number | undefined): boolean => {
+    if (!validateName(name) || !validateMobHealth(health)) return false;
+
+    const number = getNextEntityNumber(name);
+    const mob: Mob = new Mob(name, health, number, initiative);
+
+    setEntities([...entities, mob]);
+    addMobFavorite(mob);
+
+    return true;
+  };
+
+  const addHero = (name: string, health: number | undefined, initiative: number | undefined): boolean => {
+    if (!validateName(name) || !validateMobHealth(health)) return false;
+
+    const number = getNextEntityNumber(name);
+    const hero: Hero = new Hero(name, health, number, initiative);
+
+    setEntities([...entities, hero]);
+    return true;
+  };
+
+  const setHeroes = (heroes: Hero[]) => {
+    const nonHeroes = entities.filter((entity) => entity.type !== EntityType.HERO);
+    const updatedEntities = [...nonHeroes, ...heroes];
+    setEntities(updatedEntities);
+  };
+
+  const resetHeroInitiatives = () => {
+    const updatedEntities = entities.map((entity) => {
+      if (entity.type === EntityType.HERO) {
+        return {
+          ...entity,
+          initiative: undefined,
+        };
+      }
+      return entity;
+    });
+    setEntities(updatedEntities);
+  };
+
+  const validateName = (name: string): boolean => {
+    if (name.trim() === '') {
       toast({
-        title: "Error",
-        description: "Mob name cannot be empty.",
-        status: "error",
+        title: 'Error',
+        description: 'Mob name cannot be empty.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+
+      return false;
+    }
+
+    return true;
+  };
+
+  const validateMobHealth = (health: number | undefined): boolean => {
+    if (!isNaN(health) && health !== null && health <= 0) {
+      toast({
+        title: 'Error',
+        description: 'Mob health must be a positive number.',
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
       return false;
     }
 
-    if (typeof mobHealth === "string") {
-      mobHealth = parseInt(mobHealth, 10);
-    }
+    return true;
+  };
 
-    if (isNaN(mobHealth) || mobHealth <= 0) {
-      toast({
-        title: "Error",
-        description: "Mob health must be a positive number.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-      return false;
-    }
-
+  const getNextEntityNumber = (name: string) => {
     let mobNumber = 1;
-    if (mobs.some((m) => m.mobName === mobName)) {
-      // find mob of same name with largest ID and increment by 1
-      mobNumber =
-        Math.max(
-          ...mobs.filter((m) => m.mobName === mobName).map((m) => m.mobNumber)
-        ) + 1;
+    if (entities.some((m) => m.name === name)) {
+      mobNumber = Math.max(...entities.filter((m) => m.name === name).map((m) => m.number)) + 1;
     }
 
-    const mob: Mob = new Mob(mobName, mobHealth, mobNumber);
-
-    setMobs([...mobs, mob]);
-    addFavorite(mob);
+    return mobNumber;
   };
 
-  const removeMob = (mob: Mob) => {
-    setMobs(mobs.filter((m) => !(m.id === mob.id)));
+  const removeEntity = (mob: Mob) => {
+    setEntities(entities.filter((m) => !(m.id === mob.id)));
   };
 
-  const addFavorite = (mob: Mob) => {
-    if (!favorites.some((m) => m.mobName === mob.mobName)) {
-      setFavorites([...favorites, mob]);
+  const addMobFavorite = (mob: Mob) => {
+    if (!mobFavorites.some((m) => m.name === mob.name)) {
+      setMobFavorites([...mobFavorites, mob]);
     }
   };
+
+  const clearMobs = () => {
+    setEntities(entities.filter((entity) => entity.type !== EntityType.MOB));
+  };
+
+  const heroes = useMemo(() => {
+    return entities?.filter((entity) => entity.type === EntityType.HERO) as Hero[];
+  }, [entities]);
 
   useEffect(() => {
     setIsClient(true);
@@ -79,13 +135,20 @@ export const DMHelperContextProvider = ({ children }) => {
   return (
     <DMHelperContext.Provider
       value={{
-        mobs,
-        setMobs,
-        favorites,
-        setFavorites,
+        entities,
+        setEntities,
+        removeEntity,
         addMob,
-        removeMob,
+        addHero,
+        setHeroes,
+        resetHeroInitiatives,
+        mobFavorites,
+        setMobFavorites,
         isClient,
+        heroes,
+        combatStarted,
+        setCombatStarted,
+        clearMobs,
       }}
     >
       {children}

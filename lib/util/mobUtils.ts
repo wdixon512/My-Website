@@ -1,17 +1,28 @@
-import Mob from "@lib/models/Mob";
+import Entity from '@lib/models/dm-helper/Entity';
 
-export const sortMobs = (mobs: Mob[]) => {
-  if (!mobs) return [];
-  return mobs.sort((a, b) => {
-    // First, sort by mobName
-    if (a.mobName.toLowerCase() < b.mobName.toLowerCase()) return -1;
-    if (a.mobName.toLowerCase() > b.mobName.toLowerCase()) return 1;
+export const sortEntities = (entities: Entity[]) => {
+  if (!entities) return [];
+  return entities.sort((a, b) => {
+    // First, sort by name
+    if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
+    if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
 
-    // If mobName is the same, sort by id
+    // If name is the same, sort by id
     if (a.id < b.id) return -1;
     if (a.id > b.id) return 1;
 
-    // If both mobName and id are the same
+    // If both name and id are the same
     return 0;
+  });
+};
+
+export const sortEntitiesByInitiative = (entities: Entity[]) => {
+  if (!entities) return [];
+  return entities.slice().sort((a, b) => {
+    if (a.initiative !== b.initiative) {
+      return (b.initiative || 0) - (a.initiative || 0);
+    } else {
+      return 0;
+    }
   });
 };

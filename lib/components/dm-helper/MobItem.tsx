@@ -1,47 +1,21 @@
-import {
-  Text,
-  Flex,
-  FormControl,
-  Input,
-  Button,
-  FlexProps,
-} from "@chakra-ui/react";
-import AnimatedFlex from "@components/global/AnimatedFlex";
-import Mob from "@lib/models/Mob";
-import { useContext, useState } from "react";
-import { DMHelperContext } from "../contexts/DMHelperContext";
-import React from "react";
+import { Text, Flex, FormControl, Input, Button, FlexProps } from '@chakra-ui/react';
+import AnimatedFlex from '@components/global/AnimatedFlex';
+import Mob from '@lib/models/dm-helper/Mob';
+import { useContext, useState } from 'react';
+import { DMHelperContext } from '../contexts/DMHelperContext';
+import React from 'react';
 
 interface MobItemProps extends FlexProps {
   mob: Mob;
   handleDrop?: (id: string | number, x: number, y: number) => void;
 }
 
-export const MobItem: React.FC<MobItemProps> = ({
-  mob,
-  handleDrop,
-  ...props
-}) => {
-  const { mobs, removeMob, setMobs } = useContext(DMHelperContext);
-  // const [isDragging, setIsDragging] = useState(false);
+export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ...props }) => {
+  const { entities, removeEntity: removeMob, setEntities: setMobs } = useContext(DMHelperContext);
 
   const updateHealth = (mob: Mob, newHealth) => {
-    setMobs(
-      mobs.map((m) =>
-        m.id === mob.id ? new Mob(m.mobName, newHealth, m.mobNumber) : m
-      )
-    );
+    setMobs(entities.map((m) => (m.id === mob.id ? new Mob(m.name, newHealth, m.number, m.initiative) : m)));
   };
-
-  // const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-  //   e.dataTransfer.setData("text/plain", JSON.stringify(mob));
-  //   setIsDragging(true);
-  // };
-
-  // const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
-  //   handleDrop(mob.id, e.clientX, e.clientY);
-  //   setIsDragging(false);
-  // };
 
   return (
     <AnimatedFlex
@@ -50,16 +24,19 @@ export const MobItem: React.FC<MobItemProps> = ({
       justify="space-between"
       p={2}
       borderBottomWidth={1}
-      _hover={{ bg: "secondary.600", cursor: "pointer" }}
-      // onDragStart={handleDragStart}
-      // onDragEnd={handleDragEnd}
+      _hover={{ bg: 'secondary.600', cursor: 'pointer' }}
       {...props}
     >
       <Flex w="full">
         <Flex alignItems="center" flex="1">
           <Text>
-            <Text as="span" fontWeight="800">
-              &nbsp;{mob.mobName} {mob.mobNumber}
+            {mob.initiative && (
+              <Text as="span" fontWeight="800" textColor={textColor}>
+                ({mob.initiative})
+              </Text>
+            )}
+            <Text as="span" fontWeight="800" textColor={textColor}>
+              &nbsp;{mob.name} {mob.number > 1 ? `#${mob.number}` : ''}
             </Text>
           </Text>
         </Flex>
@@ -69,7 +46,7 @@ export const MobItem: React.FC<MobItemProps> = ({
             <Input
               type="number"
               fontWeight="800"
-              value={mob.mobHealth}
+              value={mob.health}
               onChange={(e) => updateHealth(mob, parseInt(e.target.value))}
               w="90px"
               ml={2}
