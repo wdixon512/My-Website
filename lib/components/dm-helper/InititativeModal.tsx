@@ -10,7 +10,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { useContext, useState } from 'react';
+import { useContext, useState, useRef } from 'react';
 import Hero from '@lib/models/dm-helper/Hero';
 import Entity, { EntityType } from '@lib/models/dm-helper/Entity';
 import { DMHelperContext } from '../contexts/DMHelperContext';
@@ -25,9 +25,23 @@ export const InitiativeModal: React.FC<InitiativeModalProps> = ({ isOpen, heroes
   const { setEntities } = useContext(DMHelperContext);
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
   const [initiativeRolls, setInitiativeRolls] = useState<number[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null); // Create ref to track input value
   const toast = useToast();
 
   const handleNextHero = () => {
+    const initiativeValue = inputRef.current?.value;
+
+    if (!initiativeValue || initiativeValue === '') {
+      toast({
+        title: 'Warning',
+        description: 'Please enter a valid initiative value.',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     if (currentHeroIndex < heroes.length - 1) {
       setCurrentHeroIndex(currentHeroIndex + 1);
     }
@@ -39,14 +53,28 @@ export const InitiativeModal: React.FC<InitiativeModalProps> = ({ isOpen, heroes
     }
   };
 
-  const handleInitiativeChange = (value: string) => {
+  const handleInitiativeChange = () => {
     const updatedRolls = [...initiativeRolls];
-    updatedRolls[currentHeroIndex] = Number(value);
+    const initiativeValue = inputRef.current?.value || '0';
+    updatedRolls[currentHeroIndex] = Number(initiativeValue);
     setInitiativeRolls(updatedRolls);
   };
 
-  const handleDone = () => {
-    if (initiativeRolls.some((roll) => roll === undefined || roll === null)) {
+  const handleDone = (aborted = false) => {
+    const initiativeValue = inputRef.current?.value;
+
+    if (initiativeValue === '') {
+      toast({
+        title: 'Warning',
+        description: 'Please enter a valid initiative value.',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (aborted || initiativeRolls.some((roll) => roll === undefined || roll === null)) {
       toast({
         title: 'Warning',
         description: 'Initiative setting was aborted. Please set all initiatives before closing.',
@@ -72,7 +100,7 @@ export const InitiativeModal: React.FC<InitiativeModalProps> = ({ isOpen, heroes
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleDone} isCentered>
+    <Modal isOpen={isOpen} onClose={() => handleDone(true)} isCentered>
       <ModalOverlay />
       <ModalContent>
         {heroes && heroes.length > 0 ? (
@@ -82,11 +110,13 @@ export const InitiativeModal: React.FC<InitiativeModalProps> = ({ isOpen, heroes
             </ModalHeader>
             <ModalBody>
               <Input
+                ref={inputRef} // Attach ref to the input
                 type="number"
                 textColor="primary.400"
                 placeholder="Enter initiative"
                 value={initiativeRolls[currentHeroIndex] || ''}
-                onChange={(e) => handleInitiativeChange(e.target.value)}
+                onChange={handleInitiativeChange}
+                required={true}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     if (currentHeroIndex === heroes.length - 1) {
@@ -100,16 +130,16 @@ export const InitiativeModal: React.FC<InitiativeModalProps> = ({ isOpen, heroes
             </ModalBody>
             <ModalFooter justifyContent="space-between">
               {currentHeroIndex > 0 && (
-                <Button leftIcon={<ChevronLeftIcon />} onClick={handlePreviousHero}>
-                  Previous Hero ({heroes[currentHeroIndex - 1]?.name})
+                <Button leftIcon={<ChevronLeftIcon />} lineHeight={5} onClick={handlePreviousHero}>
+                  Back ({heroes[currentHeroIndex - 1]?.name})
                 </Button>
               )}
               {currentHeroIndex < heroes.length - 1 ? (
-                <Button rightIcon={<ChevronRightIcon />} onClick={handleNextHero}>
-                  Next Hero ({heroes[currentHeroIndex + 1]?.name})
+                <Button rightIcon={<ChevronRightIcon />} lineHeight={5} onClick={handleNextHero}>
+                  Next ({heroes[currentHeroIndex + 1]?.name})
                 </Button>
               ) : (
-                <Button colorScheme="green" onClick={handleDone}>
+                <Button colorScheme="green" onClick={() => handleDone()}>
                   Done
                 </Button>
               )}
