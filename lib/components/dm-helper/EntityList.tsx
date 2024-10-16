@@ -15,7 +15,7 @@ export const EntityList = () => {
   const handleDragEnd = (result) => {
     if (!result.destination) return;
 
-    const reorderedEntities = Array.from(entities);
+    const reorderedEntities = Array.from(sortEntitiesByInitiative(entities));
     const [removed] = reorderedEntities.splice(result.source.index, 1);
     reorderedEntities.splice(result.destination.index, 0, removed);
 

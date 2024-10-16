@@ -47,7 +47,6 @@ export const EntityEditModal: React.FC<EntityEditModalProps> = ({ entity, isOpen
           <>
             <ModalHeader textColor="primary.400">Update {entity.name}'s Initiative</ModalHeader>
             <ModalBody>
-              <FormLabel color="blackAlpha.900">Hero Initiative</FormLabel>
               <Input
                 type="number"
                 textColor="primary.400"

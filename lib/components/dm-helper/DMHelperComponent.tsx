@@ -7,10 +7,12 @@ import { MobFavorites } from '@lib/components/dm-helper/MobFavorites';
 import { HeroList } from '@lib/components/dm-helper/HeroList';
 import { useContext } from 'react';
 import { InitiativeModal } from '@lib/components/dm-helper/modals/InititativeModal';
+import EndCombatConfirmationModal from './modals/EndCombatConfirmationModal';
 
 export const DMHelperComponent = () => {
   const { combatStarted, setCombatStarted, heroes, resetHeroInitiatives, isClient } = useContext(DMHelperContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: endCombatIsOpen, onOpen: onEndCombatModalOpen, onClose: onEndCombatModalClose } = useDisclosure();
 
   const startCombat = () => {
     if (heroes.length > 0) {
@@ -21,8 +23,12 @@ export const DMHelperComponent = () => {
   };
 
   const endCombat = () => {
-    resetHeroInitiatives();
-    setCombatStarted(false);
+    onEndCombatModalOpen();
+
+    if (!combatStarted) {
+      resetHeroInitiatives();
+      setCombatStarted(false);
+    }
   };
 
   return (
@@ -80,6 +86,11 @@ export const DMHelperComponent = () => {
       </Tabs>
 
       <InitiativeModal isOpen={isOpen} heroes={heroes} onClose={onClose} />
+      <EndCombatConfirmationModal
+        isOpen={endCombatIsOpen}
+        setCombatStarted={setCombatStarted}
+        onClose={onEndCombatModalClose}
+      />
     </>
   );
 };
