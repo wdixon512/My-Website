@@ -1,9 +1,11 @@
-import { Text, Flex, FormControl, Input, Button, FlexProps } from '@chakra-ui/react';
+import { Text, Flex, FormControl, Input, Button, FlexProps, Tooltip, Icon, useDisclosure } from '@chakra-ui/react';
 import AnimatedFlex from '@components/global/AnimatedFlex';
 import Mob from '@lib/models/dm-helper/Mob';
 import { useContext, useState } from 'react';
 import { DMHelperContext } from '../contexts/DMHelperContext';
 import React from 'react';
+import { FaUserEdit } from 'react-icons/fa';
+import EntityEditModal from './modals/EntityEditModal';
 
 interface MobItemProps extends FlexProps {
   mob: Mob;
@@ -11,14 +13,20 @@ interface MobItemProps extends FlexProps {
 }
 
 export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ...props }) => {
-  const { entities, removeEntity: removeMob, setEntities: setMobs } = useContext(DMHelperContext);
+  const { entities, removeEntity, setEntities } = useContext(DMHelperContext);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const updateHealth = (mob: Mob, newHealth) => {
-    setMobs(entities.map((m) => (m.id === mob.id ? new Mob(m.name, newHealth, m.number, m.initiative) : m)));
+    setEntities(entities.map((m) => (m.id === mob.id ? new Mob(m.name, newHealth, m.number, m.initiative) : m)));
+  };
+
+  const showEntityEditForm = () => {
+    onOpen();
   };
 
   return (
     <AnimatedFlex
+      role="group"
       align="center"
       key={props.key}
       justify="space-between"
@@ -53,10 +61,17 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
             />
           </FormControl>
         </Flex>
+        <Button variant="redSolid" onClick={() => removeEntity(mob)} mr={2}>
+          Kill
+        </Button>
+        <Tooltip label="Update Mob" aria-label="Update Mob" hasArrow>
+          <Button variant="primarySolid" onClick={() => showEntityEditForm()}>
+            <Icon as={FaUserEdit} />
+          </Button>
+        </Tooltip>
       </Flex>
-      <Button variant="redSolid" onClick={() => removeMob(mob)}>
-        Kill
-      </Button>
+
+      <EntityEditModal entity={mob} isOpen={isOpen} onClose={onClose} />
     </AnimatedFlex>
   );
 };
