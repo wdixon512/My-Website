@@ -100,7 +100,6 @@ export const InitiativeModal: React.FC<InitiativeModalProps> = ({ isOpen, heroes
 
     setInitiativeRolls([]);
     setCurrentHeroIndex(0);
-
     onClose();
   };
 

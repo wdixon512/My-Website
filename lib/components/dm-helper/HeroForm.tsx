@@ -1,9 +1,9 @@
-import { Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
-import { useContext, useState } from "react";
-import { DMHelperContext } from "../contexts/DMHelperContext";
+import { Box, Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import { useContext, useState } from 'react';
+import { DMHelperContext } from '../contexts/DMHelperContext';
 
 export const HeroForm = () => {
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const [initiative, setInitiative] = useState<number | undefined>(undefined);
 
   const { setEntities, addHero } = useContext(DMHelperContext);
@@ -16,7 +16,7 @@ export const HeroForm = () => {
     e.preventDefault();
 
     if (addHero(name, undefined, initiative)) {
-      setName("");
+      setName('');
       setInitiative(undefined);
     }
   };
@@ -29,6 +29,7 @@ export const HeroForm = () => {
       borderWidth={1}
       borderRadius="md"
       shadow="md"
+      h="fit-content"
       onSubmit={handleAddHero}
     >
       <FormControl mb={4}>

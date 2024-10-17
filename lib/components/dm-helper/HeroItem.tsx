@@ -1,4 +1,4 @@
-import { Text, Flex, Button, FlexProps, Icon, useDisclosure } from '@chakra-ui/react';
+import { Text, Flex, Button, FlexProps, Icon, useDisclosure, Tooltip } from '@chakra-ui/react';
 import AnimatedFlex from '@components/global/AnimatedFlex';
 import { useContext } from 'react';
 import { DMHelperContext } from '../contexts/DMHelperContext';
@@ -59,9 +59,11 @@ export const HeroItem: React.FC<HeroItemProps> = ({
         </Button>
       )}
       {showInitiative && (
-        <Button variant="primarySolid" onClick={() => showEntityEditForm()}>
-          <Icon as={FaUserEdit} />
-        </Button>
+        <Tooltip label="Update Hero Initiative" aria-label="Update Hero Initiative" hasArrow>
+          <Button variant="primarySolid" onClick={() => showEntityEditForm()}>
+            <Icon as={FaUserEdit} />
+          </Button>
+        </Tooltip>
       )}
 
       <EntityEditModal entity={hero} isOpen={isOpen} onClose={onClose} />
