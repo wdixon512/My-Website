@@ -24,13 +24,12 @@ export const EndCombatConfirmationModal: React.FC<EndCombatConfirmationModalProp
       <ModalOverlay />
       <ModalContent>
         <ModalHeader textColor="primary.400">Are you sure you want to end combat?</ModalHeader>
-        <ModalBody></ModalBody>
-        <ModalFooter justifyContent="space-between">
+        <ModalFooter justifyContent="center">
           <Button variant="redLink" onClick={() => handleDone(false)}>
-            Cancel
+            No
           </Button>
           <Button variant="solid" onClick={() => handleDone(true)}>
-            Done
+            Yes
           </Button>
         </ModalFooter>
       </ModalContent>
