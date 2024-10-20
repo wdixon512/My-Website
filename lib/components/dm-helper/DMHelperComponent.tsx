@@ -8,6 +8,7 @@ import { HeroList } from '@lib/components/dm-helper/HeroList';
 import { useContext } from 'react';
 import { InitiativeModal } from '@lib/components/dm-helper/modals/InititativeModal';
 import EndCombatConfirmationModal from './modals/EndCombatConfirmationModal';
+import { JoinRoomForm } from './JoinRoomForm';
 
 export const DMHelperComponent = () => {
   const { combatStarted, setCombatStarted, heroes, resetHeroInitiatives, isClient } = useContext(DMHelperContext);
@@ -55,6 +56,12 @@ export const DMHelperComponent = () => {
               Heroes
             </Text>
           </Tab>
+          <Tab _selected={{ color: 'white', bg: 'primary.200' }} borderRadius="lg" fontWeight="bold">
+            <Img src="/static/images/join-party.png" alt="knight" w="20px" h="20px" mr="1" />
+            <Text as="span" lineHeight="24px">
+              Invite Others
+            </Text>
+          </Tab>
         </TabList>
 
         <TabPanels>
@@ -80,6 +87,11 @@ export const DMHelperComponent = () => {
             <Flex gap="4" justifyContent="center">
               <HeroForm />
               <HeroList />
+            </Flex>
+          </TabPanel>
+          <TabPanel>
+            <Flex gap="4" justifyContent="center">
+              <JoinRoomForm />
             </Flex>
           </TabPanel>
         </TabPanels>

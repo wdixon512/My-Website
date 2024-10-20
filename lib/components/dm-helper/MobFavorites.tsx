@@ -56,6 +56,7 @@ export const MobFavorites = () => {
                         fontSize={8}
                         lineHeight={8}
                         p="0"
+                        mt="2px"
                         _hover={{ bg: 'transparent' }}
                         _focus={{ boxShadow: 'none' }}
                       >
