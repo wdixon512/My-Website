@@ -1,18 +1,19 @@
 import { useState } from 'react';
+import { db, signInWithGoogle } from '@services/firebase';
 import { Flex, Heading, Text, Button, Input } from '@chakra-ui/react';
+import { collection, getDocs } from 'firebase/firestore';
 
 export const JoinRoomForm = () => {
-  const [roomLink, setRoomLink] = useState('');
+  const [roomLink, setRoomLink] = useState<string | null>(null);
+  const rooms = getDocs(collection(db, 'rooms')).then((snapshot) => {
+    console.log('rooms: ', snapshot);
+  });
 
   const createRoom = () => {
-    const newRoomLink = `${process.env.NEXT_PUBLIC_BASE_URL}/room/123`; // Replace with dynamic logic
-    setRoomLink(newRoomLink);
+    signInWithGoogle();
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(roomLink);
-    alert('Link copied to clipboard!');
-  };
+  const copyToClipboard = () => {};
 
   return (
     <Flex direction="column">
