@@ -1,11 +1,15 @@
 import { createContext, useEffect, useState, useMemo } from 'react';
 import Mob from '@lib/models/dm-helper/Mob';
 import { useToast } from '@chakra-ui/react';
-import useLocalStorage from '@lib/hooks/useLocalStorage';
 import Entity, { EntityType } from '@lib/models/dm-helper/Entity';
 import Hero from '@lib/models/dm-helper/Hero';
+import { CombatState, Combat } from '@lib/models/dm-helper/Combat';
+import { fetchRoom, fetchUserRoom, updateRoom } from '@lib/services/dm-helper-service';
+import { Room } from '@lib/models/dm-helper/Room';
+import { generateRoomCode } from '@lib/util/dm-helper-utils';
 
 export const DMHelperContext = createContext({
+  room: {} as Room,
   entities: [] as Entity[],
   setEntities: (() => null) as React.Dispatch<React.SetStateAction<Entity[]>>,
   removeEntity: (mob: Mob) => null,
@@ -23,31 +27,59 @@ export const DMHelperContext = createContext({
 });
 
 export const DMHelperContextProvider = ({ children }) => {
-  const [entities, setEntities] = useLocalStorage<Entity[]>('entities', []);
-  const [mobFavorites, setMobFavorites] = useLocalStorage<Mob[]>('mobFavorites', []);
-  const [combatStarted, setCombatStarted] = useLocalStorage<boolean>('combatStarted', false);
+  const [room, setRoom] = useState<Room | null>(null);
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [mobFavorites, setMobFavorites] = useState<Mob[]>([]);
+  const [combatStarted, setCombatStarted] = useState<boolean>(false);
   const [isClient, setIsClient] = useState(false);
   const toast = useToast();
+
+  // Fetch room from Firebase on component mount
+  useEffect(() => {
+    const fetchAndSetRoom = async () => {
+      try {
+        const room = await fetchUserRoom();
+        if (room) {
+          setRoom(room);
+          setEntities(room.combat.entities || []);
+          setMobFavorites(room.mobFavorites || []);
+          setCombatStarted(room.combat.combatState === CombatState.IN_PROGRESS);
+        }
+      } catch (error) {
+        console.error('Error fetching room:', error);
+      }
+    };
+
+    fetchAndSetRoom();
+  }, []);
+
+  // Utility to update Firestore and context state simultaneously
+  const updateDbRoom = async (updatedRoom: Partial<Room>) => {
+    if (!room) return;
+    const newRoom = { ...room, ...updatedRoom };
+    await updateRoom(newRoom);
+    setRoom(newRoom);
+  };
 
   const addMob = (name: string, health: number | undefined, initiative: number | undefined): boolean => {
     if (!validateName(name) || !validateMobHealth(health)) return false;
 
-    const number = getNextEntityNumber(name);
-    const mob: Mob = new Mob(name, health, number, initiative);
+    const mob: Mob = new Mob(name, health, getNextEntityNumber(name), initiative);
+    const updatedEntities = [...entities, mob];
+    setEntities(updatedEntities);
+    updateDbRoom({ combat: { ...room?.combat, entities: updatedEntities } });
 
-    setEntities([...entities, mob]);
     addMobFavorite(mob);
-
     return true;
   };
 
   const addHero = (name: string, health: number | undefined, initiative: number | undefined): boolean => {
     if (!validateName(name) || !validateMobHealth(health)) return false;
 
-    const number = getNextEntityNumber(name);
-    const hero: Hero = new Hero(name, health, number, initiative);
-
-    setEntities([...entities, hero]);
+    const hero: Hero = new Hero(name, health, getNextEntityNumber(name), initiative);
+    const updatedEntities = [...entities, hero];
+    setEntities(updatedEntities);
+    updateDbRoom({ combat: { ...room?.combat, entities: updatedEntities } });
     return true;
   };
 
@@ -55,86 +87,84 @@ export const DMHelperContextProvider = ({ children }) => {
     const nonHeroes = entities.filter((entity) => entity.type !== EntityType.HERO);
     const updatedEntities = [...nonHeroes, ...heroes];
     setEntities(updatedEntities);
+    updateDbRoom({ combat: { ...room?.combat, entities: updatedEntities } });
   };
 
   const resetHeroInitiatives = () => {
-    const updatedEntities = entities.map((entity) => {
-      if (entity.type === EntityType.HERO) {
-        return {
-          ...entity,
-          initiative: undefined,
-        };
-      }
-      return entity;
-    });
+    const updatedEntities = entities.map((entity) =>
+      entity.type === EntityType.HERO ? { ...entity, initiative: undefined } : entity
+    );
     setEntities(updatedEntities);
-  };
-
-  const validateName = (name: string): boolean => {
-    if (name.trim() === '') {
-      toast({
-        title: 'Error',
-        description: 'Mob name cannot be empty.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-
-      return false;
-    }
-
-    return true;
-  };
-
-  const validateMobHealth = (health: number | undefined): boolean => {
-    if (!isNaN(health) && health !== null && health <= 0) {
-      toast({
-        title: 'Error',
-        description: 'Mob health must be a positive number.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      return false;
-    }
-
-    return true;
-  };
-
-  const getNextEntityNumber = (name: string) => {
-    let mobNumber = 1;
-    if (entities.some((m) => m.name === name)) {
-      mobNumber = Math.max(...entities.filter((m) => m.name === name).map((m) => m.number)) + 1;
-    }
-
-    return mobNumber;
-  };
-
-  const removeEntity = (mob: Mob) => {
-    setEntities(entities.filter((m) => !(m.id === mob.id)));
+    updateDbRoom({ combat: { ...room?.combat, entities: updatedEntities } });
   };
 
   const addMobFavorite = (mob: Mob) => {
     if (!mobFavorites.some((m) => m.name === mob.name)) {
-      setMobFavorites([...mobFavorites, mob]);
+      const updatedFavorites = [...mobFavorites, mob];
+      setMobFavorites(updatedFavorites);
+      updateDbRoom({ mobFavorites: updatedFavorites });
     }
   };
 
-  const clearMobs = () => {
-    setEntities(entities.filter((entity) => entity.type !== EntityType.MOB));
+  const removeEntity = (mob: Mob) => {
+    const updatedEntities = entities.filter((m) => m.id !== mob.id);
+    setEntities(updatedEntities);
+    updateDbRoom({ combat: { ...room?.combat, entities: updatedEntities } });
   };
 
-  const heroes = useMemo(() => {
-    return entities?.filter((entity) => entity.type === EntityType.HERO) as Hero[];
-  }, [entities]);
+  const clearMobs = () => {
+    const updatedEntities = entities.filter((entity) => entity.type !== EntityType.MOB);
+    setEntities(updatedEntities);
+    updateDbRoom({ combat: { ...room?.combat, entities: updatedEntities } });
+  };
+
+  const heroes = useMemo(() => entities.filter((entity) => entity.type === EntityType.HERO) as Hero[], [entities]);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
+  // Validation functions
+  const validateName = (name: string): boolean => {
+    if (name.trim() === '') {
+      toast({
+        title: 'Error',
+        description: 'Name cannot be empty.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const validateMobHealth = (health: number | undefined): boolean => {
+    if (health !== undefined && health <= 0) {
+      toast({
+        title: 'Error',
+        description: 'Health must be a positive number.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const getNextEntityNumber = (name: string) => {
+    let number = 1;
+    if (entities.some((m) => m.name === name)) {
+      number = Math.max(...entities.filter((m) => m.name === name).map((m) => m.number)) + 1;
+    }
+    return number;
+  };
+
   return (
     <DMHelperContext.Provider
       value={{
+        room,
         entities,
         setEntities,
         removeEntity,

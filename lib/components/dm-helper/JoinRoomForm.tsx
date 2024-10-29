@@ -6,7 +6,10 @@ import { collection, getDocs } from 'firebase/firestore';
 export const JoinRoomForm = () => {
   const [roomLink, setRoomLink] = useState<string | null>(null);
   const rooms = getDocs(collection(db, 'rooms')).then((snapshot) => {
-    console.log('rooms: ', snapshot);
+    console.log(
+      'rooms: ',
+      snapshot.docs.map((doc) => doc.data())
+    );
   });
 
   const createRoom = () => {

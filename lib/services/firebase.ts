@@ -15,8 +15,6 @@ if (!getApps().length) {
   });
 }
 
-console.log('firebaseApp: ', firebaseApp);
-
 // Export Firestore and Auth instances
 export const db = getFirestore(firebaseApp);
 export const auth = getAuth(firebaseApp);
