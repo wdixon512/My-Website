@@ -4,7 +4,7 @@ import { compilerOptions } from './tsconfig.json';
 import * as dotenv from 'dotenv';
 
 // Load environment variables from .env file
-dotenv.config();
+dotenv.config({ path: '.env.test' });
 
 const config: Config = {
   verbose: true,

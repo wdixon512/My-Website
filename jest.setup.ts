@@ -1,9 +1,12 @@
 import { initializeTestEnvironment, RulesTestEnvironment } from '@firebase/rules-unit-testing';
-import { auth } from '@lib/services/firebase';
-import { connectAuthEmulator, getAuth, initializeAuth, signInAnonymously, signInWithCustomToken } from 'firebase/auth';
-import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { connectFirestoreEmulator, Firestore } from 'firebase/firestore';
 
 let testEnv: RulesTestEnvironment;
+let db: Firestore;
+// let auth;
+
+export const getTestFirestore = () => db;
+// export const getTestAuth = () => auth;
 
 beforeAll(async () => {
   testEnv = await initializeTestEnvironment({
@@ -22,23 +25,33 @@ beforeAll(async () => {
       port: 8080,
     },
   });
+
+  const context = testEnv.authenticatedContext('test-user');
+
+  // Yikes...
+  db = context.firestore() as unknown as Firestore;
+  // auth = context.auth();
+
+  connectFirestoreEmulator(db, 'localhost', 8080);
+  // connectAuthEmulator(auth, 'http://localhost:9099');
+
+  db = getTestFirestore();
+  // auth = await getTestAuth();
 });
 
 afterAll(async () => {
   await testEnv.cleanup();
 });
 
-export const getTestFirestore = () => {
-  const db = testEnv.authenticatedContext('test-user').firestore();
+// const getTestFirestore = () => {
+//   const db = testEnv.authenticatedContext('test-user').firestore();
+//   connectFirestoreEmulator(db, 'localhost', 8080); // Ensure Firestore uses the emulator
+//   return db;
+// };
 
-  connectFirestoreEmulator(db, 'localhost', 8080); // Ensure Firestore uses the emulator
-  connectAuthEmulator(auth, 'http://localhost:9099'); // Ensure Auth uses the emulator
-  return db;
-};
-
-export const authenticateTestUser = async () => {
-  const auth = getAuth();
-  connectAuthEmulator(auth, 'http://localhost:9099');
-  // await signInWithCustomToken(auth, 'test-custom-token');
-  await signInAnonymously(auth);
-};
+// const getTestAuth = async () => {
+//   const auth = getAuth();
+//   connectAuthEmulator(auth, 'http://localhost:9099');
+//   await signInWithCustomToken(auth, '6lxDe6pWChlUsjbVYAAfVcwp5SmD');
+//   return auth;
+// };
