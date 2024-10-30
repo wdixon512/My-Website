@@ -4,7 +4,7 @@ import { useToast } from '@chakra-ui/react';
 import Entity, { EntityType } from '@lib/models/dm-helper/Entity';
 import Hero from '@lib/models/dm-helper/Hero';
 import { CombatState, Combat } from '@lib/models/dm-helper/Combat';
-import { fetchRoom, fetchUserRoom, updateRoom } from '@lib/services/dm-helper-service';
+import { fetchRoom, fetchUserRoom, updateRoom } from '@lib/services/dm-helper-room-service';
 import { Room } from '@lib/models/dm-helper/Room';
 import { generateRoomCode } from '@lib/util/dm-helper-utils';
 

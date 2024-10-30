@@ -3,9 +3,8 @@ import Hero from './Hero';
 import Mob from './Mob';
 
 export type Room = {
-  id: number;
+  id?: string;
   ownerUID: string;
-  code: string;
   combat: Combat;
   mobFavorites: Mob[];
   heroes: Hero[];
