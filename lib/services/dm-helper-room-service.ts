@@ -55,6 +55,8 @@ export function createRoomService(db: Firestore = defaultDb, auth: Auth = defaul
         );
       }
 
+      uiRoom.ownerUID = auth.currentUser.uid;
+
       const roomsRef = collection(db, 'rooms');
       const newRoomRef = await addDoc(roomsRef, uiRoom); // Automatically generates a unique ID
 

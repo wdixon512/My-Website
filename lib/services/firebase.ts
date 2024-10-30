@@ -20,6 +20,8 @@ export const db = getFirestore(firebaseApp);
 export const auth = getAuth(firebaseApp);
 
 export const signInWithGoogle = async () => {
-  const provider = new GoogleAuthProvider();
-  await signInWithPopup(auth, provider);
+  if (!auth.currentUser) {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+  }
 };

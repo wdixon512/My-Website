@@ -4,12 +4,13 @@ import { useToast } from '@chakra-ui/react';
 import Entity, { EntityType } from '@lib/models/dm-helper/Entity';
 import Hero from '@lib/models/dm-helper/Hero';
 import { CombatState, Combat } from '@lib/models/dm-helper/Combat';
-import { fetchRoom, fetchUserRoom, updateRoom } from '@lib/services/dm-helper-room-service';
 import { Room } from '@lib/models/dm-helper/Room';
-import { generateRoomCode } from '@lib/util/dm-helper-utils';
+import { createRoomService } from '@lib/services/dm-helper-room-service';
+import { getAuth } from 'firebase/auth';
 
 export const DMHelperContext = createContext({
   room: {} as Room,
+  setRoom: (() => null) as React.Dispatch<React.SetStateAction<Room | null>>,
   entities: [] as Entity[],
   setEntities: (() => null) as React.Dispatch<React.SetStateAction<Entity[]>>,
   removeEntity: (mob: Mob) => null,
@@ -27,6 +28,8 @@ export const DMHelperContext = createContext({
 });
 
 export const DMHelperContextProvider = ({ children }) => {
+  const roomService = createRoomService();
+
   const [room, setRoom] = useState<Room | null>(null);
   const [entities, setEntities] = useState<Entity[]>([]);
   const [mobFavorites, setMobFavorites] = useState<Mob[]>([]);
@@ -38,7 +41,7 @@ export const DMHelperContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchAndSetRoom = async () => {
       try {
-        const room = await fetchUserRoom();
+        const room = await roomService.fetchUserRoom();
         if (room) {
           setRoom(room);
           setEntities(room.combat.entities || []);
@@ -46,7 +49,16 @@ export const DMHelperContextProvider = ({ children }) => {
           setCombatStarted(room.combat.combatState === CombatState.IN_PROGRESS);
         }
       } catch (error) {
-        console.error('Error fetching room:', error);
+        console.warn('Error fetching room:', error, 'Creating new room...');
+        setRoom({
+          ownerUID: getAuth().currentUser?.uid ?? '',
+          combat: {
+            entities: entities,
+            combatState: combatStarted ? CombatState.IN_PROGRESS : CombatState.NOT_IN_PROGRESS,
+          } as Combat,
+          mobFavorites: mobFavorites,
+          heroes: heroes,
+        });
       }
     };
 
@@ -57,7 +69,7 @@ export const DMHelperContextProvider = ({ children }) => {
   const updateDbRoom = async (updatedRoom: Partial<Room>) => {
     if (!room) return;
     const newRoom = { ...room, ...updatedRoom };
-    await updateRoom(newRoom);
+    await roomService.updateRoom(newRoom);
     setRoom(newRoom);
   };
 
@@ -165,6 +177,7 @@ export const DMHelperContextProvider = ({ children }) => {
     <DMHelperContext.Provider
       value={{
         room,
+        setRoom,
         entities,
         setEntities,
         removeEntity,
