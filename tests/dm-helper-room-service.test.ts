@@ -110,7 +110,7 @@ describe('DM Helper Service Integration Tests', () => {
 
       // Fetch the room using your service
       const fetchedRoom = await roomService.fetchUserRoom();
-      expect(fetchedRoom).toEqual(roomData);
+      expect(fetchedRoom).equal(roomData);
     });
 
     test('should return null if no room is found for user', async () => {
@@ -148,7 +148,7 @@ describe('DM Helper Service Integration Tests', () => {
 
       // Fetch updated room to verify the change
       const roomSnapshot = await getDoc(roomRef);
-      expect(roomSnapshot.data()).toEqual(updatedRoom);
+      expect(roomSnapshot.data()).equal(updatedRoom);
     });
 
     test('should throw an error if the room does not exist', async () => {

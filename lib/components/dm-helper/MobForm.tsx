@@ -33,6 +33,7 @@ export const MobForm = () => {
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter mob name"
           required={true}
+          data-testid="mob-name-input"
         />
       </FormControl>
       <FormControl mb={4}>
@@ -44,6 +45,7 @@ export const MobForm = () => {
           onChange={(e) => setInitiative(e.target.value)}
           placeholder="Enter mob initiative"
           required={false}
+          data-testid="mob-initiative-input"
         />
       </FormControl>
       <FormControl mb={4}>
@@ -55,13 +57,14 @@ export const MobForm = () => {
           onChange={(e) => setHealth(e.target.value)}
           placeholder="Enter mob health"
           required={false}
+          data-testid="mob-health-input"
         />
       </FormControl>
-      <Button type="submit" variant="solid" width="full">
+      <Button type="submit" variant="solid" width="full" data-testid="submit-mob-button">
         Add Mob
       </Button>
 
-      <Button variant="redLink" width="full" onClick={clearMobs} mt="4">
+      <Button variant="redLink" width="full" onClick={clearMobs} mt="4" data-testid="clear-mobs-button">
         Clear Mobs
       </Button>
     </Box>

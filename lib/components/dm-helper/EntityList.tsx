@@ -4,7 +4,7 @@ import { DMHelperContext } from '../contexts/DMHelperContext';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { sortEntitiesByInitiative } from '@lib/util/mobUtils';
 import MobItem from './MobItem';
-import Entity, { EntityType } from '@lib/models/dm-helper/Entity';
+import { Entity, EntityType } from '@lib/models/dm-helper/Entity';
 import HeroItem from './HeroItem';
 import { FaUserEdit } from 'react-icons/fa';
 
@@ -46,7 +46,7 @@ export const EntityList = () => {
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="EntityList">
             {(provided) => (
-              <List ref={provided.innerRef} {...provided.droppableProps}>
+              <List ref={provided.innerRef} {...provided.droppableProps} data-testid="entity-list">
                 {sortEntitiesByInitiative(entities).map((entity: Entity, i) => (
                   <Draggable key={entity.id} draggableId={entity.id} index={i}>
                     {(provided) => (

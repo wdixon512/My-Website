@@ -44,19 +44,34 @@ export const DMHelperComponent = () => {
           w="fit-content"
           bgColor="secondary.500"
         >
-          <Tab _selected={{ color: 'white', bg: 'primary.200' }} borderRadius="lg" fontWeight="bold">
+          <Tab
+            _selected={{ color: 'white', bg: 'primary.200' }}
+            borderRadius="lg"
+            fontWeight="bold"
+            data-testid="combat-panel"
+          >
             <Img src="/static/images/sword.png" alt="sword-icon" w="20px" h="20px" mr="1" />
             <Text as="span" lineHeight="24px">
               Combat
             </Text>
           </Tab>
-          <Tab _selected={{ color: 'white', bg: 'primary.200' }} borderRadius="lg" fontWeight="bold">
+          <Tab
+            _selected={{ color: 'white', bg: 'primary.200' }}
+            borderRadius="lg"
+            fontWeight="bold"
+            data-testid="heroes-panel"
+          >
             <Img src="/static/images/knight.png" alt="knight" w="20px" h="20px" mr="1" />
             <Text as="span" lineHeight="24px">
               Heroes
             </Text>
           </Tab>
-          <Tab _selected={{ color: 'white', bg: 'primary.200' }} borderRadius="lg" fontWeight="bold">
+          <Tab
+            _selected={{ color: 'white', bg: 'primary.200' }}
+            borderRadius="lg"
+            fontWeight="bold"
+            data-testid="invite-others-panel"
+          >
             <Img src="/static/images/join-party.png" alt="knight" w="20px" h="20px" mr="1" />
             <Text as="span" lineHeight="24px">
               Invite Others
@@ -73,11 +88,15 @@ export const DMHelperComponent = () => {
               </Flex>
               <Flex direction="column" gap="4">
                 {isClient && combatStarted && (
-                  <Button variant="redSolid" onClick={() => endCombat()}>
+                  <Button variant="redSolid" onClick={() => endCombat()} data-testid="end-combat-button">
                     End Combat
                   </Button>
                 )}
-                {isClient && !combatStarted && <Button onClick={() => startCombat()}>Start Combat</Button>}
+                {isClient && !combatStarted && (
+                  <Button onClick={() => startCombat()} data-testid="start-combat-button">
+                    Start Combat
+                  </Button>
+                )}
                 <EntityList />
               </Flex>
             </Flex>

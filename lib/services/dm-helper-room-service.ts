@@ -64,6 +64,11 @@ export function createRoomService(db: Firestore = defaultDb, auth: Auth = defaul
     },
 
     async updateRoom(uiRoom: Room): Promise<Room> {
+      // User has not yet logged in. Don't throw an error, just return.
+      if (!auth.currentUser) {
+        return;
+      }
+
       const roomRef = doc(db, 'rooms', uiRoom.id);
       await updateDoc(roomRef, { ...uiRoom });
       return uiRoom;

@@ -37,7 +37,9 @@ export const JoinRoomForm = () => {
           <Button onClick={copyToClipboard}>Copy Join Room Link</Button>
         </Flex>
       ) : (
-        <Button onClick={createRoom}>Create Room</Button>
+        <Button onClick={createRoom} data-testid="create-room-button">
+          Create Room
+        </Button>
       )}
     </Flex>
   );
