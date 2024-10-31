@@ -42,16 +42,3 @@ beforeAll(async () => {
 afterAll(async () => {
   await testEnv.cleanup();
 });
-
-// const getTestFirestore = () => {
-//   const db = testEnv.authenticatedContext('test-user').firestore();
-//   connectFirestoreEmulator(db, 'localhost', 8080); // Ensure Firestore uses the emulator
-//   return db;
-// };
-
-// const getTestAuth = async () => {
-//   const auth = getAuth();
-//   connectAuthEmulator(auth, 'http://localhost:9099');
-//   await signInWithCustomToken(auth, '6lxDe6pWChlUsjbVYAAfVcwp5SmD');
-//   return auth;
-// };

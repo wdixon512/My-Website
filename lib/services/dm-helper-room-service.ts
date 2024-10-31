@@ -65,6 +65,7 @@ export function createRoomService(db: Firestore = defaultDb, auth: Auth = defaul
 
     async updateRoom(uiRoom: Room): Promise<Room> {
       const roomRef = doc(db, 'rooms', uiRoom.id);
+      debugger;
       await updateDoc(roomRef, { ...uiRoom });
       return uiRoom;
     },

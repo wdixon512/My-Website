@@ -1,7 +1,7 @@
 import { Box, Button, Circle, Flex, Heading } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { DMHelperContext } from '../contexts/DMHelperContext';
-import Mob from '@lib/models/dm-helper/Mob';
+import { Mob } from '@lib/models/dm-helper/Mob';
 import { AnimatePresence } from 'framer-motion';
 import AnimatedFlex from '../global/AnimatedFlex';
 
@@ -31,7 +31,7 @@ export const MobFavorites = () => {
               </Heading>
               <Flex gap="4" justifyContent={'center'} flexWrap="wrap" maxW="300px">
                 {mobFavorites.map((mob, i) => (
-                  <Box position="relative">
+                  <Box position="relative" key={i}>
                     <Button variant="outline" width="fit" onClick={() => handleaddMob(mob)}>
                       {mob.name}
                     </Button>

@@ -1,12 +1,13 @@
-import { createContext, useEffect, useState, useMemo } from 'react';
-import Mob from '@lib/models/dm-helper/Mob';
+import { createContext, useEffect, useState, useMemo, useCallback } from 'react';
 import { useToast } from '@chakra-ui/react';
-import Entity, { EntityType } from '@lib/models/dm-helper/Entity';
-import Hero from '@lib/models/dm-helper/Hero';
 import { CombatState, Combat } from '@lib/models/dm-helper/Combat';
 import { Room } from '@lib/models/dm-helper/Room';
 import { createRoomService } from '@lib/services/dm-helper-room-service';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { Entity, EntityType } from '@lib/models/dm-helper/Entity';
+import { Hero } from '@lib/models/dm-helper/Hero';
+import { Mob } from '@lib/models/dm-helper/Mob';
+import { getNextEntityNumber, validateMobHealth, validateName } from '@lib/util/dm-helper-utils';
 
 export const DMHelperContext = createContext({
   room: {} as Room,
@@ -16,7 +17,6 @@ export const DMHelperContext = createContext({
   removeEntity: (mob: Mob) => null,
   addMob: (name: string, health: number | undefined, initiative: number | undefined) => null,
   addHero: (name: string, health: number | undefined, initiative: number | undefined) => null,
-  setHeroes: (() => null) as React.Dispatch<React.SetStateAction<Hero[]>>,
   resetHeroInitiatives: () => null,
   mobFavorites: [] as Mob[],
   setMobFavorites: (mobs: Mob[]) => null,
@@ -35,71 +35,114 @@ export const DMHelperContextProvider = ({ children }) => {
   const [mobFavorites, setMobFavorites] = useState<Mob[]>([]);
   const [combatStarted, setCombatStarted] = useState<boolean>(false);
   const [isClient, setIsClient] = useState(false);
+  const [commitPending, setCommitPending] = useState(false);
+
   const toast = useToast();
 
-  // Fetch room from Firebase on component mount
+  const heroes = useMemo(() => entities.filter((entity) => entity.type === EntityType.HERO) as Hero[], [entities]);
+
+  // Utilities to update Room context state & Firestore
+  const scheduleCommitRoomChanges = () => setCommitPending(true);
+
   useEffect(() => {
-    const fetchAndSetRoom = async () => {
-      try {
-        const room = await roomService.fetchUserRoom();
-        if (room) {
-          setRoom(room);
-          setEntities(room.combat.entities || []);
-          setMobFavorites(room.mobFavorites || []);
-          setCombatStarted(room.combat.combatState === CombatState.IN_PROGRESS);
+    if (!commitPending) return;
+
+    const newRoom: Room = {
+      ...room,
+      combat: {
+        ...room?.combat,
+        entities: entities,
+        combatState: combatStarted ? CombatState.IN_PROGRESS : CombatState.NOT_IN_PROGRESS,
+      },
+      mobFavorites: mobFavorites,
+      heroes: heroes,
+    };
+
+    setRoom(newRoom);
+    if (!newRoom) return;
+    roomService.updateRoom(newRoom);
+    setCommitPending(false);
+  }, [commitPending, entities, mobFavorites, heroes, combatStarted, room]);
+
+  // On component mount, fetch the user's room from Firestore
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const room = await roomService.fetchUserRoom();
+          if (room) {
+            setRoom(room);
+            setEntities(room.combat.entities || []);
+            setMobFavorites(room.mobFavorites || []);
+            setCombatStarted(room.combat.combatState === CombatState.IN_PROGRESS);
+          }
+        } catch (error) {
+          console.warn('Error fetching room:', error, 'Creating new room...');
+          // If we fail to retrieve the room, create a new one
+          setRoom({
+            ownerUID: user.uid,
+            combat: {
+              entities: entities,
+              combatState: combatStarted ? CombatState.IN_PROGRESS : CombatState.NOT_IN_PROGRESS,
+            } as Combat,
+            mobFavorites: mobFavorites,
+            heroes: heroes,
+          });
         }
-      } catch (error) {
-        console.warn('Error fetching room:', error, 'Creating new room...');
-        setRoom({
-          ownerUID: getAuth().currentUser?.uid ?? '',
-          combat: {
-            entities: entities,
-            combatState: combatStarted ? CombatState.IN_PROGRESS : CombatState.NOT_IN_PROGRESS,
-          } as Combat,
-          mobFavorites: mobFavorites,
-          heroes: heroes,
-        });
+      }
+    });
+
+    setIsClient(true);
+
+    // Cleanup subscription on component unmount
+    return () => unsubscribe();
+  }, []);
+
+  const addMob = (name: string, health: number | undefined, initiative: number | undefined): boolean => {
+    if (!validateName(name, toast) || !validateMobHealth(health, toast)) return false;
+
+    const mob: Mob = {
+      id: `${name}_${getNextEntityNumber(entities, name)}`,
+      name,
+      health,
+      number: getNextEntityNumber(entities, name),
+      initiative,
+      type: EntityType.MOB,
+    };
+
+    const addMobFavorite = (mob: Mob) => {
+      if (!mobFavorites.some((m) => m.name === mob.name)) {
+        const updatedFavorites = [...mobFavorites, mob];
+        setMobFavorites(updatedFavorites);
       }
     };
 
-    fetchAndSetRoom();
-  }, []);
-
-  // Utility to update Firestore and context state simultaneously
-  const updateDbRoom = async (updatedRoom: Partial<Room>) => {
-    if (!room) return;
-    const newRoom = { ...room, ...updatedRoom };
-    await roomService.updateRoom(newRoom);
-    setRoom(newRoom);
-  };
-
-  const addMob = (name: string, health: number | undefined, initiative: number | undefined): boolean => {
-    if (!validateName(name) || !validateMobHealth(health)) return false;
-
-    const mob: Mob = new Mob(name, health, getNextEntityNumber(name), initiative);
     const updatedEntities = [...entities, mob];
     setEntities(updatedEntities);
-    updateDbRoom({ combat: { ...room?.combat, entities: updatedEntities } });
-
     addMobFavorite(mob);
+    scheduleCommitRoomChanges();
+
     return true;
   };
 
   const addHero = (name: string, health: number | undefined, initiative: number | undefined): boolean => {
-    if (!validateName(name) || !validateMobHealth(health)) return false;
+    if (!validateName(name, toast) || !validateMobHealth(health, toast)) return false;
 
-    const hero: Hero = new Hero(name, health, getNextEntityNumber(name), initiative);
+    const hero: Hero = {
+      id: `${name}_${getNextEntityNumber(entities, name)}`,
+      name,
+      health,
+      number: getNextEntityNumber(entities, name),
+      initiative,
+      type: EntityType.HERO,
+    };
+
     const updatedEntities = [...entities, hero];
     setEntities(updatedEntities);
-    updateDbRoom({ combat: { ...room?.combat, entities: updatedEntities } });
-    return true;
-  };
+    scheduleCommitRoomChanges();
 
-  const setHeroes = (heroes: Hero[]) => {
-    const nonHeroes = entities.filter((entity) => entity.type !== EntityType.HERO);
-    const updatedEntities = [...nonHeroes, ...heroes];
-    setEntities(updatedEntities);
-    updateDbRoom({ combat: { ...room?.combat, entities: updatedEntities } });
+    return true;
   };
 
   const resetHeroInitiatives = () => {
@@ -107,70 +150,19 @@ export const DMHelperContextProvider = ({ children }) => {
       entity.type === EntityType.HERO ? { ...entity, initiative: undefined } : entity
     );
     setEntities(updatedEntities);
-    updateDbRoom({ combat: { ...room?.combat, entities: updatedEntities } });
-  };
-
-  const addMobFavorite = (mob: Mob) => {
-    if (!mobFavorites.some((m) => m.name === mob.name)) {
-      const updatedFavorites = [...mobFavorites, mob];
-      setMobFavorites(updatedFavorites);
-      updateDbRoom({ mobFavorites: updatedFavorites });
-    }
+    scheduleCommitRoomChanges();
   };
 
   const removeEntity = (mob: Mob) => {
     const updatedEntities = entities.filter((m) => m.id !== mob.id);
     setEntities(updatedEntities);
-    updateDbRoom({ combat: { ...room?.combat, entities: updatedEntities } });
+    scheduleCommitRoomChanges();
   };
 
   const clearMobs = () => {
     const updatedEntities = entities.filter((entity) => entity.type !== EntityType.MOB);
     setEntities(updatedEntities);
-    updateDbRoom({ combat: { ...room?.combat, entities: updatedEntities } });
-  };
-
-  const heroes = useMemo(() => entities.filter((entity) => entity.type === EntityType.HERO) as Hero[], [entities]);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Validation functions
-  const validateName = (name: string): boolean => {
-    if (name.trim() === '') {
-      toast({
-        title: 'Error',
-        description: 'Name cannot be empty.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      return false;
-    }
-    return true;
-  };
-
-  const validateMobHealth = (health: number | undefined): boolean => {
-    if (health !== undefined && health <= 0) {
-      toast({
-        title: 'Error',
-        description: 'Health must be a positive number.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      return false;
-    }
-    return true;
-  };
-
-  const getNextEntityNumber = (name: string) => {
-    let number = 1;
-    if (entities.some((m) => m.name === name)) {
-      number = Math.max(...entities.filter((m) => m.name === name).map((m) => m.number)) + 1;
-    }
-    return number;
+    scheduleCommitRoomChanges();
   };
 
   return (
@@ -183,7 +175,6 @@ export const DMHelperContextProvider = ({ children }) => {
         removeEntity,
         addMob,
         addHero,
-        setHeroes,
         resetHeroInitiatives,
         mobFavorites,
         setMobFavorites,
