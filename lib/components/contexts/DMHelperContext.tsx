@@ -8,6 +8,7 @@ import { Entity, EntityType } from '@lib/models/dm-helper/Entity';
 import { Hero } from '@lib/models/dm-helper/Hero';
 import { Mob } from '@lib/models/dm-helper/Mob';
 import { getNextEntityNumber, validateMobHealth, validateName } from '@lib/util/dm-helper-utils';
+import { sanitizeData } from '@lib/util/firebase-utils';
 
 export const DMHelperContext = createContext({
   room: {} as Room,
@@ -15,8 +16,8 @@ export const DMHelperContext = createContext({
   entities: [] as Entity[],
   setEntities: (() => null) as React.Dispatch<React.SetStateAction<Entity[]>>,
   removeEntity: (mob: Mob) => null,
-  addMob: (name: string, health: number | undefined, initiative: number | undefined) => null,
-  addHero: (name: string, health: number | undefined, initiative: number | undefined) => null,
+  addMob: (name: string, health: number | null, initiative: number | null) => null,
+  addHero: (name: string, health: number | null, initiative: number | null) => null,
   resetHeroInitiatives: () => null,
   mobFavorites: [] as Mob[],
   setMobFavorites: (mobs: Mob[]) => null,
@@ -58,9 +59,11 @@ export const DMHelperContextProvider = ({ children }) => {
       heroes: heroes,
     };
 
-    setRoom(newRoom);
-    if (!newRoom) return;
-    roomService.updateRoom(newRoom);
+    // Firebase doesn't like `undefined` values, so we sanitize the data before updating Firestore
+    const sanitizedRoom = sanitizeData(newRoom);
+
+    setRoom(sanitizedRoom);
+    roomService.updateRoom(sanitizedRoom);
     setCommitPending(false);
   }, [commitPending, entities, mobFavorites, heroes, combatStarted, room]);
 
@@ -99,7 +102,7 @@ export const DMHelperContextProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  const addMob = (name: string, health: number | undefined, initiative: number | undefined): boolean => {
+  const addMob = (name: string, health: number | null, initiative: number | null): boolean => {
     if (!validateName(name, toast) || !validateMobHealth(health, toast)) return false;
 
     const mob: Mob = {
@@ -126,8 +129,8 @@ export const DMHelperContextProvider = ({ children }) => {
     return true;
   };
 
-  const addHero = (name: string, health: number | undefined, initiative: number | undefined): boolean => {
-    if (!validateName(name, toast) || !validateMobHealth(health, toast)) return false;
+  const addHero = (name: string, health: number | null, initiative: number | null): boolean => {
+    if (!validateName(name, toast)) return false;
 
     const hero: Hero = {
       id: `${name}_${getNextEntityNumber(entities, name)}`,

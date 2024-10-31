@@ -12,8 +12,8 @@ export const MobForm = () => {
   const handleAddMob = (e) => {
     e.preventDefault();
 
-    const parsedHealth = health === '' ? undefined : parseInt(health, 10);
-    const parsedInitiative = initiative === '' ? undefined : parseInt(initiative, 10);
+    const parsedHealth = health === '' ? null : parseInt(health, 10);
+    const parsedInitiative = initiative === '' ? null : parseInt(initiative, 10);
 
     if (addMob(name, parsedHealth, parsedInitiative)) {
       setName('');

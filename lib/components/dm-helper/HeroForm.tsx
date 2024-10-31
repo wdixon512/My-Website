@@ -4,7 +4,6 @@ import { DMHelperContext } from '../contexts/DMHelperContext';
 
 export const HeroForm = () => {
   const [name, setName] = useState('');
-  const [initiative, setInitiative] = useState<number | undefined>(undefined);
 
   const { setEntities, addHero } = useContext(DMHelperContext);
 
@@ -15,9 +14,8 @@ export const HeroForm = () => {
   const handleAddHero = (e) => {
     e.preventDefault();
 
-    if (addHero(name, undefined, initiative)) {
+    if (addHero(name, null, null)) {
       setName('');
-      setInitiative(undefined);
     }
   };
 
