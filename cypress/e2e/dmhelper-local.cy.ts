@@ -197,18 +197,17 @@ describe('DMHelper E2E Tests', () => {
     cy.get('[data-testid="entity-list"]').should('contain', 'Orc');
 
     // Add 3 Goblins and 2 Orcs
-    cy.pause();
     cy.get('[data-testid="goblin_1-quickadd-btn"]').click();
     cy.get('[data-testid="goblin_1-quickadd-btn"]').click();
     cy.get('[data-testid="goblin_1-quickadd-btn"]').click();
-    cy.get('[data-testid="orc_2-quickadd-btn"]').click();
     cy.get('[data-testid="orc_2-quickadd-btn"]').click();
 
     // Verify UI of multiple entities
     cy.get('[data-testid="entity-list"]').within(() => {
-      cy.get('[data-testid="entity-item"]').should('have.length', 6);
+      cy.get('[data-testid="entity-item"]').should('have.length', 7);
       cy.get('[data-testid="entity-item"]').should('contain', 'Goblin').should('have.length', 3);
       cy.get('[data-testid="entity-item"]').should('contain', 'Orc').should('have.length', 3);
+      cy.get('[data-testid="entity-item"]').should('contain', 'Warrior').should('have.length', 1);
     });
 
     // Wait for the mobs to be added to the database
