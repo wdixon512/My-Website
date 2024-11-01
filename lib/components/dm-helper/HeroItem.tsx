@@ -63,7 +63,7 @@ export const HeroItem: React.FC<HeroItemProps> = ({
           <Button
             variant="primarySolid"
             onClick={() => showEntityEditForm()}
-            data-testid={`${hero.id.toLowerCase()}_edit`}
+            data-testid={`${hero.id.toLowerCase()}-edit`}
           >
             <Icon as={FaUserEdit} />
           </Button>

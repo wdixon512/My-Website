@@ -58,7 +58,7 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
               onChange={(e) => updateHealth(mob, parseInt(e.target.value))}
               w="90px"
               ml={2}
-              data-testid={`${mob.id.toLowerCase()}_health`}
+              data-testid={`${mob.id.toLowerCase()}-health`}
             />
           </FormControl>
         </Flex>
@@ -66,7 +66,7 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
           variant="redSolid"
           onClick={() => removeEntity(mob)}
           mr={2}
-          data-testid={`${mob.id.toLowerCase()}_kill`}
+          data-testid={`${mob.id.toLowerCase()}-kill`}
         >
           Kill
         </Button>
@@ -74,7 +74,7 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
           <Button
             variant="primarySolid"
             onClick={() => showEntityEditForm()}
-            data-testid={`${mob.id.toLowerCase()}_edit`}
+            data-testid={`${mob.id.toLowerCase()}-edit`}
           >
             <Icon as={FaUserEdit} />
           </Button>

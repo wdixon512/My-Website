@@ -35,13 +35,15 @@ export const EntityEditModal: React.FC<EntityEditModalProps> = ({ entity, isOpen
             if (entity.type === EntityType.MOB) {
               const sameName = newName === entity.name;
               const mobsWithSameName = prevEntities.filter((m) => m.name === newName);
+              const newNumber = sameName ? entity.number : mobsWithSameName.length + 1;
 
               return {
                 ...e,
                 name: newName,
                 health: parseInt(newHealth, 10),
                 initiative: parseInt(newInitiaive, 10),
-                number: sameName ? entity.number : mobsWithSameName.length + 1,
+                number: newNumber,
+                id: `${newName}-${newNumber}`,
               };
             }
 

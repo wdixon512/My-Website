@@ -120,10 +120,10 @@ describe('DMHelper E2E Tests', () => {
       expect(myRoom.combat.entities).to.satisfy((entities: Entity[]) => {
         return (
           entities.some(
-            (entity) => entity.initiative === 21 && entity.id === 'Warrior_1' && entity.type === EntityType.HERO
+            (entity) => entity.initiative === 21 && entity.id === 'warrior-1' && entity.type === EntityType.HERO
           ) &&
           entities.some(
-            (entity) => entity.initiative === 15 && entity.id === 'Goblin_1' && entity.type === EntityType.MOB
+            (entity) => entity.initiative === 15 && entity.id === 'goblin-1' && entity.type === EntityType.MOB
           )
         );
       });
@@ -132,7 +132,7 @@ describe('DMHelper E2E Tests', () => {
 
   it('should update a mob entirely and verify it in the database', () => {
     // Interact with the UI to update the mob
-    cy.get('[data-testid="goblin_1_edit"]').click();
+    cy.get('[data-testid="goblin-1-edit"]').click();
 
     cy.get('[data-testid="name-edit-modal-input"]').clear().type('Orc');
     cy.get('[data-testid="health-edit-modal-input"]').clear().type('50');
@@ -161,7 +161,7 @@ describe('DMHelper E2E Tests', () => {
 
   it('should update a hero initiative and verify it in the database', () => {
     // Interact with the UI to update the hero initiative
-    cy.get('[data-testid="warrior_1_edit"]').click();
+    cy.get('[data-testid="warrior-1-edit"]').click();
 
     cy.get('[data-testid="initiative-edit-modal-input"]').clear().type('25');
     cy.get('[data-testid="done-edit-modal-btn"]').click();
@@ -197,17 +197,17 @@ describe('DMHelper E2E Tests', () => {
     cy.get('[data-testid="entity-list"]').should('contain', 'Orc');
 
     // Add 3 Goblins and 2 Orcs
-    cy.get('[data-testid="goblin_1-quickadd-btn"]').click();
-    cy.get('[data-testid="goblin_1-quickadd-btn"]').click();
-    cy.get('[data-testid="goblin_1-quickadd-btn"]').click();
-    cy.get('[data-testid="orc_2-quickadd-btn"]').click();
+    cy.get('[data-testid="goblin-1-quickadd-btn"]').click();
+    cy.get('[data-testid="goblin-1-quickadd-btn"]').click();
+    cy.get('[data-testid="goblin-1-quickadd-btn"]').click();
+    cy.get('[data-testid="orc-2-quickadd-btn"]').click();
 
     // Verify UI of multiple entities
     cy.get('[data-testid="entity-list"]').within(() => {
       cy.get('[data-testid="entity-item"]').should('have.length', 7);
-      cy.get('[data-testid="entity-item"]').should('contain', 'Goblin').should('have.length', 3);
-      cy.get('[data-testid="entity-item"]').should('contain', 'Orc').should('have.length', 3);
-      cy.get('[data-testid="entity-item"]').should('contain', 'Warrior').should('have.length', 1);
+      cy.get('[data-testid="entity-item"]').filter(':contains("Goblin")').should('have.length', 3);
+      cy.get('[data-testid="entity-item"]').filter(':contains("Orc")').should('have.length', 3);
+      cy.get('[data-testid="entity-item"]').filter(':contains("Warrior")').should('have.length', 1);
     });
 
     // Wait for the mobs to be added to the database
@@ -253,7 +253,7 @@ describe('DMHelper E2E Tests', () => {
   it('should remove a hero and verify it is removed from the database', () => {
     // Interact with the UI to remove the hero
     cy.get('[data-testid="heroes-panel"]').click();
-    cy.get('[data-testid="warrior_1_remove"]').click();
+    cy.get('[data-testid="warrior-1_remove"]').click();
 
     // Wait for the hero to be removed from the database
     cy.wait(2000);
@@ -270,7 +270,7 @@ describe('DMHelper E2E Tests', () => {
   });
 
   it('should remove a mob and verify it is removed from the database', () => {
-    cy.get('[data-testid="goblin_1_kill"]').click();
+    cy.get('[data-testid="goblin-1-kill"]').click();
 
     // Wait for the mob to be removed from the database
     cy.wait(2000);
@@ -282,7 +282,7 @@ describe('DMHelper E2E Tests', () => {
 
       expect(myRoom).to.exist;
       expect(myRoom.combat.entities).to.exist;
-      expect(myRoom.combat.entities).to.satisfy((entities: Entity[]) => entities.length === 0);
+      expect(myRoom.combat.entities).to.satisfy((entities: Entity[]) => entities.length === 5);
     });
   });
 });

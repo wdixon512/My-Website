@@ -14,4 +14,5 @@ Will Dixon's personal website, built with NextJS and ChakraUI!
 # Cypress Testing
 
 1. Run `npx cypress open`
-2. For tests that require checks against the database after some interaction, make sure your local .env file has the `SERVICE_ACCOUNT` entry in it. See https://www.npmjs.com/package/cypress-firebase setup for further instruction on what this .env entry should be set to (it's a JSON object, and has to be on 1 LINE)
+2. For tests that require checks against the database after some interaction, make sure your local .env file has the `SERVICE_ACCOUNT` entry in it. See https://www.npmjs.com/package/cypress-firebase setup for further instruction on what this .env entry should be set to (it's a JSON object, and has to be on 1 LINE).
+3. You will also need to set `CYPRESS_FIREBASE_TEST_UID` to the UID for one of your google accounts.

@@ -126,7 +126,7 @@ export const DMHelperContextProvider = ({ children }) => {
     if (!validateName(name, toast) || !validateMobHealth(health, toast)) return false;
 
     const mob: Mob = {
-      id: `${name}_${getNextEntityNumber(entities, name)}`,
+      id: `${name.toLowerCase()}-${getNextEntityNumber(entities, name)}`,
       name,
       health,
       number: getNextEntityNumber(entities, name),
@@ -153,7 +153,7 @@ export const DMHelperContextProvider = ({ children }) => {
     if (!validateName(name, toast)) return false;
 
     const hero: Hero = {
-      id: `${name}_${getNextEntityNumber(entities, name)}`,
+      id: `${name.toLowerCase()}-${getNextEntityNumber(entities, name)}`,
       name,
       health,
       number: getNextEntityNumber(entities, name),
