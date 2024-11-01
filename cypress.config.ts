@@ -16,6 +16,7 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // e2e testing node events setup code
       config.env.SERVICE_ACCOUNT = process.env.SERVICE_ACCOUNT;
+      config.env.TEST_UID = process.env.CYPRESS_FIREBASE_TEST_UID;
       return cypressFirebasePlugin(on, config, admin, {
         // Here is where you can pass special options.
         // If you have not set the GCLOUD_PROJECT environment variable, give the projectId here, like so:

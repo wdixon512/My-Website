@@ -1,16 +1,5 @@
 import { Room } from '@lib/models/dm-helper/Room';
-import {
-  Firestore,
-  collection,
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  getDocs,
-  query,
-  where,
-  addDoc,
-} from 'firebase/firestore';
+import { Firestore, collection, doc, getDoc, updateDoc, getDocs, query, where, addDoc } from 'firebase/firestore';
 import { Auth } from 'firebase/auth';
 import { db as defaultDb, auth as defaultAuth } from './firebase';
 
@@ -22,6 +11,7 @@ export type DMHelperRoomService = {
 };
 
 export function createRoomService(db: Firestore = defaultDb, auth: Auth = defaultAuth): DMHelperRoomService {
+  // TODO: Implement retry policies for all methods!
   return {
     async fetchUserRoom(): Promise<Room | null> {
       const user = auth.currentUser;
@@ -53,6 +43,20 @@ export function createRoomService(db: Firestore = defaultDb, auth: Auth = defaul
         console.warn(
           'Room ID is generated automatically by this function and should not be provided. The provided ID will be ignored.'
         );
+      }
+
+      // You're already in your own room! Don't create a new one.
+      if (uiRoom.ownerUID && uiRoom.ownerUID == auth.currentUser.uid) {
+        const errorMessage = 'You already have a room!';
+        console.error(errorMessage);
+        return Promise.reject(errorMessage);
+      }
+
+      // You're in somebody else's room! Don't create a new one.
+      if (uiRoom.ownerUID && uiRoom.ownerUID != auth.currentUser.uid) {
+        const errorMessage = "You're already in somebody else's room!";
+        console.error(errorMessage);
+        return Promise.reject(errorMessage);
       }
 
       uiRoom.ownerUID = auth.currentUser.uid;

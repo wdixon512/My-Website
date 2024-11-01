@@ -1,4 +1,4 @@
-import Entity from './Entity';
+import { Entity } from './Entity';
 
 export enum CombatState {
   NOT_IN_PROGRESS = 0,

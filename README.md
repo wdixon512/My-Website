@@ -10,3 +10,8 @@ Will Dixon's personal website, built with NextJS and ChakraUI!
 4. Run `firebase init emulators`. Choose Auth and Firestore emulators
 5. Run `firebase emulators:start --only firestore`
 6. Run `npm test` in another terminal tab
+
+# Cypress Testing
+
+1. Run `npx cypress open`
+2. For tests that require checks against the database after some interaction, make sure your local .env file has the `SERVICE_ACCOUNT` entry in it. See https://www.npmjs.com/package/cypress-firebase setup for further instruction on what this .env entry should be set to (it's a JSON object, and has to be on 1 LINE)

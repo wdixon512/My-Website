@@ -1,6 +1,7 @@
 import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { cypressIsTesting } from '@lib/util/cypress-utils';
 
 let firebaseApp;
 
@@ -20,6 +21,11 @@ export const db = getFirestore(firebaseApp);
 export const auth = getAuth(firebaseApp);
 
 export const signInWithGoogle = async () => {
+  if (cypressIsTesting()) {
+    console.log('Cypress is testing, skipping sign in with Google, but will delay for 1 second.');
+    return await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+
   if (!auth.currentUser) {
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider);

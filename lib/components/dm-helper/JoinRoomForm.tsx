@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { signInWithGoogle } from '@services/firebase';
+import { auth, signInWithGoogle } from '@services/firebase';
 import { Flex, Heading, Text, Button, Input, useToast } from '@chakra-ui/react';
 import { createRoomService } from '@lib/services/dm-helper-room-service';
 import { DMHelperContext } from '../contexts/DMHelperContext';
@@ -7,20 +7,32 @@ import { DMHelperContext } from '../contexts/DMHelperContext';
 export const JoinRoomForm = () => {
   const roomService = createRoomService();
   const { room, setRoom } = useContext(DMHelperContext);
-  const [roomLink, setRoomLink] = useState<string | null>(null);
+  const [roomLink] = useState<string | null>(null);
   const toast = useToast();
 
   const createRoom = async () => {
     await signInWithGoogle();
-    const newRoom = await roomService.createRoom(room);
-    setRoom(newRoom);
-    toast({
-      title: 'Room Created',
-      description: 'Your room has been created!',
-      status: 'success',
-      duration: 5000,
-      isClosable: true,
-    });
+    roomService
+      .createRoom(room)
+      .then((newRoom) => {
+        setRoom(newRoom);
+        toast({
+          title: 'Room Created',
+          description: 'Your room has been created!',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: 'Error Creating Room',
+          description: error,
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
+      });
   };
 
   const copyToClipboard = () => {};

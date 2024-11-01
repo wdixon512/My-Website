@@ -21,6 +21,9 @@ import 'firebase/compat/database';
 import 'firebase/compat/firestore';
 import { attachCustomCommands } from 'cypress-firebase';
 
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 const fbConfig = {
   apiKey: 'AIzaSyBk0kM-gOoO21l7sDOD50c6ErxsYYiZ1FE',
   authDomain: 'dm-helper-e7207.firebaseapp.com',
