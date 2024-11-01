@@ -7,9 +7,10 @@ import MobItem from './MobItem';
 import { Entity, EntityType } from '@lib/models/dm-helper/Entity';
 import HeroItem from './HeroItem';
 import { FaUserEdit } from 'react-icons/fa';
+import { Mob } from '@lib/models/dm-helper/Mob';
 
 export const EntityList = () => {
-  const { entities, setEntities, combatStarted, isClient } = useContext(DMHelperContext);
+  const { entities, updateEntities, combatStarted, isClient } = useContext(DMHelperContext);
   const toast = useToast();
 
   const handleDragEnd = (result) => {
@@ -37,7 +38,7 @@ export const EntityList = () => {
       });
     }
 
-    setEntities(reorderedEntities);
+    updateEntities(reorderedEntities);
   };
 
   return (
@@ -50,9 +51,14 @@ export const EntityList = () => {
                 {sortEntitiesByInitiative(entities).map((entity: Entity, i) => (
                   <Draggable key={entity.id} draggableId={entity.id} index={i}>
                     {(provided) => (
-                      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        data-testid="entity-item"
+                      >
                         {entity.type === EntityType.MOB ? (
-                          <MobItem mob={entity} />
+                          <MobItem mob={entity as Mob} />
                         ) : (
                           combatStarted && <HeroItem hero={entity} textColor={'interactive.200'} />
                         )}

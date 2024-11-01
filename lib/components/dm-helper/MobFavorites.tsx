@@ -6,18 +6,18 @@ import { AnimatePresence } from 'framer-motion';
 import AnimatedFlex from '../global/AnimatedFlex';
 
 export const MobFavorites = () => {
-  const { mobFavorites: mobFavorites, addMob, setMobFavorites, isClient } = useContext(DMHelperContext);
+  const { mobFavorites: mobFavorites, addMob, updateMobFavorites, isClient } = useContext(DMHelperContext);
 
   const handleaddMob = (mob: Mob) => {
     addMob(mob.name, mob.health, mob.initiative);
   };
 
   const handleRemoveFavorite = (mob: Mob) => {
-    setMobFavorites(mobFavorites.filter((m) => m !== mob));
+    updateMobFavorites(mobFavorites.filter((m) => m !== mob));
   };
 
   const clearFavorites = () => {
-    setMobFavorites([]);
+    updateMobFavorites([]);
   };
 
   return (
@@ -32,7 +32,12 @@ export const MobFavorites = () => {
               <Flex gap="4" justifyContent={'center'} flexWrap="wrap" maxW="300px">
                 {mobFavorites.map((mob, i) => (
                   <Box position="relative" key={i}>
-                    <Button variant="outline" width="fit" onClick={() => handleaddMob(mob)}>
+                    <Button
+                      variant="outline"
+                      width="fit"
+                      onClick={() => handleaddMob(mob)}
+                      data-testid={`${mob.id.toLowerCase()}-quickadd-btn`}
+                    >
                       {mob.name}
                     </Button>
                     <Circle
@@ -59,6 +64,7 @@ export const MobFavorites = () => {
                         mt="2px"
                         _hover={{ bg: 'transparent' }}
                         _focus={{ boxShadow: 'none' }}
+                        data-testid={`${mob.id.toLowerCase()}-quickadd-remove-btn`}
                       >
                         X
                       </Button>
@@ -67,7 +73,12 @@ export const MobFavorites = () => {
                 ))}
               </Flex>
               <Flex justifyContent={'center'} mt="4">
-                <Button color="marioRed.700" variant="redLink" onClick={clearFavorites}>
+                <Button
+                  color="marioRed.700"
+                  variant="redLink"
+                  onClick={clearFavorites}
+                  data-testid={`quickadd-clear-btn`}
+                >
                   Clear Quick Add
                 </Button>
               </Flex>

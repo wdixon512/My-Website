@@ -1,5 +1,16 @@
 import { Room } from '@lib/models/dm-helper/Room';
-import { Firestore, collection, doc, getDoc, updateDoc, getDocs, query, where, addDoc } from 'firebase/firestore';
+import {
+  Firestore,
+  collection,
+  doc,
+  getDoc,
+  updateDoc,
+  getDocs,
+  query,
+  where,
+  addDoc,
+  setDoc,
+} from 'firebase/firestore';
 import { Auth } from 'firebase/auth';
 import { db as defaultDb, auth as defaultAuth } from './firebase';
 
@@ -39,17 +50,30 @@ export function createRoomService(db: Firestore = defaultDb, auth: Auth = defaul
     },
 
     async createRoom(uiRoom: Room): Promise<Room> {
-      if (uiRoom.id) {
+      // If, for whatever reason, uiRoom is null, create a new room with the current user as the owner.
+      if (!uiRoom && auth.currentUser.uid) {
+        uiRoom = {
+          ...uiRoom,
+          ownerUID: auth.currentUser.uid,
+        };
+      }
+
+      if (uiRoom?.id) {
         console.warn(
           'Room ID is generated automatically by this function and should not be provided. The provided ID will be ignored.'
         );
       }
 
-      // You're already in your own room! Don't create a new one.
+      // The context's room owner is set to current user. Something smells fishy...
       if (uiRoom.ownerUID && uiRoom.ownerUID == auth.currentUser.uid) {
-        const errorMessage = 'You already have a room!';
-        console.error(errorMessage);
-        return Promise.reject(errorMessage);
+        const dbRoom = await this.fetchUserRoom();
+
+        // You're already in your own room! Don't create a new one.
+        if (dbRoom) {
+          const errorMessage = 'You already have a room!';
+          console.error(errorMessage);
+          return Promise.reject(errorMessage);
+        }
       }
 
       // You're in somebody else's room! Don't create a new one.
@@ -62,7 +86,11 @@ export function createRoomService(db: Firestore = defaultDb, auth: Auth = defaul
       uiRoom.ownerUID = auth.currentUser.uid;
 
       const roomsRef = collection(db, 'rooms');
-      const newRoomRef = await addDoc(roomsRef, uiRoom); // Automatically generates a unique ID
+      const newRoomRef = doc(roomsRef); // Automatically generates a unique ID
+      await setDoc(newRoomRef, {
+        ...uiRoom,
+        id: newRoomRef.id,
+      });
 
       return { id: newRoomRef.id, ...uiRoom };
     },
@@ -73,8 +101,13 @@ export function createRoomService(db: Firestore = defaultDb, auth: Auth = defaul
         return;
       }
 
-      const roomRef = doc(db, 'rooms', uiRoom.id);
-      await updateDoc(roomRef, { ...uiRoom });
+      try {
+        const roomRef = doc(db, 'rooms', uiRoom.id);
+        await updateDoc(roomRef, { ...uiRoom });
+      } catch (error) {
+        return Promise.reject(`Error updating room with ID: ${uiRoom.id}. Failed with error: ${error}`);
+      }
+
       return uiRoom;
     },
   };

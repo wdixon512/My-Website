@@ -9,7 +9,7 @@ export const HeroList = () => {
   return (
     <Box p={4} bg="secondary.200" borderWidth={1} borderRadius="md" shadow="md" w={{ base: '100%', lg: '500px' }}>
       {isClient && (
-        <List>
+        <List data-testid="hero-list">
           {heroes.map((hero, i) => (
             <HeroItem key={i} hero={hero} showInitiative={false} showRemove={true} />
           ))}

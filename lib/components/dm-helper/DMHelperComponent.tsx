@@ -11,7 +11,8 @@ import EndCombatConfirmationModal from './modals/EndCombatConfirmationModal';
 import { JoinRoomForm } from './JoinRoomForm';
 
 export const DMHelperComponent = () => {
-  const { combatStarted, setCombatStarted, heroes, resetHeroInitiatives, isClient } = useContext(DMHelperContext);
+  const { room, combatStarted, updateCombatStarted, heroes, resetHeroInitiatives, isClient } =
+    useContext(DMHelperContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: endCombatIsOpen, onOpen: onEndCombatModalOpen, onClose: onEndCombatModalClose } = useDisclosure();
 
@@ -20,7 +21,7 @@ export const DMHelperComponent = () => {
       resetHeroInitiatives();
       onOpen();
     }
-    setCombatStarted(true);
+    updateCombatStarted(true);
   };
 
   const endCombat = () => {
@@ -28,12 +29,13 @@ export const DMHelperComponent = () => {
 
     if (!combatStarted) {
       resetHeroInitiatives();
-      setCombatStarted(false);
+      updateCombatStarted(false);
     }
   };
 
   return (
     <>
+      {room?.id && <Text>Current Room Id: {room.id}</Text>}
       <Tabs display="flex" flexDir="column" alignContent={'center'}>
         <TabList
           alignSelf="center"
@@ -88,7 +90,7 @@ export const DMHelperComponent = () => {
               </Flex>
               <Flex direction="column" gap="4">
                 {isClient && combatStarted && (
-                  <Button variant="redSolid" onClick={() => endCombat()} data-testid="end-combat-button">
+                  <Button variant="redSolid" onClick={() => endCombat()} data-testid="end-combat-btn">
                     End Combat
                   </Button>
                 )}
@@ -119,7 +121,7 @@ export const DMHelperComponent = () => {
       <InitiativeModal isOpen={isOpen} heroes={heroes} onClose={onClose} />
       <EndCombatConfirmationModal
         isOpen={endCombatIsOpen}
-        setCombatStarted={setCombatStarted}
+        updateCombatStarted={updateCombatStarted}
         onClose={onEndCombatModalClose}
       />
     </>

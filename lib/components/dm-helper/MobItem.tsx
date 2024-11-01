@@ -1,6 +1,6 @@
 import { Text, Flex, FormControl, Input, Button, FlexProps, Tooltip, Icon, useDisclosure } from '@chakra-ui/react';
 import AnimatedFlex from '@components/global/AnimatedFlex';
-import Mob from '@lib/models/dm-helper/Mob';
+import { Mob } from '@lib/models/dm-helper/Mob';
 import { useContext, useState } from 'react';
 import { DMHelperContext } from '../contexts/DMHelperContext';
 import React from 'react';
@@ -13,11 +13,11 @@ interface MobItemProps extends FlexProps {
 }
 
 export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ...props }) => {
-  const { entities, removeEntity, setEntities } = useContext(DMHelperContext);
+  const { entities, removeEntity, updateEntities } = useContext(DMHelperContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const updateHealth = (mob: Mob, newHealth) => {
-    setEntities(entities.map((m) => (m.id === mob.id ? new Mob(m.name, newHealth, m.number, m.initiative) : m)));
+    updateEntities(entities.map((m) => (m.id === mob.id ? { ...m, health: newHealth } : m)));
   };
 
   const showEntityEditForm = () => {
@@ -58,14 +58,24 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
               onChange={(e) => updateHealth(mob, parseInt(e.target.value))}
               w="90px"
               ml={2}
+              data-testid={`${mob.id.toLowerCase()}_health`}
             />
           </FormControl>
         </Flex>
-        <Button variant="redSolid" onClick={() => removeEntity(mob)} mr={2}>
+        <Button
+          variant="redSolid"
+          onClick={() => removeEntity(mob)}
+          mr={2}
+          data-testid={`${mob.id.toLowerCase()}_kill`}
+        >
           Kill
         </Button>
         <Tooltip label="Update Mob" aria-label="Update Mob" hasArrow>
-          <Button variant="primarySolid" onClick={() => showEntityEditForm()}>
+          <Button
+            variant="primarySolid"
+            onClick={() => showEntityEditForm()}
+            data-testid={`${mob.id.toLowerCase()}_edit`}
+          >
             <Icon as={FaUserEdit} />
           </Button>
         </Tooltip>

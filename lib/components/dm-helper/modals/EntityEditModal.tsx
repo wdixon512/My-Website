@@ -12,7 +12,7 @@ import {
   FormControl,
 } from '@chakra-ui/react';
 import { useContext, useState, useRef } from 'react';
-import Entity, { EntityType } from '@lib/models/dm-helper/Entity';
+import { EntityType, Entity } from '@lib/models/dm-helper/Entity';
 import { DMHelperContext } from '../../contexts/DMHelperContext';
 
 interface EntityEditModalProps {
@@ -22,14 +22,14 @@ interface EntityEditModalProps {
 }
 
 export const EntityEditModal: React.FC<EntityEditModalProps> = ({ entity, isOpen, onClose }) => {
-  const { setEntities } = useContext(DMHelperContext);
+  const { updateEntities } = useContext(DMHelperContext);
   const [newInitiaive, setNewInitiative] = useState<string>(entity.initiative?.toString());
   const [newName, setNewName] = useState<string>(entity.name);
   const [newHealth, setNewHealth] = useState<string>(entity.health?.toString());
 
   const handleDone = (success: boolean) => {
     if (success) {
-      setEntities((prevEntities) =>
+      updateEntities((prevEntities) =>
         prevEntities.map((e) => {
           if (e.id === entity.id) {
             if (entity.type === EntityType.MOB) {
@@ -80,6 +80,7 @@ export const EntityEditModal: React.FC<EntityEditModalProps> = ({ entity, isOpen
                       onChange={(e) => setNewName(e.target.value)}
                       placeholder="Enter mob name"
                       required={true}
+                      data-testid="name-edit-modal-input"
                     />
                   </FormControl>
 
@@ -92,6 +93,7 @@ export const EntityEditModal: React.FC<EntityEditModalProps> = ({ entity, isOpen
                       onChange={(e) => setNewHealth(e.target.value)}
                       placeholder="Enter mob health"
                       required={false}
+                      data-testid="health-edit-modal-input"
                     />
                   </FormControl>
                 </>
@@ -105,14 +107,15 @@ export const EntityEditModal: React.FC<EntityEditModalProps> = ({ entity, isOpen
                   value={newInitiaive}
                   onChange={(e) => setNewInitiative(e.target.value)}
                   required={true}
+                  data-testid="initiative-edit-modal-input"
                 />
               </FormControl>
             </ModalBody>
             <ModalFooter justifyContent="space-between">
-              <Button variant="redLink" onClick={() => handleDone(false)}>
+              <Button variant="redLink" onClick={() => handleDone(false)} data-testid="cancel-edit-modal-btn">
                 Cancel
               </Button>
-              <Button variant="solid" onClick={() => handleDone(true)}>
+              <Button variant="solid" onClick={() => handleDone(true)} data-testid="done-edit-modal-btn">
                 Done
               </Button>
             </ModalFooter>

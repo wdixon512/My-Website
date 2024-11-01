@@ -5,10 +5,10 @@ import { DMHelperContext } from '../contexts/DMHelperContext';
 export const HeroForm = () => {
   const [name, setName] = useState('');
 
-  const { setEntities, addHero } = useContext(DMHelperContext);
+  const { updateEntities, addHero } = useContext(DMHelperContext);
 
   const clearHeroes = () => {
-    setEntities([]);
+    updateEntities([]);
   };
 
   const handleAddHero = (e) => {
@@ -39,10 +39,11 @@ export const HeroForm = () => {
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter hero name"
           required={true}
+          data-testid="hero-name-input"
         />
       </FormControl>
 
-      <Button type="submit" variant="solid" width="full">
+      <Button type="submit" variant="solid" width="full" data-testid="add-hero-btn">
         Add Hero
       </Button>
 

@@ -14,17 +14,17 @@ export const DMHelperContext = createContext({
   room: {} as Room,
   setRoom: (() => null) as React.Dispatch<React.SetStateAction<Room | null>>,
   entities: [] as Entity[],
-  setEntities: (() => null) as React.Dispatch<React.SetStateAction<Entity[]>>,
+  updateEntities: (() => null) as React.Dispatch<React.SetStateAction<Entity[]>>,
   removeEntity: (mob: Mob) => null,
   addMob: (name: string, health: number | null, initiative: number | null) => null,
   addHero: (name: string, health: number | null, initiative: number | null) => null,
   resetHeroInitiatives: () => null,
   mobFavorites: [] as Mob[],
-  setMobFavorites: (mobs: Mob[]) => null,
+  updateMobFavorites: (mobs: Mob[]) => null,
   isClient: false,
   heroes: [] as Hero[],
   combatStarted: false,
-  setCombatStarted: (started: boolean) => null,
+  updateCombatStarted: (started: boolean) => null,
   clearMobs: () => null,
 });
 
@@ -63,7 +63,17 @@ export const DMHelperContextProvider = ({ children }) => {
     const sanitizedRoom = sanitizeData(newRoom);
 
     setRoom(sanitizedRoom);
-    roomService.updateRoom(sanitizedRoom);
+
+    roomService.updateRoom(sanitizedRoom).catch((error) => {
+      toast({
+        title: 'Error Updating Room',
+        description: error,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    });
+
     setCommitPending(false);
   }, [commitPending, entities, mobFavorites, heroes, combatStarted, room]);
 
@@ -73,12 +83,22 @@ export const DMHelperContextProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          const room = await roomService.fetchUserRoom();
-          if (room) {
-            setRoom(room);
-            setEntities(room.combat.entities || []);
-            setMobFavorites(room.mobFavorites || []);
-            setCombatStarted(room.combat.combatState === CombatState.IN_PROGRESS);
+          const dbRoom = await roomService.fetchUserRoom();
+          if (dbRoom) {
+            setRoom(dbRoom);
+            setEntities(dbRoom.combat?.entities || []);
+            setMobFavorites(dbRoom.mobFavorites || []);
+            setCombatStarted(dbRoom.combat?.combatState === CombatState.IN_PROGRESS);
+          } else {
+            setRoom({
+              ownerUID: user.uid,
+              combat: {
+                entities: entities,
+                combatState: combatStarted ? CombatState.IN_PROGRESS : CombatState.NOT_IN_PROGRESS,
+              } as Combat,
+              mobFavorites: mobFavorites,
+              heroes: heroes,
+            });
           }
         } catch (error) {
           console.warn('Error fetching room:', error, 'Creating new room...');
@@ -148,6 +168,21 @@ export const DMHelperContextProvider = ({ children }) => {
     return true;
   };
 
+  const updateEntities = (entities: Entity[]) => {
+    setEntities(entities);
+    scheduleCommitRoomChanges();
+  };
+
+  const updateMobFavorites = (mobs: Mob[]) => {
+    setMobFavorites(mobs);
+    scheduleCommitRoomChanges();
+  };
+
+  const updateCombatStarted = (started: boolean) => {
+    setCombatStarted(started);
+    scheduleCommitRoomChanges();
+  };
+
   const resetHeroInitiatives = () => {
     const updatedEntities = entities.map((entity) =>
       entity.type === EntityType.HERO ? { ...entity, initiative: undefined } : entity
@@ -174,17 +209,17 @@ export const DMHelperContextProvider = ({ children }) => {
         room,
         setRoom,
         entities,
-        setEntities,
+        updateEntities,
         removeEntity,
         addMob,
         addHero,
         resetHeroInitiatives,
         mobFavorites,
-        setMobFavorites,
+        updateMobFavorites,
         isClient,
         heroes,
         combatStarted,
-        setCombatStarted,
+        updateCombatStarted,
         clearMobs,
       }}
     >
