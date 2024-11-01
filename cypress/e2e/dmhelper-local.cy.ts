@@ -2,6 +2,7 @@ import { Hero } from './../../lib/models/dm-helper/Hero';
 import { Room } from './../../lib/models/dm-helper/Room';
 import { Entity, EntityType } from './../../lib/models/dm-helper/Entity';
 import { CombatState } from './../../lib/models/dm-helper/Combat';
+import { verify } from 'crypto';
 
 describe('DMHelper E2E Tests', () => {
   beforeEach(() => {
@@ -153,10 +154,29 @@ describe('DMHelper E2E Tests', () => {
       expect(myRoom.combat.entities).to.exist;
       expect(myRoom.combat.entities).to.satisfy((entities: Entity[]) => {
         return entities.some((entity) => {
-          return entity.name === 'Orc' && entity.health === 50 && entity.initiative === 10;
+          return entity.id === 'orc-1' && entity.name === 'Orc' && entity.health === 50 && entity.initiative === 10;
         });
       });
     });
+
+    // Test inline health editor
+    cy.get('[data-testid="orc-1-health"]').clear().type('25');
+
+    cy.callFirestore('get', 'rooms').then((rooms: Room[]) => {
+      const myRoom = rooms.find((room) => {
+        return room.ownerUID === Cypress.env('TEST_UID');
+      });
+
+      expect(myRoom).to.exist;
+      expect(myRoom.combat.entities).to.exist;
+      expect(myRoom.combat.entities).to.satisfy((entities: Entity[]) => {
+        return entities.some((entity) => {
+          return entity.id === 'orc-1' && entity.health === 25;
+        });
+      });
+    });
+
+    cy.get('[data-testid="orc-1-health"]').clear().type('50');
   });
 
   it('should update a hero initiative and verify it in the database', () => {
@@ -214,17 +234,25 @@ describe('DMHelper E2E Tests', () => {
     cy.wait(2000);
 
     cy.callFirestore('get', 'rooms').then((rooms: Room[]) => {
-      const myRoom = rooms.find((room) => {
-        return room.ownerUID === Cypress.env('TEST_UID');
-      });
+      // Find the room owned by the test user
+      const myRoom = rooms.find((room) => room.ownerUID === Cypress.env('TEST_UID'));
 
+      // Assert that the room and combat entities exist
       expect(myRoom).to.exist;
       expect(myRoom.combat.entities).to.exist;
-      expect(myRoom.combat.entities).to.satisfy((entities: Entity[]) => {
-        return (
-          entities.some((entity) => entity.name === 'Goblin' && entity.health === 30 && entity.initiative === 15) &&
-          entities.some((entity) => entity.name === 'Orc' && entity.health === 50 && entity.initiative === 10)
+
+      // Define expected entities for clarity
+      const expectedEntities = [
+        { name: 'Goblin', health: 30, initiative: 15, count: 3 },
+        { name: 'Orc', health: 50, initiative: 10, count: 3 },
+      ];
+
+      // Validate each expected entity in the database
+      expectedEntities.forEach(({ name, health, initiative, count }) => {
+        const matchingEntities = myRoom.combat.entities.filter(
+          (entity) => entity.name === name && entity.health === health && entity.initiative === initiative
         );
+        expect(matchingEntities.length).to.equal(count);
       });
     });
   });

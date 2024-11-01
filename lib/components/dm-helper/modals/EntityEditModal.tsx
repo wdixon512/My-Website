@@ -43,7 +43,7 @@ export const EntityEditModal: React.FC<EntityEditModalProps> = ({ entity, isOpen
                 health: parseInt(newHealth, 10),
                 initiative: parseInt(newInitiaive, 10),
                 number: newNumber,
-                id: `${newName}-${newNumber}`,
+                id: `${newName.toLowerCase()}-${newNumber}`,
               };
             }
 
