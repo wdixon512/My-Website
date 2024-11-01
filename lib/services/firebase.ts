@@ -1,5 +1,6 @@
 import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getDatabase } from 'firebase/database';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { cypressIsTesting } from '@lib/util/cypress-utils';
 
@@ -13,11 +14,13 @@ if (!getApps().length) {
     storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
     messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    databaseURL: process.env.NEXT_PUBLIC_FIREBASE_RTDB_URL,
   });
 }
 
-// Export Firestore and Auth instances
+// Export Firestore, RTDB, and Auth instances
 export const db = getFirestore(firebaseApp);
+export const rtdb = getDatabase(firebaseApp);
 export const auth = getAuth(firebaseApp);
 
 export const signInWithGoogle = async () => {

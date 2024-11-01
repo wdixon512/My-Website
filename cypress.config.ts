@@ -15,6 +15,7 @@ export default defineConfig({
     // NOTE: Add "supportFile" setting if separate location is used
     setupNodeEvents(on, config) {
       // e2e testing node events setup code
+      config.env.NEXT_PUBLIC_FIREBASE_RTDB_URL = process.env.NEXT_PUBLIC_FIREBASE_RTDB_URL;
       config.env.SERVICE_ACCOUNT = process.env.SERVICE_ACCOUNT;
       config.env.TEST_UID = process.env.CYPRESS_FIREBASE_TEST_UID;
       return cypressFirebasePlugin(on, config, admin, {

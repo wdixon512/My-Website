@@ -32,6 +32,7 @@ const fbConfig = {
   messagingSenderId: '778480457827',
   appId: '1:778480457827:web:a854efc49001ad24818056',
   measurementId: 'G-WZ4Q08Q2YB',
+  databaseURL: Cypress.env('NEXT_PUBLIC_FIREBASE_RTDB_URL'),
 };
 
 firebase.initializeApp(fbConfig);
