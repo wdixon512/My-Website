@@ -219,8 +219,7 @@ describe('DMHelper E2E Tests', () => {
 
       verifyDbRoom((room) => {
         expect(room).to.exist;
-        expect(room.heroes).to.be.empty;
-        expect(room.heroes).to.satisfy((heroes: Hero[]) => heroes.length === 0);
+        expect(room.heroes).to.be.undefined;
       });
     });
 

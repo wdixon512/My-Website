@@ -6,8 +6,8 @@ export type Room = {
   id?: string;
   ownerUID: string;
   combat: Combat;
-  mobFavorites: Mob[];
-  heroes: Hero[];
+  mobFavorites?: Mob[];
+  heroes?: Hero[];
   syncWithFirebase?: boolean;
 };
 

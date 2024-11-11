@@ -1,5 +1,9 @@
 import { Room, RoomResponse } from '@lib/models/dm-helper/Room';
 
+// export const getElementByTestId = (testId: string) => {
+//   return cy.get(`[data-testid="${testId}"]`, timeout)
+// }
+
 export const addGoblin = () => {
   cy.get('[data-testid="combat-panel"]').click();
   cy.get('[data-testid="mob-name-input"]').type('Goblin');
