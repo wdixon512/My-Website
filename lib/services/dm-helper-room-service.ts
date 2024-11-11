@@ -1,18 +1,8 @@
 import { Room } from '@lib/models/dm-helper/Room';
-import {
-  Firestore,
-  collection,
-  doc,
-  getDoc,
-  updateDoc,
-  getDocs,
-  query,
-  where,
-  addDoc,
-  setDoc,
-} from 'firebase/firestore';
-import { Auth } from 'firebase/auth';
+import { Firestore, collection, doc, getDoc, updateDoc, getDocs, query, where, setDoc } from 'firebase/firestore';
+import { Auth, User } from 'firebase/auth';
 import { db as defaultDb, auth as defaultAuth } from './firebase';
+import { useToast } from '@chakra-ui/react';
 
 export type DMHelperRoomService = {
   fetchUserRoom(): Promise<Room | null>;

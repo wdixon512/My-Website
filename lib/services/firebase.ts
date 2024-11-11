@@ -19,7 +19,7 @@ if (!getApps().length) {
 }
 
 // Export Firestore, RTDB, and Auth instances
-export const db = getFirestore(firebaseApp);
+// export const db = getFirestore(firebaseApp);
 export const rtdb = getDatabase(firebaseApp);
 export const auth = getAuth(firebaseApp);
 
@@ -32,5 +32,11 @@ export const signInWithGoogle = async () => {
   if (!auth.currentUser) {
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider);
+  }
+};
+
+export const signOutOfGoogle = async () => {
+  if (auth.currentUser) {
+    await auth.signOut();
   }
 };

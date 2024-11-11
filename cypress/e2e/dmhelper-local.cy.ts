@@ -37,9 +37,6 @@ describe('DMHelper E2E Tests', () => {
       cy.get('[data-testid="invite-others-panel"]').click();
       cy.get('[data-testid="create-room-button"]').click();
 
-      // Wait for the room to be created/retrieved from the database
-      cy.wait(2000);
-
       cy.get('[data-testid="combat-panel"]').click();
 
       // Add a mob

@@ -29,7 +29,7 @@ export const MobFavorites = () => {
               <Heading size="md" textAlign="center" textColor="primary.700" borderBottom={'2px solid'}>
                 Quick Add
               </Heading>
-              <Flex gap="4" justifyContent={'center'} flexWrap="wrap" maxW="300px">
+              <Flex gap="4" justifyContent={'center'} flexWrap="wrap" maxW="300px" data-testid="mob-favorites-list">
                 {mobFavorites.map((mob, i) => (
                   <Box position="relative" key={i}>
                     <Button

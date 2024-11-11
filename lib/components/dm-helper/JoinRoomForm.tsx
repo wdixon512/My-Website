@@ -1,41 +1,32 @@
 import { useContext, useState } from 'react';
-import { auth, signInWithGoogle } from '@services/firebase';
+import { signInWithGoogle } from '@services/firebase';
 import { Flex, Heading, Text, Button, Input, useToast } from '@chakra-ui/react';
-import { createRoomService } from '@lib/services/dm-helper-room-service';
 import { DMHelperContext } from '../contexts/DMHelperContext';
 
 export const JoinRoomForm = () => {
-  const roomService = createRoomService();
-  const { room, setRoom } = useContext(DMHelperContext);
-  const [roomLink] = useState<string | null>(null);
+  const { createRoom } = useContext(DMHelperContext);
+  const [roomLink, setRoomLink] = useState<string | null>(null);
   const toast = useToast();
 
-  const createRoom = async () => {
+  const handleCreateRoom = async () => {
     await signInWithGoogle();
-    roomService
-      .createRoom(room)
-      .then((newRoom) => {
-        setRoom(newRoom);
+    const joinRoomLink = await createRoom();
+    if (joinRoomLink) setRoomLink(joinRoomLink);
+  };
+
+  const copyToClipboard = () => {
+    if (roomLink) {
+      navigator.clipboard.writeText(roomLink).then(() => {
         toast({
-          title: 'Room Created',
-          description: 'Your room has been created!',
+          title: 'Link Copied',
+          description: 'Join room link has been copied to clipboard.',
           status: 'success',
-          duration: 5000,
-          isClosable: true,
-        });
-      })
-      .catch((error) => {
-        toast({
-          title: 'Error Creating Room',
-          description: error,
-          status: 'error',
-          duration: 5000,
+          duration: 3000,
           isClosable: true,
         });
       });
+    }
   };
-
-  const copyToClipboard = () => {};
 
   return (
     <Flex direction="column">
@@ -49,7 +40,7 @@ export const JoinRoomForm = () => {
           <Button onClick={copyToClipboard}>Copy Join Room Link</Button>
         </Flex>
       ) : (
-        <Button onClick={createRoom} data-testid="create-room-button">
+        <Button onClick={handleCreateRoom} data-testid="create-room-button">
           Create Room
         </Button>
       )}

@@ -1,18 +1,20 @@
 import { createContext, useEffect, useState, useMemo, useCallback } from 'react';
 import { useToast } from '@chakra-ui/react';
 import { CombatState, Combat } from '@lib/models/dm-helper/Combat';
-import { Room } from '@lib/models/dm-helper/Room';
-import { createRoomService } from '@lib/services/dm-helper-room-service';
+import { DEFAULT_ROOM, Room } from '@lib/models/dm-helper/Room';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Entity, EntityType } from '@lib/models/dm-helper/Entity';
 import { Hero } from '@lib/models/dm-helper/Hero';
 import { Mob } from '@lib/models/dm-helper/Mob';
 import { getNextEntityNumber, validateMobHealth, validateName } from '@lib/util/dm-helper-utils';
 import { sanitizeData } from '@lib/util/firebase-utils';
+import { auth, rtdb } from '@services/firebase';
+import { ref, get, set, update, push, query, orderByChild, equalTo } from 'firebase/database';
 
 export const DMHelperContext = createContext({
   room: {} as Room,
   setRoom: (() => null) as React.Dispatch<React.SetStateAction<Room | null>>,
+  createRoom: async () => null,
   entities: [] as Entity[],
   updateEntities: (() => null) as React.Dispatch<React.SetStateAction<Entity[]>>,
   removeEntity: (mob: Mob) => null,
@@ -29,9 +31,7 @@ export const DMHelperContext = createContext({
 });
 
 export const DMHelperContextProvider = ({ children }) => {
-  const roomService = createRoomService();
-
-  const [room, setRoom] = useState<Room | null>(null);
+  const [room, setRoom] = useState<Room | null>(DEFAULT_ROOM);
   const [entities, setEntities] = useState<Entity[]>([]);
   const [mobFavorites, setMobFavorites] = useState<Mob[]>([]);
   const [combatStarted, setCombatStarted] = useState<boolean>(false);
@@ -42,13 +42,16 @@ export const DMHelperContextProvider = ({ children }) => {
 
   const heroes = useMemo(() => entities.filter((entity) => entity.type === EntityType.HERO) as Hero[], [entities]);
 
-  // Utilities to update Room context state & Firestore
+  // Utilities to update Room context state & Realtime Database
   const scheduleCommitRoomChanges = () => setCommitPending(true);
 
+  // Commit changes to the room to Realtime Database
   useEffect(() => {
     if (!commitPending) return;
 
-    const newRoom: Room = {
+    let syncChangesWithFirebase = room.syncWithFirebase;
+
+    const updatedRoom: Room = {
       ...room,
       combat: {
         ...room?.combat,
@@ -59,38 +62,91 @@ export const DMHelperContextProvider = ({ children }) => {
       heroes: heroes,
     };
 
-    // Firebase doesn't like `undefined` values, so we sanitize the data before updating Firestore
-    const sanitizedRoom = sanitizeData(newRoom);
-
+    // Firebase doesn't like `undefined` values, so we sanitize the data before updating Realtime Database
+    const sanitizedRoom = sanitizeData(updatedRoom);
     setRoom(sanitizedRoom);
 
-    roomService.updateRoom(sanitizedRoom).catch((error) => {
+    if (!auth.currentUser) {
+      // If user isn't authenticated, and the room they're in is set to sync with Firebase, we can't update the room
+      if (updatedRoom.syncWithFirebase) {
+        toast({
+          title: 'Authentication Error',
+          description: 'User is not authenticated',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+
+      syncChangesWithFirebase = false;
+    }
+
+    // If the user is authenticated, but they are not the owner of the room, we can't update the room
+    if (auth.currentUser && updatedRoom.ownerUID !== auth.currentUser.uid) {
       toast({
-        title: 'Error Updating Room',
-        description: error,
+        title: 'Authorization Error',
+        description: 'You are not the owner of this room. You cannot make updates to it.',
         status: 'error',
         duration: 5000,
         isClosable: true,
       });
-    });
+
+      syncChangesWithFirebase = false;
+    }
+
+    // Update the room in Realtime Database
+    if (syncChangesWithFirebase) {
+      try {
+        if (!sanitizedRoom.id) {
+          throw new Error('No room ID found. Failed to sync room with cloud.');
+        }
+        const roomRef = ref(rtdb, `rooms/${sanitizedRoom.id}`);
+        update(roomRef, sanitizedRoom).catch((error) => {
+          toast({
+            title: 'Error Updating Room',
+            description: error.message,
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          });
+        });
+      } catch (e) {
+        console.error(e);
+        toast({
+          title: 'Error Updating Room',
+          description: e.message,
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    }
 
     setCommitPending(false);
   }, [commitPending, entities, mobFavorites, heroes, combatStarted, room]);
 
-  // On component mount, fetch the user's room from Firestore
+  // On component mount, fetch the user's room from Realtime Database
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          const dbRoom = await roomService.fetchUserRoom();
-          if (dbRoom) {
-            setRoom(dbRoom);
-            setEntities(dbRoom.combat?.entities || []);
-            setMobFavorites(dbRoom.mobFavorites || []);
-            setCombatStarted(dbRoom.combat?.combatState === CombatState.IN_PROGRESS);
+          // Create a query to find rooms with the matching ownerUID
+          const roomsRef = ref(rtdb, `rooms`);
+          const queryByOwnerUID = query(roomsRef, orderByChild('ownerUID'), equalTo(user.uid));
+          const snapshot = await get(queryByOwnerUID);
+
+          if (snapshot.exists()) {
+            const dbRooms = snapshot.val();
+            const firstRoom = Object.values(dbRooms)[0] as Room;
+
+            setRoom(firstRoom);
+            setEntities(firstRoom.combat?.entities || []);
+            setMobFavorites(firstRoom.mobFavorites || []);
+            setCombatStarted(firstRoom.combat?.combatState === CombatState.IN_PROGRESS);
           } else {
             setRoom({
+              ...room,
               ownerUID: user.uid,
               combat: {
                 entities: entities,
@@ -104,6 +160,7 @@ export const DMHelperContextProvider = ({ children }) => {
           console.warn('Error fetching room:', error, 'Creating new room...');
           // If we fail to retrieve the room, create a new one
           setRoom({
+            ...room,
             ownerUID: user.uid,
             combat: {
               entities: entities,
@@ -121,6 +178,60 @@ export const DMHelperContextProvider = ({ children }) => {
     // Cleanup subscription on component unmount
     return () => unsubscribe();
   }, []);
+
+  const createRoom = async () => {
+    const user = auth.currentUser;
+
+    if (!user) {
+      toast({
+        title: 'Authentication Error',
+        description: 'User is not authenticated',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    let newRoomData = {
+      ...room,
+      ownerUID: user.uid,
+      syncWithFirebase: true,
+    };
+
+    try {
+      const roomRef = ref(rtdb, `rooms`);
+      const newRoomRef = await push(roomRef, newRoomData); // generates a unique ID for the room
+      const newRoomId = newRoomRef.key;
+
+      if (newRoomId) {
+        newRoomData = { ...newRoomData, id: newRoomId };
+        setRoom(newRoomData);
+        await set(newRoomRef, newRoomData);
+        toast({
+          title: 'Room Created',
+          description: 'Your room has been created!',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        });
+
+        return `${window.location.origin}/join/${newRoomId}`;
+      }
+
+      throw new Error('Failed to create room; no room ID generated.');
+    } catch (error) {
+      toast({
+        title: 'Error Creating Room',
+        description: error.message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+
+      return null;
+    }
+  };
 
   const addMob = (name: string, health: number | null, initiative: number | null): boolean => {
     if (!validateName(name, toast) || !validateMobHealth(health, toast)) return false;
@@ -208,6 +319,7 @@ export const DMHelperContextProvider = ({ children }) => {
       value={{
         room,
         setRoom,
+        createRoom,
         entities,
         updateEntities,
         removeEntity,

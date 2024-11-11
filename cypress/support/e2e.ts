@@ -27,12 +27,12 @@ dotenv.config();
 const fbConfig = {
   apiKey: 'AIzaSyBk0kM-gOoO21l7sDOD50c6ErxsYYiZ1FE',
   authDomain: 'dm-helper-e7207.firebaseapp.com',
+  databaseURL: 'https://dm-helper-e7207-default-rtdb.firebaseio.com',
   projectId: 'dm-helper-e7207',
-  storageBucket: 'dm-helper-e7207.appspot.com',
+  storageBucket: 'dm-helper-e7207.firebasestorage.app',
   messagingSenderId: '778480457827',
   appId: '1:778480457827:web:a854efc49001ad24818056',
   measurementId: 'G-WZ4Q08Q2YB',
-  databaseURL: Cypress.env('NEXT_PUBLIC_FIREBASE_RTDB_URL'),
 };
 
 firebase.initializeApp(fbConfig);

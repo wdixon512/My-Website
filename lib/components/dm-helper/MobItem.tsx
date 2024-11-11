@@ -33,17 +33,18 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
       p={2}
       borderBottomWidth={1}
       _hover={{ bg: 'secondary.600', cursor: 'pointer' }}
+      data-testid={`${mob.id}-item`}
       {...props}
     >
       <Flex w="full">
         <Flex alignItems="center" flex="1">
           <Text>
             {mob.initiative && (
-              <Text as="span" fontWeight="800" textColor={textColor}>
+              <Text as="span" fontWeight="800" textColor={textColor} data-testid={`${mob.id}-initiative`}>
                 ({mob.initiative})
               </Text>
             )}
-            <Text as="span" fontWeight="800" textColor={textColor}>
+            <Text as="span" fontWeight="800" textColor={textColor} data-testid={`${mob.id}-name`}>
               &nbsp;{mob.name} {mob.number > 1 ? `#${mob.number}` : ''}
             </Text>
           </Text>
@@ -58,16 +59,11 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
               onChange={(e) => updateHealth(mob, parseInt(e.target.value))}
               w="90px"
               ml={2}
-              data-testid={`${mob.id.toLowerCase()}-health`}
+              data-testid={`${mob.id}-health`}
             />
           </FormControl>
         </Flex>
-        <Button
-          variant="redSolid"
-          onClick={() => removeEntity(mob)}
-          mr={2}
-          data-testid={`${mob.id.toLowerCase()}-kill`}
-        >
+        <Button variant="redSolid" onClick={() => removeEntity(mob)} mr={2} data-testid={`${mob.id}-kill`}>
           Kill
         </Button>
         <Tooltip label="Update Mob" aria-label="Update Mob" hasArrow>

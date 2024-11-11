@@ -36,17 +36,18 @@ export const HeroItem: React.FC<HeroItemProps> = ({
       borderBottomWidth={1}
       _hover={{ bg: 'secondary.600', cursor: 'pointer' }}
       className="group"
+      data-testid={`${hero.id}-item`}
       {...props}
     >
       <Flex w="full">
         <Flex alignItems="center" flex="1" py={2}>
           <Text>
             {showInitiative && hero.initiative && (
-              <Text as="span" fontWeight="800">
+              <Text as="span" fontWeight="800" data-testid={`${hero.id}-initiative`}>
                 ({hero.initiative})
               </Text>
             )}
-            <Text as="span" fontWeight="800" textColor={textColor}>
+            <Text as="span" fontWeight="800" textColor={textColor} data-testid={`${hero.id}-name`}>
               &nbsp;{hero.name}
             </Text>
           </Text>
@@ -54,7 +55,7 @@ export const HeroItem: React.FC<HeroItemProps> = ({
         <Flex flex="1" alignItems="center"></Flex>
       </Flex>
       {showRemove && (
-        <Button variant="redSolid" onClick={() => removeEntity(hero)} data-testid={`${hero.id.toLowerCase()}_remove`}>
+        <Button variant="redSolid" onClick={() => removeEntity(hero)} data-testid={`${hero.id.toLowerCase()}-remove`}>
           Remove
         </Button>
       )}
