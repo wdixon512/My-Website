@@ -1,64 +1,51 @@
-import { Hero } from './../../lib/models/dm-helper/Hero';
-import { Room } from './../../lib/models/dm-helper/Room';
-import { Mob } from './../../lib/models/dm-helper/Mob';
-import { Entity, EntityType } from './../../lib/models/dm-helper/Entity';
-import { CombatState } from './../../lib/models/dm-helper/Combat';
+import { Hero } from '../../lib/models/dm-helper/Hero';
+import { Mob } from '../../lib/models/dm-helper/Mob';
+import { Entity, EntityType } from '../../lib/models/dm-helper/Entity';
+import { CombatState } from '../../lib/models/dm-helper/Combat';
+import { dmHelperBeforeEach, dmHelperAfter } from '../helpers/dmhelper-setup';
+import {
+  addGoblinAndVerify,
+  addHeroAndVerify,
+  createRoom,
+  verifyDbRoom,
+  deleteRooms,
+  startCombat,
+  updateMobAndVerify,
+  updateMobHealthInlineAndVerify,
+  updateHeroAndVerify,
+  addOrcAndVerify,
+  quickAddById,
+  endCombat,
+  removeHeroAndVerify,
+  killMobAndVerify,
+  removeQuickAddByIdAndVerify,
+} from '../helpers/dmhelper-utils';
 
 describe('DMHelper E2E Tests', () => {
+  before(() => {
+    deleteRooms();
+  });
+
   beforeEach(() => {
-    // Login and visit the page once before all tests
-    cy.login();
-    cy.visit('/dm-helper');
-    cy.window().then((win) => {
-      win.localStorage.setItem('cypressTesting', 'true');
-    });
-    cy.wait(2000); // Wait for initial load
+    dmHelperBeforeEach();
   });
 
   after(() => {
-    // Wait to delete so the last step of each test can run
-    cy.wait(2000);
-
-    cy.callFirestore('get', 'rooms').then((rooms: Room[]) => {
-      const myRoom = rooms.find((room) => {
-        return room.ownerUID === Cypress.env('TEST_UID');
-      });
-
-      if (!myRoom) {
-        return;
-      }
-
-      cy.callFirestore('delete', `rooms/${myRoom.id}`);
-    });
+    dmHelperAfter();
   });
 
   describe('Room and Entity Management', () => {
     it('should create a room, add a mob, and verify it in the database', () => {
-      cy.get('[data-testid="invite-others-panel"]').click();
-      cy.get('[data-testid="create-room-button"]').click();
-
-      cy.get('[data-testid="combat-panel"]').click();
-
-      // Add a mob
-      cy.get('[data-testid="mob-name-input"]').type('Goblin');
-      cy.get('[data-testid="mob-health-input"]').type('30');
-      cy.get('[data-testid="mob-initiative-input"]').type('15');
-      cy.get('[data-testid="submit-mob-button"]').click();
-
-      // Verify the mob is added in the UI
-      cy.get('[data-testid="entity-list"]').should('contain', 'Goblin');
+      createRoom();
+      addGoblinAndVerify();
 
       // Wait for the mob to be added to the database
       cy.wait(2000);
 
-      cy.callFirestore('get', 'rooms').then((rooms: Room[]) => {
-        const myRoom = rooms.find((room) => {
-          return room.ownerUID === Cypress.env('TEST_UID');
-        });
-
-        expect(myRoom).to.exist;
-        expect(myRoom.combat.entities).to.exist;
-        expect(myRoom.combat.entities).to.satisfy((entities: Entity[]) =>
+      verifyDbRoom((room) => {
+        expect(room).to.exist;
+        expect(room.combat.entities).to.exist;
+        expect(room.combat.entities).to.satisfy((entities: Entity[]) =>
           entities.some((entity) => {
             return (
               entity.id === 'goblin-1' && entity.name === 'Goblin' && entity.health === 30 && entity.initiative === 15
@@ -69,24 +56,14 @@ describe('DMHelper E2E Tests', () => {
     });
 
     it('should add a hero and verify it in the database', () => {
-      // Interact with the UI to add a hero
-      cy.get('[data-testid="heroes-panel"]').click();
-      cy.get('[data-testid="hero-name-input"]').type('Warrior');
-      cy.get('[data-testid="add-hero-btn"]').click();
-
-      // Verify the hero is added in the UI
-      cy.get('[data-testid="hero-list"]').should('contain', 'Warrior');
+      addHeroAndVerify('Warrior');
 
       // Wait for the hero to be added to the database
       cy.wait(2000);
 
-      cy.callFirestore('get', 'rooms').then((rooms: Room[]) => {
-        const myRoom = rooms.find((room) => {
-          return room.ownerUID === Cypress.env('TEST_UID');
-        });
-
-        expect(myRoom).to.exist;
-        expect(myRoom.heroes).to.satisfy((heroes: Hero[]) => {
+      verifyDbRoom((room) => {
+        expect(room).to.exist;
+        expect(room.heroes).to.satisfy((heroes: Hero[]) => {
           return heroes.some((hero) => hero.id === 'warrior-1' && hero.name === 'Warrior');
         });
       });
@@ -95,12 +72,7 @@ describe('DMHelper E2E Tests', () => {
 
   describe('Combat Management', () => {
     it('should start combat, enter initiative and verify the combat state in the database', () => {
-      // Start combat
-      cy.get('[data-testid="combat-panel"]').click();
-      cy.get('[data-testid="start-combat-button"]').click();
-
-      cy.wait(1000);
-
+      startCombat();
       cy.get('[data-testid="initiative-input"]').type('21{enter}');
 
       // Wait for the combat state to be updated in the database
@@ -108,14 +80,10 @@ describe('DMHelper E2E Tests', () => {
 
       cy.get('[data-testid="entity-list"]').should('contain', 'Warrior').should('contain', 'Goblin');
 
-      cy.callFirestore('get', 'rooms').then((rooms: Room[]) => {
-        const myRoom = rooms.find((room) => {
-          return room.ownerUID === Cypress.env('TEST_UID');
-        });
-
-        expect(myRoom).to.exist;
-        expect(myRoom.combat.combatState).to.equal(CombatState.IN_PROGRESS);
-        expect(myRoom.combat.entities).to.satisfy((entities: Entity[]) => {
+      verifyDbRoom((room) => {
+        expect(room).to.exist;
+        expect(room.combat.combatState).to.equal(CombatState.IN_PROGRESS);
+        expect(room.combat.entities).to.satisfy((entities: Entity[]) => {
           return (
             entities.some(
               (entity) => entity.initiative === 21 && entity.id === 'warrior-1' && entity.type === EntityType.HERO
@@ -130,28 +98,19 @@ describe('DMHelper E2E Tests', () => {
 
     it('should update a mob entirely and verify it in the database', () => {
       // Interact with the UI to update the mob
-      cy.get('[data-testid="goblin-1-edit"]').click();
-
-      cy.get('[data-testid="name-edit-modal-input"]').clear().type('Orc');
-      cy.get('[data-testid="health-edit-modal-input"]').clear().type('50');
-      cy.get('[data-testid="initiative-edit-modal-input"]').clear().type('10');
-      cy.get('[data-testid="done-edit-modal-btn"]').click();
+      updateMobAndVerify('goblin-1', 'orc-1', 'Orc', 50, 10);
 
       // Wait for the mob to be updated in the database
       cy.wait(2000);
 
-      cy.get('[data-testid="entity-list"]').should('contain', 'Orc');
+      updateMobHealthInlineAndVerify('orc-1', 25);
 
-      cy.callFirestore('get', 'rooms').then((rooms: Room[]) => {
-        const myRoom = rooms.find((room) => {
-          return room.ownerUID === Cypress.env('TEST_UID');
-        });
-
-        expect(myRoom).to.exist;
-        expect(myRoom.combat.entities).to.exist;
-        expect(myRoom.combat.entities).to.satisfy((entities: Entity[]) => {
+      verifyDbRoom((room) => {
+        expect(room).to.exist;
+        expect(room.combat.entities).to.exist;
+        expect(room.combat.entities).to.satisfy((entities: Entity[]) => {
           return entities.some((entity) => {
-            return entity.id === 'orc-1' && entity.name === 'Orc' && entity.health === 50 && entity.initiative === 10;
+            return entity.id === 'orc-1' && entity.name === 'Orc' && entity.health === 25 && entity.initiative === 10;
           });
         });
       });
@@ -162,14 +121,10 @@ describe('DMHelper E2E Tests', () => {
       // Wait for the mob to be updated in the database
       cy.wait(2000);
 
-      cy.callFirestore('get', 'rooms').then((rooms: Room[]) => {
-        const myRoom = rooms.find((room) => {
-          return room.ownerUID === Cypress.env('TEST_UID');
-        });
-
-        expect(myRoom).to.exist;
-        expect(myRoom.combat.entities).to.exist;
-        expect(myRoom.combat.entities).to.satisfy((entities: Entity[]) => {
+      verifyDbRoom((room) => {
+        expect(room).to.exist;
+        expect(room.combat.entities).to.exist;
+        expect(room.combat.entities).to.satisfy((entities: Entity[]) => {
           return entities.some((entity) => {
             return entity.id === 'orc-1' && entity.health === 25;
           });
@@ -182,45 +137,33 @@ describe('DMHelper E2E Tests', () => {
     it('should update a hero initiative and verify it in the database', () => {
       // Interact with the UI to update the hero initiative
       cy.get('[data-testid="warrior-1-edit"]').click();
-
       cy.get('[data-testid="initiative-edit-modal-input"]').clear().type('25');
       cy.get('[data-testid="done-edit-modal-btn"]').click();
+
+      updateHeroAndVerify('warrior-1', 25);
 
       // Wait for the hero initiative to be updated in the database
       cy.wait(2000);
 
-      cy.get('[data-testid="entity-list"]').should('contain', 'Warrior');
-
-      cy.callFirestore('get', 'rooms').then((rooms: Room[]) => {
-        const myRoom = rooms.find((room) => {
-          return room.ownerUID === Cypress.env('TEST_UID');
-        });
-
-        expect(myRoom).to.exist;
-        expect(myRoom.combat.entities).to.exist;
-        expect(myRoom.combat.entities).to.satisfy((entities: Entity[]) => {
+      verifyDbRoom((room) => {
+        expect(room).to.exist;
+        expect(room.combat.entities).to.exist;
+        expect(room.combat.entities).to.satisfy((entities: Entity[]) => {
           return entities.some((entity) => {
-            return entity.name === 'Warrior' && entity.initiative === 25;
+            return entity.id === 'warrior-1' && entity.name === 'Warrior' && entity.initiative === 25;
           });
         });
       });
     });
 
     it('should add quick add mobs and verify them in the database', () => {
-      // Add Orc to Mobs + Favorites
-      cy.get('[data-testid="mob-name-input"]').type('Orc');
-      cy.get('[data-testid="mob-health-input"]').type('50');
-      cy.get('[data-testid="mob-initiative-input"]').type('10');
-      cy.get('[data-testid="submit-mob-button"]').click();
+      addOrcAndVerify();
 
-      // Verify the mobs are added in the UI
-      cy.get('[data-testid="entity-list"]').should('contain', 'Orc');
-
-      // Add 3 Goblins and 2 Orcs
-      cy.get('[data-testid="goblin-1-quickadd-btn"]').click();
-      cy.get('[data-testid="goblin-1-quickadd-btn"]').click();
-      cy.get('[data-testid="goblin-1-quickadd-btn"]').click();
-      cy.get('[data-testid="orc-2-quickadd-btn"]').click();
+      // Add 3 Goblins and another Orc
+      quickAddById('goblin-1');
+      quickAddById('goblin-1');
+      quickAddById('goblin-1');
+      quickAddById('orc-2');
 
       // Verify UI of multiple entities
       cy.get('[data-testid="entity-list"]').within(() => {
@@ -233,13 +176,9 @@ describe('DMHelper E2E Tests', () => {
       // Wait for the mobs to be added to the database
       cy.wait(2000);
 
-      cy.callFirestore('get', 'rooms').then((rooms: Room[]) => {
-        // Find the room owned by the test user
-        const myRoom = rooms.find((room) => room.ownerUID === Cypress.env('TEST_UID'));
-
-        // Assert that the room and combat entities exist
-        expect(myRoom).to.exist;
-        expect(myRoom.combat.entities).to.exist;
+      verifyDbRoom((room) => {
+        expect(room).to.exist;
+        expect(room.combat.entities).to.exist;
 
         // Define expected entities for clarity
         const expectedEntities = [
@@ -249,7 +188,7 @@ describe('DMHelper E2E Tests', () => {
 
         // Validate each expected entity in the database
         expectedEntities.forEach(({ name, health, initiative, count }) => {
-          const matchingEntities = myRoom.combat.entities.filter(
+          const matchingEntities = room.combat.entities.filter(
             (entity) => entity.name === name && entity.health === health && entity.initiative === initiative
           );
           expect(matchingEntities.length).to.equal(count);
@@ -258,78 +197,55 @@ describe('DMHelper E2E Tests', () => {
     });
 
     it('should end combat and verify the combat state in the database', () => {
-      // End combat
-      cy.get('[data-testid="end-combat-btn"]').click();
-      cy.get('[data-testid="end-combat-no-btn"]').click();
-
-      cy.get('[data-testid="end-combat-btn"]').click();
-      cy.get('[data-testid="end-combat-yes-btn"]').click();
+      endCombat(false);
+      endCombat(true);
 
       // Wait for the combat state to be updated in the database
       cy.wait(2000);
 
-      cy.callFirestore('get', 'rooms').then((rooms: Room[]) => {
-        const myRoom = rooms.find((room) => {
-          return room.ownerUID === Cypress.env('TEST_UID');
-        });
-
-        expect(myRoom).to.exist;
-        expect(myRoom.combat.combatState).to.equal(CombatState.NOT_IN_PROGRESS);
+      verifyDbRoom((room) => {
+        expect(room).to.exist;
+        expect(room.combat.combatState).to.equal(CombatState.NOT_IN_PROGRESS);
       });
     });
   });
 
   describe('Removal', () => {
     it('should remove a hero and verify it is removed from the database', () => {
-      // Interact with the UI to remove the hero
-      cy.get('[data-testid="heroes-panel"]').click();
-      cy.get('[data-testid="warrior-1_remove"]').click();
+      removeHeroAndVerify('warrior-1');
 
       // Wait for the hero to be removed from the database
       cy.wait(2000);
 
-      cy.callFirestore('get', 'rooms').then((rooms: Room[]) => {
-        const myRoom = rooms.find((room) => {
-          return room.ownerUID === Cypress.env('TEST_UID');
-        });
-
-        expect(myRoom).to.exist;
-        expect(myRoom.heroes).to.exist;
-        expect(myRoom.heroes).to.satisfy((heroes: Hero[]) => heroes.length === 0);
+      verifyDbRoom((room) => {
+        expect(room).to.exist;
+        expect(room.heroes).to.be.undefined;
       });
     });
 
     it('should remove a mob and verify it is removed from the database', () => {
-      cy.get('[data-testid="goblin-1-kill"]').click();
+      killMobAndVerify('goblin-1');
 
       // Wait for the mob to be removed from the database
       cy.wait(2000);
 
-      cy.callFirestore('get', 'rooms').then((rooms: Room[]) => {
-        const myRoom = rooms.find((room) => {
-          return room.ownerUID === Cypress.env('TEST_UID');
-        });
-
-        expect(myRoom).to.exist;
-        expect(myRoom.combat.entities).to.exist;
-        expect(myRoom.combat.entities).to.satisfy((entities: Entity[]) => entities.length === 5);
+      verifyDbRoom((room) => {
+        expect(room).to.exist;
+        expect(room.combat.entities).to.exist;
+        expect(room.combat.entities).to.satisfy((entities: Entity[]) => entities.length === 5);
       });
     });
 
     it('should remove a quickadded mob and verify it is removed from the database', () => {
-      cy.get('[data-testid="goblin-1-quickadd-remove-btn"]').click();
+      removeQuickAddByIdAndVerify('goblin-1');
 
       // Wait for the mob to be removed from the database
       cy.wait(2000);
 
-      cy.callFirestore('get', 'rooms').then((rooms: Room[]) => {
-        const myRoom = rooms.find((room) => {
-          return room.ownerUID === Cypress.env('TEST_UID');
-        });
-
-        expect(myRoom).to.exist;
-        expect(myRoom.mobFavorites).to.exist;
-        expect(myRoom.mobFavorites).to.satisfy(
+      verifyDbRoom((room) => {
+        expect(room).to.exist;
+        expect(room.mobFavorites).to.exist;
+        expect(room.mobFavorites).to.satisfy(
           (favorites: Mob[]) => favorites.length === 1 && !favorites.some((m) => m.id === 'goblin-1')
         );
       });
