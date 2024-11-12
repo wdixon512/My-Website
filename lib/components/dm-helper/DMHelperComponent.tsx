@@ -1,4 +1,16 @@
-import { Flex, Tabs, TabList, TabPanels, Tab, TabPanel, Img, Text, Button, useDisclosure } from '@chakra-ui/react';
+import {
+  Flex,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Img,
+  Text,
+  Button,
+  useDisclosure,
+  Icon,
+} from '@chakra-ui/react';
 import { MobForm } from '@lib/components/dm-helper/MobForm';
 import { HeroForm } from '@lib/components/dm-helper/HeroForm';
 import { DMHelperContext } from '@lib/components/contexts/DMHelperContext';
@@ -10,6 +22,8 @@ import { InitiativeModal } from '@lib/components/dm-helper/modals/InititativeMod
 import EndCombatConfirmationModal from './modals/EndCombatConfirmationModal';
 import { InviteOthersForm } from './InviteOthersForm';
 import DMHelperSignInComponent from './DMHelperSignInComponent';
+import { FaDoorOpen } from 'react-icons/fa';
+import JoinRoomTabPanel from './JoinRoomTabPanel';
 
 export const DMHelperComponent = () => {
   const { combatStarted, updateCombatStarted, heroes, resetHeroInitiatives, isClient } = useContext(DMHelperContext);
@@ -79,6 +93,17 @@ export const DMHelperComponent = () => {
               Invite Others
             </Text>
           </Tab>
+          <Tab
+            _selected={{ color: 'white', bg: 'primary.200' }}
+            borderRadius="lg"
+            fontWeight="bold"
+            data-testid="join-room-panel"
+          >
+            <Icon as={FaDoorOpen} mr="2" />
+            <Text as="span" lineHeight="24px">
+              Join Room
+            </Text>
+          </Tab>
         </TabList>
 
         <TabPanels>
@@ -114,6 +139,9 @@ export const DMHelperComponent = () => {
             <Flex gap="4" justifyContent="center">
               <InviteOthersForm />
             </Flex>
+          </TabPanel>
+          <TabPanel>
+            <JoinRoomTabPanel />
           </TabPanel>
         </TabPanels>
       </Tabs>

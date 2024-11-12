@@ -15,6 +15,7 @@ export const DMHelperContext = createContext({
   room: {} as Room,
   setRoom: (() => null) as React.Dispatch<React.SetStateAction<Room | null>>,
   createRoom: async () => null,
+  joinRoom: async (roomId: string) => null,
   joinRoomLink: null as string | null,
   entities: [] as Entity[],
   updateEntities: (() => null) as React.Dispatch<React.SetStateAction<Entity[]>>,
@@ -40,7 +41,7 @@ export const DMHelperContextProvider = ({ children }) => {
   const [isClient, setIsClient] = useState(false);
   const [commitPending, setCommitPending] = useState(false);
   const [joinRoomLink, setJoinRoomLink] = useState<string | null>(null);
-  const [loadingFirebaseRoom, setloadingFirebaseRoom] = useState(true);
+  const [loadingFirebaseRoom, setloadingFirebaseRoom] = useState(false);
 
   const toast = useToast();
 
@@ -244,6 +245,49 @@ export const DMHelperContextProvider = ({ children }) => {
     }
   };
 
+  const joinRoom = async (roomId: string) => {
+    try {
+      setloadingFirebaseRoom(true);
+      const roomRef = ref(rtdb, `rooms/${roomId}`);
+      const roomSnapshot = await get(roomRef);
+
+      if (roomSnapshot.exists()) {
+        const dbRoom = roomSnapshot.val() as Room;
+        setRoom(dbRoom);
+        setEntities(dbRoom.combat?.entities || []);
+        setMobFavorites(dbRoom.mobFavorites || []);
+        setCombatStarted(dbRoom.combat?.combatState === CombatState.IN_PROGRESS);
+        setJoinRoomLink(`${window.location.origin}/join/${roomId}`);
+        toast({
+          title: 'Room Joined',
+          description: 'You have successfully joined the room!',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: 'Room not found',
+          description: 'The room you are trying to join does not exist.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error('Error joining room:', error);
+      toast({
+        title: 'Error joining room',
+        description: 'An error occurred while trying to join the room.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+
+    setloadingFirebaseRoom(false);
+  };
+
   const addMob = (name: string, health: number | null, initiative: number | null): boolean => {
     if (!validateName(name, toast) || !validateMobHealth(health, toast)) return false;
 
@@ -331,6 +375,7 @@ export const DMHelperContextProvider = ({ children }) => {
         room,
         setRoom,
         createRoom,
+        joinRoom,
         joinRoomLink,
         entities,
         updateEntities,
