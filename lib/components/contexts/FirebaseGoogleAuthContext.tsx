@@ -72,7 +72,6 @@ export const FirebaseGoogleAuthProvider: React.FC<{ children: ReactNode }> = ({ 
 
         // save a local storage variable that the user has signed out
         window.localStorage.setItem('signedOut', 'true');
-
         window.location.reload();
       } catch (e) {
         const error = e as Error;

@@ -15,6 +15,7 @@ export const DMHelperContext = createContext({
   room: {} as Room,
   setRoom: (() => null) as React.Dispatch<React.SetStateAction<Room | null>>,
   createRoom: async () => null,
+  joinRoomLink: null as string | null,
   entities: [] as Entity[],
   updateEntities: (() => null) as React.Dispatch<React.SetStateAction<Entity[]>>,
   removeEntity: (mob: Mob) => null,
@@ -37,6 +38,7 @@ export const DMHelperContextProvider = ({ children }) => {
   const [combatStarted, setCombatStarted] = useState<boolean>(false);
   const [isClient, setIsClient] = useState(false);
   const [commitPending, setCommitPending] = useState(false);
+  const [joinRoomLink, setJoinRoomLink] = useState<string | null>(null);
 
   const toast = useToast();
 
@@ -144,6 +146,7 @@ export const DMHelperContextProvider = ({ children }) => {
             setEntities(firstRoom.combat?.entities || []);
             setMobFavorites(firstRoom.mobFavorites || []);
             setCombatStarted(firstRoom.combat?.combatState === CombatState.IN_PROGRESS);
+            setJoinRoomLink(`${window.location.origin}/join/${firstRoom.id}`);
           } else {
             setRoom({
               ...room,
@@ -216,7 +219,10 @@ export const DMHelperContextProvider = ({ children }) => {
           isClosable: true,
         });
 
-        return `${window.location.origin}/join/${newRoomId}`;
+        const roomLink = `${window.location.origin}/join/${newRoomId}`;
+        setJoinRoomLink(roomLink);
+
+        return roomLink;
       }
 
       throw new Error('Failed to create room; no room ID generated.');
@@ -320,6 +326,7 @@ export const DMHelperContextProvider = ({ children }) => {
         room,
         setRoom,
         createRoom,
+        joinRoomLink,
         entities,
         updateEntities,
         removeEntity,

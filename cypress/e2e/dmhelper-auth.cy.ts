@@ -3,19 +3,22 @@ import { Mob } from './../../lib/models/dm-helper/Mob';
 import { Entity } from './../../lib/models/dm-helper/Entity';
 import { dmHelperAfter, dmHelperBeforeEach } from '../helpers/dmhelper-setup';
 import {
-  addGoblin,
   addGoblinAndVerify,
-  addHero,
   addHeroAndVerify,
-  addKobold,
   addKoboldAndVerify,
   createRoom,
   deleteRooms,
-  signIn,
+  goToInviteOthersPanel,
+  dmHelperSignIn,
+  dmHelperSignOut,
   verifyDbRoom,
 } from '../helpers/dmhelper-utils';
 
 describe('DMHelper User Authorization Tests', () => {
+  before(() => {
+    deleteRooms();
+  });
+
   beforeEach(() => {
     dmHelperBeforeEach();
   });
@@ -24,14 +27,19 @@ describe('DMHelper User Authorization Tests', () => {
     dmHelperAfter();
   });
 
+  it('should go to the invite others tab while not signed in, and see "sign in" and not "create a room"', () => {
+    dmHelperSignOut();
+    goToInviteOthersPanel();
+    cy.get('[data-testid="invite-others-sign-in-btn"]').should('exist');
+    cy.get('[data-testid="create-room-button"]').should('not.exist');
+  });
+
   it('should sign in, add a mob/hero to room without sync, create room entry in DB, then sync current state', () => {
-    signIn();
+    dmHelperSignOut();
+    dmHelperSignIn();
     addGoblinAndVerify();
     addHeroAndVerify('Sava');
     createRoom();
-
-    // Wait for the mob to be added to the database
-    cy.wait(2000);
 
     verifyDbRoom((room) => {
       // Verify the combat
@@ -76,9 +84,6 @@ describe('DMHelper User Authorization Tests', () => {
     addGoblinAndVerify();
     addHeroAndVerify('Sava');
     createRoom();
-
-    // Wait for the mob to be added to the database
-    cy.wait(2000);
 
     verifyDbRoom((room) => {
       // Verify the combat
