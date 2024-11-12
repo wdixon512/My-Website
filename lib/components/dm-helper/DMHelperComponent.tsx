@@ -3,13 +3,12 @@ import { MobForm } from '@lib/components/dm-helper/MobForm';
 import { HeroForm } from '@lib/components/dm-helper/HeroForm';
 import { DMHelperContext } from '@lib/components/contexts/DMHelperContext';
 import { EntityList } from '@lib/components/dm-helper/EntityList';
-import { MobFavorites } from '@lib/components/dm-helper/MobFavorites';
+import { MobQuickAdd } from '@lib/components/dm-helper/MobQuickAdd';
 import { HeroList } from '@lib/components/dm-helper/HeroList';
 import { useContext } from 'react';
 import { InitiativeModal } from '@lib/components/dm-helper/modals/InititativeModal';
 import EndCombatConfirmationModal from './modals/EndCombatConfirmationModal';
-import { JoinRoomForm } from './JoinRoomForm';
-import { useFirebaseGoogleAuth } from '../contexts/FirebaseGoogleAuthContext';
+import { InviteOthersForm } from './InviteOthersForm';
 import DMHelperSignInComponent from './DMHelperSignInComponent';
 
 export const DMHelperComponent = () => {
@@ -87,7 +86,7 @@ export const DMHelperComponent = () => {
             <Flex direction={{ base: 'column', lg: 'row' }} justifyContent="center" gap="12">
               <Flex direction="column" gap="4">
                 <MobForm />
-                <MobFavorites />
+                <MobQuickAdd />
               </Flex>
               <Flex direction="column" gap="4">
                 {isClient && combatStarted && (
@@ -113,7 +112,7 @@ export const DMHelperComponent = () => {
           </TabPanel>
           <TabPanel>
             <Flex gap="4" justifyContent="center">
-              <JoinRoomForm />
+              <InviteOthersForm />
             </Flex>
           </TabPanel>
         </TabPanels>

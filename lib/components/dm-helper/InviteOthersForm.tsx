@@ -4,7 +4,7 @@ import { DMHelperContext } from '../contexts/DMHelperContext';
 import { useFirebaseGoogleAuth } from '../contexts/FirebaseGoogleAuthContext';
 import { auth } from '@lib/services/firebase';
 
-export const JoinRoomForm = () => {
+export const InviteOthersForm = () => {
   const { room, joinRoomLink, createRoom } = useContext(DMHelperContext);
   const { signInWithGoogle } = useFirebaseGoogleAuth();
   const toast = useToast();

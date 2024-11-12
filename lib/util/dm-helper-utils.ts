@@ -46,3 +46,17 @@ export const validateMobHealth = (
   }
   return true;
 };
+
+export const validateInitiative = (initiative: string) => {
+  if (initiative.trim() === '') {
+    return false;
+  }
+
+  const initNum = parseInt(initiative, 10);
+
+  if (isNaN(initNum)) {
+    return false;
+  }
+
+  return true;
+};

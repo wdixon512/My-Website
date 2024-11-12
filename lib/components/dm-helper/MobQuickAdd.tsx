@@ -5,10 +5,10 @@ import { Mob } from '@lib/models/dm-helper/Mob';
 import { AnimatePresence } from 'framer-motion';
 import AnimatedFlex from '../global/AnimatedFlex';
 
-export const MobFavorites = () => {
-  const { mobFavorites: mobFavorites, addMob, updateMobFavorites, isClient } = useContext(DMHelperContext);
+export const MobQuickAdd = () => {
+  const { mobFavorites, addMob, updateMobFavorites, isClient } = useContext(DMHelperContext);
 
-  const handleaddMob = (mob: Mob) => {
+  const handleAddMob = (mob: Mob) => {
     addMob(mob.name, mob.health, mob.initiative);
   };
 
@@ -35,7 +35,7 @@ export const MobFavorites = () => {
                     <Button
                       variant="outline"
                       width="fit"
-                      onClick={() => handleaddMob(mob)}
+                      onClick={() => handleAddMob(mob)}
                       data-testid={`${mob.id.toLowerCase()}-quickadd-btn`}
                     >
                       {mob.name}
