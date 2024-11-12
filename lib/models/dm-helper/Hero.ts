@@ -1,4 +1,4 @@
-import Entity, { EntityType } from './Entity';
+import { Entity, EntityType } from './Entity';
 
 export type Hero = Entity & {
   type: EntityType.HERO;

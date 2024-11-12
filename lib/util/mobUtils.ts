@@ -1,4 +1,4 @@
-import Entity from '@lib/models/dm-helper/Entity';
+import { Entity } from '@lib/models/dm-helper/Entity';
 
 export const sortEntities = (entities: Entity[]) => {
   if (!entities) return [];

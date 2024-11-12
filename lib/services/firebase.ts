@@ -1,7 +1,7 @@
 import { initializeApp, getApps } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getDatabase } from 'firebase/database';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { AuthError, AuthErrorCodes, getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { cypressIsTesting } from '@lib/util/cypress-utils';
 
 let firebaseApp;
@@ -22,21 +22,3 @@ if (!getApps().length) {
 // export const db = getFirestore(firebaseApp);
 export const rtdb = getDatabase(firebaseApp);
 export const auth = getAuth(firebaseApp);
-
-export const signInWithGoogle = async () => {
-  if (cypressIsTesting()) {
-    console.log('Cypress is testing, skipping sign in with Google, but will delay for 1 second.');
-    return await new Promise((resolve) => setTimeout(resolve, 1000));
-  }
-
-  if (!auth.currentUser) {
-    const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
-  }
-};
-
-export const signOutOfGoogle = async () => {
-  if (auth.currentUser) {
-    await auth.signOut();
-  }
-};

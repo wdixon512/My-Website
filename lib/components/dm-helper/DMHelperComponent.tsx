@@ -9,11 +9,11 @@ import { useContext } from 'react';
 import { InitiativeModal } from '@lib/components/dm-helper/modals/InititativeModal';
 import EndCombatConfirmationModal from './modals/EndCombatConfirmationModal';
 import { JoinRoomForm } from './JoinRoomForm';
-import { signInWithGoogle, signOutOfGoogle } from '@lib/services/firebase';
+import { useFirebaseGoogleAuth } from '../contexts/FirebaseGoogleAuthContext';
+import DMHelperSignInComponent from './DMHelperSignInComponent';
 
 export const DMHelperComponent = () => {
-  const { room, combatStarted, updateCombatStarted, heroes, resetHeroInitiatives, isClient } =
-    useContext(DMHelperContext);
+  const { combatStarted, updateCombatStarted, heroes, resetHeroInitiatives, isClient } = useContext(DMHelperContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: endCombatIsOpen, onOpen: onEndCombatModalOpen, onClose: onEndCombatModalClose } = useDisclosure();
 
@@ -34,30 +34,9 @@ export const DMHelperComponent = () => {
     }
   };
 
-  const handleSignIn = () => {
-    signInWithGoogle().then((_) => {
-      console.log('Signed in with Google');
-    });
-  };
-
-  const handleSignOut = () => {
-    signOutOfGoogle().then((_) => {
-      window.location.reload();
-    });
-  };
-
   return (
     <>
-      {room?.id && <Text>Current Room Id: {room.id}</Text>}
-      {/* // TODO: put this somewhere else */}
-      <Flex gap={4}>
-        <Button onClick={handleSignIn} data-testid="sign-in-btn">
-          Sign In
-        </Button>
-        <Button variant="redSolid" onClick={handleSignOut} data-testid="sign-out-btn">
-          Sign Out
-        </Button>
-      </Flex>
+      <DMHelperSignInComponent />
       <Tabs display="flex" flexDir="column" alignContent={'center'}>
         <TabList
           alignSelf="center"

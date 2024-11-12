@@ -181,12 +181,17 @@ export const deleteRooms = () => {
   });
 };
 
-export const signIn = () => {
+export const dmHelperSignIn = () => {
   cy.get('[data-testid="sign-in-btn"]').click();
+  cy.login();
   cy.wait(1000);
 };
 
-export const signOut = () => {
+export const dmHelperSignOut = () => {
   cy.get('[data-testid="sign-out-btn"]').click();
-  cy.wait(1000);
+  cy.logout();
+};
+
+export const goToInviteOthersPanel = () => {
+  cy.get('[data-testid="invite-others-panel"]').click();
 };
