@@ -29,6 +29,7 @@ export const DMHelperContext = createContext({
   combatStarted: false,
   updateCombatStarted: (started: boolean) => null,
   clearMobs: () => null,
+  loadingFirebaseRoom: false,
 });
 
 export const DMHelperContextProvider = ({ children }) => {
@@ -39,6 +40,7 @@ export const DMHelperContextProvider = ({ children }) => {
   const [isClient, setIsClient] = useState(false);
   const [commitPending, setCommitPending] = useState(false);
   const [joinRoomLink, setJoinRoomLink] = useState<string | null>(null);
+  const [loadingFirebaseRoom, setloadingFirebaseRoom] = useState(true);
 
   const toast = useToast();
 
@@ -46,6 +48,64 @@ export const DMHelperContextProvider = ({ children }) => {
 
   // Utilities to update Room context state & Realtime Database
   const scheduleCommitRoomChanges = () => setCommitPending(true);
+
+  // On component mount, fetch the user's room from Realtime Database
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          setloadingFirebaseRoom(true);
+          // Create a query to find rooms with the matching ownerUID
+          const roomsRef = ref(rtdb, `rooms`);
+          const queryByOwnerUID = query(roomsRef, orderByChild('ownerUID'), equalTo(user.uid));
+          const snapshot = await get(queryByOwnerUID);
+
+          if (snapshot.exists()) {
+            const dbRooms = snapshot.val();
+            const firstRoom = Object.values(dbRooms)[0] as Room;
+
+            setRoom(firstRoom);
+            setEntities(firstRoom.combat?.entities || []);
+            setMobFavorites(firstRoom.mobFavorites || []);
+            setCombatStarted(firstRoom.combat?.combatState === CombatState.IN_PROGRESS);
+            setJoinRoomLink(`${window.location.origin}/join/${firstRoom.id}`);
+          } else {
+            setRoom({
+              ...room,
+              ownerUID: user.uid,
+              combat: {
+                entities: entities,
+                combatState: combatStarted ? CombatState.IN_PROGRESS : CombatState.NOT_IN_PROGRESS,
+              } as Combat,
+              mobFavorites: mobFavorites,
+              heroes: heroes,
+            });
+          }
+        } catch (error) {
+          console.warn('Error fetching room:', error, 'Creating new room...');
+          // If we fail to retrieve the room, create a new one
+          setRoom({
+            ...room,
+            ownerUID: user.uid,
+            combat: {
+              entities: entities,
+              combatState: combatStarted ? CombatState.IN_PROGRESS : CombatState.NOT_IN_PROGRESS,
+            } as Combat,
+            mobFavorites: mobFavorites,
+            heroes: heroes,
+          });
+        }
+
+        setloadingFirebaseRoom(false);
+      }
+    });
+
+    setIsClient(true);
+
+    // Cleanup subscription on component unmount
+    return () => unsubscribe();
+  }, []);
 
   // Commit changes to the room to Realtime Database
   useEffect(() => {
@@ -126,61 +186,6 @@ export const DMHelperContextProvider = ({ children }) => {
 
     setCommitPending(false);
   }, [commitPending, entities, mobFavorites, heroes, combatStarted, room]);
-
-  // On component mount, fetch the user's room from Realtime Database
-  useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        try {
-          // Create a query to find rooms with the matching ownerUID
-          const roomsRef = ref(rtdb, `rooms`);
-          const queryByOwnerUID = query(roomsRef, orderByChild('ownerUID'), equalTo(user.uid));
-          const snapshot = await get(queryByOwnerUID);
-
-          if (snapshot.exists()) {
-            const dbRooms = snapshot.val();
-            const firstRoom = Object.values(dbRooms)[0] as Room;
-
-            setRoom(firstRoom);
-            setEntities(firstRoom.combat?.entities || []);
-            setMobFavorites(firstRoom.mobFavorites || []);
-            setCombatStarted(firstRoom.combat?.combatState === CombatState.IN_PROGRESS);
-            setJoinRoomLink(`${window.location.origin}/join/${firstRoom.id}`);
-          } else {
-            setRoom({
-              ...room,
-              ownerUID: user.uid,
-              combat: {
-                entities: entities,
-                combatState: combatStarted ? CombatState.IN_PROGRESS : CombatState.NOT_IN_PROGRESS,
-              } as Combat,
-              mobFavorites: mobFavorites,
-              heroes: heroes,
-            });
-          }
-        } catch (error) {
-          console.warn('Error fetching room:', error, 'Creating new room...');
-          // If we fail to retrieve the room, create a new one
-          setRoom({
-            ...room,
-            ownerUID: user.uid,
-            combat: {
-              entities: entities,
-              combatState: combatStarted ? CombatState.IN_PROGRESS : CombatState.NOT_IN_PROGRESS,
-            } as Combat,
-            mobFavorites: mobFavorites,
-            heroes: heroes,
-          });
-        }
-      }
-    });
-
-    setIsClient(true);
-
-    // Cleanup subscription on component unmount
-    return () => unsubscribe();
-  }, []);
 
   const createRoom = async () => {
     const user = auth.currentUser;
@@ -340,6 +345,7 @@ export const DMHelperContextProvider = ({ children }) => {
         combatStarted,
         updateCombatStarted,
         clearMobs,
+        loadingFirebaseRoom,
       }}
     >
       {children}
