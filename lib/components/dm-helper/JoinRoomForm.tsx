@@ -1,11 +1,12 @@
 import { useContext, useState } from 'react';
-import { signInWithGoogle } from '@services/firebase';
 import { Flex, Heading, Text, Button, Input, useToast } from '@chakra-ui/react';
 import { DMHelperContext } from '../contexts/DMHelperContext';
+import { useFirebaseGoogleAuth } from '../contexts/FirebaseGoogleAuthContext';
 
 export const JoinRoomForm = () => {
   const { createRoom } = useContext(DMHelperContext);
   const [roomLink, setRoomLink] = useState<string | null>(null);
+  const { signInWithGoogle } = useFirebaseGoogleAuth();
   const toast = useToast();
 
   const handleCreateRoom = async () => {

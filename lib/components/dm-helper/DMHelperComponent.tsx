@@ -9,13 +9,14 @@ import { useContext } from 'react';
 import { InitiativeModal } from '@lib/components/dm-helper/modals/InititativeModal';
 import EndCombatConfirmationModal from './modals/EndCombatConfirmationModal';
 import { JoinRoomForm } from './JoinRoomForm';
-import { signInWithGoogle, signOutOfGoogle } from '@lib/services/firebase';
+import { useFirebaseGoogleAuth } from '../contexts/FirebaseGoogleAuthContext';
 
 export const DMHelperComponent = () => {
   const { room, combatStarted, updateCombatStarted, heroes, resetHeroInitiatives, isClient } =
     useContext(DMHelperContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: endCombatIsOpen, onOpen: onEndCombatModalOpen, onClose: onEndCombatModalClose } = useDisclosure();
+  const { signInWithGoogle, signOutOfGoogle } = useFirebaseGoogleAuth();
 
   const startCombat = () => {
     if (heroes.length > 0) {
