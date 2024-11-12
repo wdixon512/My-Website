@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useToast } from '@chakra-ui/react';
 import { cypressIsTesting } from '@lib/util/cypress-utils';
@@ -14,6 +14,18 @@ const FirebaseGoogleAuthContext = createContext<FirebaseGoogleAuthContextProps |
 export const FirebaseGoogleAuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const toast = useToast();
 
+  useEffect(() => {
+    const signedOut = window.localStorage.getItem('signedOut');
+
+    if (signedOut && signedOut === 'true') {
+      window.localStorage.removeItem('signedOut');
+      toast({
+        title: 'Signed Out',
+        description: 'You have successfully signed out.',
+        status: 'success',
+      });
+    }
+  }, []);
   const signInWithGoogle = async (): Promise<void> => {
     if (cypressIsTesting()) {
       console.log('Cypress is testing, skipping sign in with Google, but will delay for 1 second.');
@@ -24,6 +36,14 @@ export const FirebaseGoogleAuthProvider: React.FC<{ children: ReactNode }> = ({ 
       const provider = new GoogleAuthProvider();
       try {
         await signInWithPopup(auth, provider);
+
+        toast({
+          title: 'Sign-in Successful',
+          description: 'You have successfully signed in.',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        });
       } catch (e) {
         const error = e as Error;
         toast({
@@ -34,6 +54,14 @@ export const FirebaseGoogleAuthProvider: React.FC<{ children: ReactNode }> = ({ 
           isClosable: true,
         });
       }
+    } else {
+      toast({
+        title: 'Sign-in Error',
+        description: 'You are already signed in.',
+        status: 'info',
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
@@ -41,6 +69,11 @@ export const FirebaseGoogleAuthProvider: React.FC<{ children: ReactNode }> = ({ 
     if (auth.currentUser) {
       try {
         await auth.signOut();
+
+        // save a local storage variable that the user has signed out
+        window.localStorage.setItem('signedOut', 'true');
+
+        window.location.reload();
       } catch (e) {
         const error = e as Error;
         toast({

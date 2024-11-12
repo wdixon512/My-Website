@@ -36,15 +36,11 @@ export const DMHelperComponent = () => {
   };
 
   const handleSignIn = () => {
-    signInWithGoogle().then((_) => {
-      console.log('Signed in with Google');
-    });
+    signInWithGoogle();
   };
 
   const handleSignOut = () => {
-    signOutOfGoogle().then((_) => {
-      window.location.reload();
-    });
+    signOutOfGoogle();
   };
 
   return (
