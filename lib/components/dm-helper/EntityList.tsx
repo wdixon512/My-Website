@@ -8,6 +8,7 @@ import { Entity, EntityType } from '@lib/models/dm-helper/Entity';
 import HeroItem from './HeroItem';
 import { FaUserEdit } from 'react-icons/fa';
 import { Mob } from '@lib/models/dm-helper/Mob';
+import { Hero } from '@lib/models/dm-helper/Hero';
 
 export const EntityList = () => {
   const { entities, updateEntities, combatStarted, isClient } = useContext(DMHelperContext);
@@ -60,7 +61,7 @@ export const EntityList = () => {
                         {entity.type === EntityType.MOB ? (
                           <MobItem mob={entity as Mob} />
                         ) : (
-                          combatStarted && <HeroItem hero={entity} textColor={'interactive.200'} />
+                          combatStarted && <HeroItem hero={entity as Hero} textColor={'interactive.200'} />
                         )}
                       </div>
                     )}

@@ -18,7 +18,7 @@ export const DMHelperContext = createContext({
   joinRoomLink: null as string | null,
   entities: [] as Entity[],
   updateEntities: (() => null) as React.Dispatch<React.SetStateAction<Entity[]>>,
-  removeEntity: (mob: Mob) => null,
+  removeEntity: (entity: Entity) => null,
   addMob: (name: string, health: number | null, initiative: number | null) => null,
   addHero: (name: string, health: number | null, initiative: number | null) => null,
   resetHeroInitiatives: () => null,
@@ -308,8 +308,8 @@ export const DMHelperContextProvider = ({ children }) => {
     scheduleCommitRoomChanges();
   };
 
-  const removeEntity = (mob: Mob) => {
-    const updatedEntities = entities.filter((m) => m.id !== mob.id);
+  const removeEntity = (entity: Entity) => {
+    const updatedEntities = entities.filter((e) => e.id !== entity.id);
     setEntities(updatedEntities);
     scheduleCommitRoomChanges();
   };
