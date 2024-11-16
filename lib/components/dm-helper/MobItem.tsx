@@ -13,7 +13,7 @@ interface MobItemProps extends FlexProps {
 }
 
 export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ...props }) => {
-  const { entities, removeEntity, updateEntities } = useContext(DMHelperContext);
+  const { entities, removeEntity, updateEntities, readOnlyRoom } = useContext(DMHelperContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const updateHealth = (mob: Mob, newHealth) => {
@@ -37,44 +37,52 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
       {...props}
     >
       <Flex w="full">
-        <Flex alignItems="center" flex="1">
+        <Flex alignItems="center" flex="1" py={'2'}>
           <Text>
             {mob.initiative && (
               <Text as="span" fontWeight="800" textColor={textColor} data-testid={`${mob.id}-initiative`}>
                 ({mob.initiative})
               </Text>
             )}
-            <Text as="span" fontWeight="800" textColor={textColor} data-testid={`${mob.id}-name`}>
+            <Text as="span" fontWeight="800" textColor={textColor} data-testid={`${mob.id}-name`} color="marioRed.200">
               &nbsp;{mob.name} {mob.number > 1 ? `#${mob.number}` : ''}
             </Text>
           </Text>
         </Flex>
-        <Flex flex="1" alignItems="center">
-          <Text>Health:</Text>
-          <FormControl>
-            <Input
-              type="number"
-              fontWeight="800"
-              value={mob.health}
-              onChange={(e) => updateHealth(mob, parseInt(e.target.value))}
-              w="90px"
-              ml={2}
-              data-testid={`${mob.id}-health`}
-            />
-          </FormControl>
-        </Flex>
-        <Button variant="redSolid" onClick={() => removeEntity(mob)} mr={2} data-testid={`${mob.id}-kill`}>
-          Kill
-        </Button>
-        <Tooltip label="Update Mob" aria-label="Update Mob" hasArrow>
-          <Button
-            variant="primarySolid"
-            onClick={() => showEntityEditForm()}
-            data-testid={`${mob.id.toLowerCase()}-edit`}
-          >
-            <Icon as={FaUserEdit} />
+        {!readOnlyRoom && (
+          <Flex flex="1" alignItems="center" justifyContent={readOnlyRoom ? 'flex-end' : 'flex-start'}>
+            <Text>Health:</Text>
+            <>
+              <FormControl>
+                <Input
+                  type="number"
+                  fontWeight="800"
+                  value={mob.health}
+                  onChange={(e) => updateHealth(mob, parseInt(e.target.value))}
+                  w="90px"
+                  ml={2}
+                  data-testid={`${mob.id}-health`}
+                />
+              </FormControl>
+            </>
+          </Flex>
+        )}
+        {!readOnlyRoom && (
+          <Button variant="redSolid" onClick={() => removeEntity(mob)} mr={2} data-testid={`${mob.id}-kill`}>
+            Kill
           </Button>
-        </Tooltip>
+        )}
+        {!readOnlyRoom && (
+          <Tooltip label="Update Mob" aria-label="Update Mob" hasArrow>
+            <Button
+              variant="primarySolid"
+              onClick={() => showEntityEditForm()}
+              data-testid={`${mob.id.toLowerCase()}-edit`}
+            >
+              <Icon as={FaUserEdit} />
+            </Button>
+          </Tooltip>
+        )}
       </Flex>
 
       <EntityEditModal entity={mob} isOpen={isOpen} onClose={onClose} />

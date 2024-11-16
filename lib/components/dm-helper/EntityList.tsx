@@ -11,7 +11,8 @@ import { Mob } from '@lib/models/dm-helper/Mob';
 import { Hero } from '@lib/models/dm-helper/Hero';
 
 export const EntityList = () => {
-  const { entities, updateEntities, combatStarted, isClient, loadingFirebaseRoom } = useContext(DMHelperContext);
+  const { entities, updateEntities, combatStarted, isClient, loadingFirebaseRoom, readOnlyRoom } =
+    useContext(DMHelperContext);
   const toast = useToast();
 
   const handleDragEnd = (result) => {
@@ -47,7 +48,7 @@ export const EntityList = () => {
       {isClient &&
         (loadingFirebaseRoom ? (
           <Spinner size="lg" label="Loading entities..." />
-        ) : (
+        ) : !readOnlyRoom ? (
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="EntityList">
               {(provided) => (
@@ -75,6 +76,18 @@ export const EntityList = () => {
               )}
             </Droppable>
           </DragDropContext>
+        ) : (
+          <List data-testid="entity-list">
+            {sortEntitiesByInitiative(entities).map((entity: Entity) => (
+              <div key={entity.id} data-testid="entity-item">
+                {entity.type === EntityType.MOB ? (
+                  <MobItem mob={entity as Mob} />
+                ) : (
+                  combatStarted && <HeroItem hero={entity as Hero} textColor={'interactive.200'} />
+                )}
+              </div>
+            ))}
+          </List>
         ))}
     </Box>
   );

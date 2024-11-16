@@ -9,7 +9,9 @@ import { Mob } from '@lib/models/dm-helper/Mob';
 import { getNextEntityNumber, validateMobHealth, validateName } from '@lib/util/dm-helper-utils';
 import { sanitizeData } from '@lib/util/firebase-utils';
 import { auth, rtdb } from '@services/firebase';
-import { ref, get, set, update, push, query, orderByChild, equalTo } from 'firebase/database';
+import { ref, get, set, update, push, query, orderByChild, equalTo, onValue } from 'firebase/database';
+import useLocalStorage from '@lib/hooks/useLocalStorage';
+import { getRoombyId, getRoomByOwnerUID } from '@lib/services/dm-helper-firebase-service';
 
 export const DMHelperContext = createContext({
   room: {} as Room,
@@ -31,6 +33,7 @@ export const DMHelperContext = createContext({
   updateCombatStarted: (started: boolean) => null,
   clearMobs: () => null,
   loadingFirebaseRoom: false,
+  readOnlyRoom: false,
 });
 
 export const DMHelperContextProvider = ({ children }) => {
@@ -42,47 +45,48 @@ export const DMHelperContextProvider = ({ children }) => {
   const [commitPending, setCommitPending] = useState(false);
   const [joinRoomLink, setJoinRoomLink] = useState<string | null>(null);
   const [loadingFirebaseRoom, setloadingFirebaseRoom] = useState(false);
+  const [joinedRoomId, setJoinedRoomId] = useLocalStorage('joinedRoomId', null);
 
   const toast = useToast();
 
   const heroes = useMemo(() => entities.filter((entity) => entity.type === EntityType.HERO) as Hero[], [entities]);
+  const readOnlyRoom = useMemo(() => joinedRoomId !== null, [joinedRoomId]);
 
   // Utilities to update Room context state & Realtime Database
   const scheduleCommitRoomChanges = () => setCommitPending(true);
 
-  // On component mount, fetch the user's room from Realtime Database
+  // On component mount, fetch the room from Realtime Database
   useEffect(() => {
+    setIsClient(true);
+
+    // If localstorage is indicating that we've joined a room, join it
+    if (joinedRoomId) {
+      joinRoom(joinedRoomId);
+      return;
+    }
+
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
           setloadingFirebaseRoom(true);
-          // Create a query to find rooms with the matching ownerUID
-          const roomsRef = ref(rtdb, `rooms`);
-          const queryByOwnerUID = query(roomsRef, orderByChild('ownerUID'), equalTo(user.uid));
-          const snapshot = await get(queryByOwnerUID);
-
-          if (snapshot.exists()) {
-            const dbRooms = snapshot.val();
-            const firstRoom = Object.values(dbRooms)[0] as Room;
-
-            setRoom(firstRoom);
-            setEntities(firstRoom.combat?.entities || []);
-            setMobFavorites(firstRoom.mobFavorites || []);
-            setCombatStarted(firstRoom.combat?.combatState === CombatState.IN_PROGRESS);
-            setJoinRoomLink(`${window.location.origin}/join/${firstRoom.id}`);
-          } else {
-            setRoom({
-              ...room,
-              ownerUID: user.uid,
-              combat: {
-                entities: entities,
-                combatState: combatStarted ? CombatState.IN_PROGRESS : CombatState.NOT_IN_PROGRESS,
-              } as Combat,
-              mobFavorites: mobFavorites,
-              heroes: heroes,
-            });
-          }
+          // Get room for firebase, and set our context state
+          getRoomByOwnerUID(user.uid).then((dbRoom) => {
+            if (dbRoom) {
+              syncContextWithRoom(dbRoom);
+            } else {
+              setRoom({
+                ...room,
+                ownerUID: user.uid,
+                combat: {
+                  entities: entities,
+                  combatState: combatStarted ? CombatState.IN_PROGRESS : CombatState.NOT_IN_PROGRESS,
+                } as Combat,
+                mobFavorites: mobFavorites,
+                heroes: heroes,
+              });
+            }
+          });
         } catch (error) {
           console.warn('Error fetching room:', error, 'Creating new room...');
           // If we fail to retrieve the room, create a new one
@@ -102,15 +106,12 @@ export const DMHelperContextProvider = ({ children }) => {
       }
     });
 
-    setIsClient(true);
-
-    // Cleanup subscription on component unmount
     return () => unsubscribe();
   }, []);
 
   // Commit changes to the room to Realtime Database
   useEffect(() => {
-    if (!commitPending) return;
+    if (!commitPending || joinedRoomId) return;
 
     let syncChangesWithFirebase = room.syncWithFirebase;
 
@@ -253,17 +254,31 @@ export const DMHelperContextProvider = ({ children }) => {
 
       if (roomSnapshot.exists()) {
         const dbRoom = roomSnapshot.val() as Room;
-        setRoom(dbRoom);
-        setEntities(dbRoom.combat?.entities || []);
-        setMobFavorites(dbRoom.mobFavorites || []);
-        setCombatStarted(dbRoom.combat?.combatState === CombatState.IN_PROGRESS);
-        setJoinRoomLink(`${window.location.origin}/join/${roomId}`);
+        syncContextWithRoom(dbRoom);
         toast({
           title: 'Room Joined',
           description: 'You have successfully joined the room!',
           status: 'success',
           duration: 5000,
           isClosable: true,
+        });
+        setJoinedRoomId(dbRoom.id);
+
+        // Start listening for real-time updates
+        onValue(roomRef, (snapshot) => {
+          if (snapshot.exists()) {
+            const updatedRoom = snapshot.val() as Room;
+            syncContextWithRoom(updatedRoom); // Update context state with new data
+          } else {
+            console.warn(`Room with ID ${roomId} no longer exists.`);
+            toast({
+              title: 'Room Removed',
+              description: 'The room you joined has been deleted.',
+              status: 'warning',
+              duration: 5000,
+              isClosable: true,
+            });
+          }
         });
       } else {
         toast({
@@ -286,6 +301,14 @@ export const DMHelperContextProvider = ({ children }) => {
     }
 
     setloadingFirebaseRoom(false);
+  };
+
+  const syncContextWithRoom = async (dbRoom: Room) => {
+    setRoom(dbRoom);
+    setEntities(dbRoom.combat?.entities || []);
+    setMobFavorites(dbRoom.mobFavorites || []);
+    setCombatStarted(dbRoom.combat?.combatState === CombatState.IN_PROGRESS);
+    setJoinRoomLink(`${window.location.origin}/join/${dbRoom.id}`);
   };
 
   const addMob = (name: string, health: number | null, initiative: number | null): boolean => {
@@ -391,6 +414,7 @@ export const DMHelperContextProvider = ({ children }) => {
         updateCombatStarted,
         clearMobs,
         loadingFirebaseRoom,
+        readOnlyRoom,
       }}
     >
       {children}

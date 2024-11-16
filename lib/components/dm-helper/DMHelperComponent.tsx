@@ -10,6 +10,7 @@ import {
   Button,
   useDisclosure,
   Icon,
+  Heading,
 } from '@chakra-ui/react';
 import { MobForm } from '@lib/components/dm-helper/MobForm';
 import { HeroForm } from '@lib/components/dm-helper/HeroForm';
@@ -26,7 +27,8 @@ import { FaDoorOpen } from 'react-icons/fa';
 import JoinRoomTabPanel from './JoinRoomTabPanel';
 
 export const DMHelperComponent = () => {
-  const { combatStarted, updateCombatStarted, heroes, resetHeroInitiatives, isClient } = useContext(DMHelperContext);
+  const { combatStarted, updateCombatStarted, heroes, resetHeroInitiatives, isClient, readOnlyRoom } =
+    useContext(DMHelperContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: endCombatIsOpen, onOpen: onEndCombatModalOpen, onClose: onEndCombatModalClose } = useDisclosure();
 
@@ -51,60 +53,64 @@ export const DMHelperComponent = () => {
     <>
       <DMHelperSignInComponent />
       <Tabs display="flex" flexDir="column" alignContent={'center'}>
-        <TabList
-          alignSelf="center"
-          border="2px solid"
-          justifyContent="center"
-          mb="4"
-          p={2}
-          w="fit-content"
-          bgColor="secondary.500"
-        >
-          <Tab
-            _selected={{ color: 'white', bg: 'primary.200' }}
-            borderRadius="lg"
-            fontWeight="bold"
-            data-testid="combat-panel"
-          >
-            <Img src="/static/images/sword.png" alt="sword-icon" w="20px" h="20px" mr="1" />
-            <Text as="span" lineHeight="24px">
-              Combat
-            </Text>
-          </Tab>
-          <Tab
-            _selected={{ color: 'white', bg: 'primary.200' }}
-            borderRadius="lg"
-            fontWeight="bold"
-            data-testid="heroes-panel"
-          >
-            <Img src="/static/images/knight.png" alt="knight" w="20px" h="20px" mr="1" />
-            <Text as="span" lineHeight="24px">
-              Heroes
-            </Text>
-          </Tab>
-          <Tab
-            _selected={{ color: 'white', bg: 'primary.200' }}
-            borderRadius="lg"
-            fontWeight="bold"
-            data-testid="invite-others-panel"
-          >
-            <Img src="/static/images/join-party.png" alt="knight" w="20px" h="20px" mr="1" />
-            <Text as="span" lineHeight="24px">
-              Invite Others
-            </Text>
-          </Tab>
-          <Tab
-            _selected={{ color: 'white', bg: 'primary.200' }}
-            borderRadius="lg"
-            fontWeight="bold"
-            data-testid="join-room-panel"
-          >
-            <Icon as={FaDoorOpen} mr="2" />
-            <Text as="span" lineHeight="24px">
-              Join Room
-            </Text>
-          </Tab>
-        </TabList>
+        {!readOnlyRoom && (
+          <>
+            <TabList
+              alignSelf="center"
+              border="2px solid"
+              justifyContent="center"
+              mb="4"
+              p={2}
+              w="fit-content"
+              bgColor="secondary.500"
+            >
+              <Tab
+                _selected={{ color: 'white', bg: 'primary.200' }}
+                borderRadius="lg"
+                fontWeight="bold"
+                data-testid="combat-panel"
+              >
+                <Img src="/static/images/sword.png" alt="sword-icon" w="20px" h="20px" mr="1" />
+                <Text as="span" lineHeight="24px">
+                  Combat
+                </Text>
+              </Tab>
+              <Tab
+                _selected={{ color: 'white', bg: 'primary.200' }}
+                borderRadius="lg"
+                fontWeight="bold"
+                data-testid="heroes-panel"
+              >
+                <Img src="/static/images/knight.png" alt="knight" w="20px" h="20px" mr="1" />
+                <Text as="span" lineHeight="24px">
+                  Heroes
+                </Text>
+              </Tab>
+              <Tab
+                _selected={{ color: 'white', bg: 'primary.200' }}
+                borderRadius="lg"
+                fontWeight="bold"
+                data-testid="invite-others-panel"
+              >
+                <Img src="/static/images/join-party.png" alt="knight" w="20px" h="20px" mr="1" />
+                <Text as="span" lineHeight="24px">
+                  Invite Others
+                </Text>
+              </Tab>
+              <Tab
+                _selected={{ color: 'white', bg: 'primary.200' }}
+                borderRadius="lg"
+                fontWeight="bold"
+                data-testid="join-room-panel"
+              >
+                <Icon as={FaDoorOpen} mr="2" />
+                <Text as="span" lineHeight="24px">
+                  Join Room
+                </Text>
+              </Tab>
+            </TabList>
+          </>
+        )}
 
         <TabPanels>
           <TabPanel>
@@ -114,16 +120,34 @@ export const DMHelperComponent = () => {
                 <MobQuickAdd />
               </Flex>
               <Flex direction="column" gap="4">
-                {isClient && combatStarted && (
-                  <Button variant="redSolid" onClick={() => endCombat()} data-testid="end-combat-btn">
-                    End Combat
-                  </Button>
+                {!readOnlyRoom ? (
+                  <>
+                    {isClient && combatStarted && (
+                      <Button variant="redSolid" onClick={() => endCombat()} data-testid="end-combat-btn">
+                        End Combat
+                      </Button>
+                    )}
+                    {isClient && !combatStarted && (
+                      <Button onClick={() => startCombat()} data-testid="start-combat-button">
+                        Start Combat
+                      </Button>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {isClient && combatStarted && (
+                      <Heading variant="redSolid" data-testid="combat-started-heading" textAlign="center">
+                        Combat has started...
+                      </Heading>
+                    )}
+                    {isClient && !combatStarted && (
+                      <Heading data-testid="combat-ended-heading" textAlign="center">
+                        Combat has NOT started.
+                      </Heading>
+                    )}
+                  </>
                 )}
-                {isClient && !combatStarted && (
-                  <Button onClick={() => startCombat()} data-testid="start-combat-button">
-                    Start Combat
-                  </Button>
-                )}
+
                 <EntityList />
               </Flex>
             </Flex>

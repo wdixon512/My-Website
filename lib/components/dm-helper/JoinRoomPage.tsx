@@ -10,11 +10,7 @@ export const JoinRoomPage: React.FC = ({}) => {
 
   useEffect(() => {
     if (router.isReady && roomId) {
-      // Call a function in DMHelperContext to join the room
       joinRoom(roomId as string);
-      //   .then(() => {
-      //       router.push(`/dm-helper`);
-      //   });
     }
   }, [router.isReady, roomId]);
 
