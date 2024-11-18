@@ -9,7 +9,6 @@ import {
   Text,
   Button,
   useDisclosure,
-  Icon,
   Heading,
 } from '@chakra-ui/react';
 import { MobForm } from '@lib/components/dm-helper/MobForm';
@@ -23,7 +22,6 @@ import { InitiativeModal } from '@lib/components/dm-helper/modals/InititativeMod
 import EndCombatConfirmationModal from './modals/EndCombatConfirmationModal';
 import { InviteOthersForm } from './InviteOthersForm';
 import DMHelperSignInComponent from './DMHelperSignInComponent';
-import { FaDoorOpen } from 'react-icons/fa';
 import JoinRoomTabPanel from './JoinRoomTabPanel';
 
 export const DMHelperComponent = () => {
@@ -49,7 +47,7 @@ export const DMHelperComponent = () => {
     }
   };
 
-  return (
+  return isClient ? (
     <>
       <DMHelperSignInComponent />
       <Tabs display="flex" flexDir="column" alignContent={'center'}>
@@ -97,17 +95,6 @@ export const DMHelperComponent = () => {
                   Invite Others
                 </Text>
               </Tab>
-              <Tab
-                _selected={{ color: 'white', bg: 'primary.200' }}
-                borderRadius="lg"
-                fontWeight="bold"
-                data-testid="join-room-panel"
-              >
-                <Icon as={FaDoorOpen} mr="2" />
-                <Text as="span" lineHeight="24px">
-                  Join Room
-                </Text>
-              </Tab>
             </TabList>
           </>
         )}
@@ -122,12 +109,12 @@ export const DMHelperComponent = () => {
               <Flex direction="column" gap="4">
                 {!readOnlyRoom ? (
                   <>
-                    {isClient && combatStarted && (
+                    {combatStarted && (
                       <Button variant="redSolid" onClick={() => endCombat()} data-testid="end-combat-btn">
                         End Combat
                       </Button>
                     )}
-                    {isClient && !combatStarted && (
+                    {!combatStarted && (
                       <Button onClick={() => startCombat()} data-testid="start-combat-button">
                         Start Combat
                       </Button>
@@ -135,12 +122,12 @@ export const DMHelperComponent = () => {
                   </>
                 ) : (
                   <>
-                    {isClient && combatStarted && (
+                    {combatStarted && (
                       <Heading variant="redSolid" data-testid="combat-started-heading" textAlign="center">
                         Combat has started...
                       </Heading>
                     )}
-                    {isClient && !combatStarted && (
+                    {!combatStarted && (
                       <Heading data-testid="combat-ended-heading" textAlign="center">
                         Combat has NOT started.
                       </Heading>
@@ -164,9 +151,6 @@ export const DMHelperComponent = () => {
               <InviteOthersForm />
             </Flex>
           </TabPanel>
-          <TabPanel>
-            <JoinRoomTabPanel />
-          </TabPanel>
         </TabPanels>
       </Tabs>
 
@@ -177,5 +161,5 @@ export const DMHelperComponent = () => {
         onClose={onEndCombatModalClose}
       />
     </>
-  );
+  ) : null;
 };

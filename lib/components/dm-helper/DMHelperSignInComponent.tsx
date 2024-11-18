@@ -1,12 +1,27 @@
 import { useContext } from 'react';
 import { DMHelperContext } from '../contexts/DMHelperContext';
-import { Button, Flex, Text } from '@chakra-ui/react';
+import {
+  Button,
+  Flex,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { auth } from '@lib/services/firebase';
 import { useFirebaseGoogleAuth } from '../contexts/FirebaseGoogleAuthContext';
 
 export const DMHelperSignInComponent: React.FC = () => {
-  const { room, readOnlyRoom } = useContext(DMHelperContext);
+  const { room, readOnlyRoom, leaveRoom } = useContext(DMHelperContext);
   const { signInWithGoogle, signOutOfGoogle } = useFirebaseGoogleAuth();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleLeaveRoom = () => {
+    onOpen();
+  };
 
   return (
     <>
@@ -26,10 +41,31 @@ export const DMHelperSignInComponent: React.FC = () => {
         </Flex>
       ) : (
         <>
-          {/* TODO: Implement Leave Room button */}
-          <Button variant="redSolid" data-testid="leave-room-btn">
+          <Button variant="redSolid" onClick={handleLeaveRoom} data-testid="leave-room-btn">
             Leave Room
           </Button>
+
+          <Modal isOpen={isOpen} onClose={onClose} isCentered>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader textColor="primary.400">Are you sure you want to leave the room?</ModalHeader>
+              <ModalFooter justifyContent="center">
+                <Button variant="redLink" onClick={onClose} data-testid="leave-room-no-btn">
+                  No
+                </Button>
+                <Button
+                  variant="solid"
+                  onClick={() => {
+                    leaveRoom();
+                    onClose();
+                  }}
+                  data-testid="leave-room-yes-btn"
+                >
+                  Yes
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
         </>
       )}
     </>

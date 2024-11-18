@@ -18,6 +18,7 @@ export const DMHelperContext = createContext({
   setRoom: (() => null) as React.Dispatch<React.SetStateAction<Room | null>>,
   createRoom: async () => null,
   joinRoom: async (roomId: string) => null,
+  leaveRoom: () => null,
   joinRoomLink: null as string | null,
   entities: [] as Entity[],
   updateEntities: (() => null) as React.Dispatch<React.SetStateAction<Entity[]>>,
@@ -303,6 +304,11 @@ export const DMHelperContextProvider = ({ children }) => {
     setloadingFirebaseRoom(false);
   };
 
+  const leaveRoom = async () => {
+    setJoinedRoomId(null);
+    window.location.reload();
+  };
+
   const syncContextWithRoom = async (dbRoom: Room) => {
     setRoom(dbRoom);
     setEntities(dbRoom.combat?.entities || []);
@@ -399,6 +405,7 @@ export const DMHelperContextProvider = ({ children }) => {
         setRoom,
         createRoom,
         joinRoom,
+        leaveRoom,
         joinRoomLink,
         entities,
         updateEntities,

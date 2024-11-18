@@ -76,7 +76,7 @@ export const EntityList = () => {
               )}
             </Droppable>
           </DragDropContext>
-        ) : (
+        ) : combatStarted ? (
           <List data-testid="entity-list">
             {sortEntitiesByInitiative(entities).map((entity: Entity) => (
               <div key={entity.id} data-testid="entity-item">
@@ -88,6 +88,10 @@ export const EntityList = () => {
               </div>
             ))}
           </List>
+        ) : (
+          <>
+            <Text fontStyle="italic">When combat starts, intiative order will be shown here.</Text>
+          </>
         ))}
     </Box>
   );
