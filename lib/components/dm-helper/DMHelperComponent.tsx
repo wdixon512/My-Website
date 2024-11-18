@@ -22,7 +22,6 @@ import { InitiativeModal } from '@lib/components/dm-helper/modals/InititativeMod
 import EndCombatConfirmationModal from './modals/EndCombatConfirmationModal';
 import { InviteOthersForm } from './InviteOthersForm';
 import DMHelperSignInComponent from './DMHelperSignInComponent';
-import JoinRoomTabPanel from './JoinRoomTabPanel';
 
 export const DMHelperComponent = () => {
   const { combatStarted, updateCombatStarted, heroes, resetHeroInitiatives, isClient, readOnlyRoom } =

@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState, useMemo, useCallback } from 'react';
+import { createContext, useEffect, useState, useMemo } from 'react';
 import { useToast } from '@chakra-ui/react';
 import { CombatState, Combat } from '@lib/models/dm-helper/Combat';
 import { DEFAULT_ROOM, Room } from '@lib/models/dm-helper/Room';
@@ -9,9 +9,9 @@ import { Mob } from '@lib/models/dm-helper/Mob';
 import { getNextEntityNumber, validateMobHealth, validateName } from '@lib/util/dm-helper-utils';
 import { sanitizeData } from '@lib/util/firebase-utils';
 import { auth, rtdb } from '@services/firebase';
-import { ref, get, set, update, push, query, orderByChild, equalTo, onValue } from 'firebase/database';
+import { ref, get, set, update, push, onValue } from 'firebase/database';
 import useLocalStorage from '@lib/hooks/useLocalStorage';
-import { getRoombyId, getRoomByOwnerUID } from '@lib/services/dm-helper-firebase-service';
+import { getRoomByOwnerUID } from '@lib/services/dm-helper-firebase-service';
 
 export const DMHelperContext = createContext({
   room: {} as Room,
