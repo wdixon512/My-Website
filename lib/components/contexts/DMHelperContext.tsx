@@ -256,13 +256,17 @@ export const DMHelperContextProvider = ({ children }) => {
       if (roomSnapshot.exists()) {
         const dbRoom = roomSnapshot.val() as Room;
         syncContextWithRoom(dbRoom);
-        toast({
-          title: 'Room Joined',
-          description: 'You have successfully joined the room!',
-          status: 'success',
-          duration: 5000,
-          isClosable: true,
-        });
+
+        // Only show the toast if we've joined a new room
+        if (joinedRoomId !== dbRoom.id) {
+          toast({
+            title: 'Room Joined',
+            description: `You have successfully joined the room with ID: ${roomId}`,
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+          });
+        }
         setJoinedRoomId(dbRoom.id);
 
         // Start listening for real-time updates

@@ -10,7 +10,9 @@ export const JoinRoomPage: React.FC = ({}) => {
 
   useEffect(() => {
     if (router.isReady && roomId) {
-      joinRoom(roomId as string);
+      joinRoom(roomId as string).then((_) => {
+        router.push('/dm-helper');
+      });
     }
   }, [router.isReady, roomId]);
 
