@@ -1,11 +1,20 @@
 import { Box, Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
-import { useContext, useState } from 'react';
+import { useCallback, useContext, useState, useEffect, useRef } from 'react';
 import { DMHelperContext } from '../contexts/DMHelperContext';
+import useDndApi from '@lib/services/dnd5eapi-service';
+import { SummaryMob } from '@lib/models/dnd5eapi/DetailedMob';
+import { debounce } from '@lib/util/js-utils';
+import { MobTypeahead } from './MobTypeahead';
 
 export const MobForm = () => {
   const [name, setName] = useState('');
   const [health, setHealth] = useState<string>('');
   const [initiative, setInitiative] = useState<string>('');
+  const [typeaheadMobs, setTypeaheadMobs] = useState<SummaryMob[]>([]);
+  const [isFocused, setIsFocused] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
+  const typeaheadRef = useRef(null);
+  const { summaryMobs } = useDndApi();
 
   const { addMob, clearMobs, readOnlyRoom } = useContext(DMHelperContext);
 
@@ -22,21 +31,88 @@ export const MobForm = () => {
     }
   };
 
+  const fetchTypeaheadMobs = async (userInput: string) => {
+    if (userInput === '') {
+      setTypeaheadMobs([]);
+      return;
+    }
+
+    // Filter the list of mobs based on the user's input
+    const filteredMobs = summaryMobs.filter((mob) => mob.name.toLowerCase().includes(userInput.toLowerCase()));
+
+    setTypeaheadMobs(filteredMobs);
+  };
+
+  const debouncedFetchTypeaheadMobs = useCallback(debounce(fetchTypeaheadMobs, 200), [summaryMobs]);
+
+  const handleMobNameChange = async (e) => {
+    const userInput = e.target.value as string;
+    setName(userInput);
+
+    // Debounce the fetching of mobs against search term so it only happens once every 200ms
+    debouncedFetchTypeaheadMobs(userInput);
+    setHighlightedIndex(-1);
+  };
+
+  const handleTypeaheadClick = (mobName: string) => {
+    setName(mobName);
+    setTypeaheadMobs([]);
+    setHighlightedIndex(-1);
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    // Delay the blur effect to allow click event on list items
+    setTimeout(() => setIsFocused(false), 100);
+  };
+
+  const handleKeyDown = (e) => {
+    if (typeaheadMobs.length > 0 && isFocused) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setHighlightedIndex((prevIndex) => (prevIndex + 1) % typeaheadMobs.length);
+        typeaheadRef.current?.scrollTo(0, (highlightedIndex + 1) * 40);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setHighlightedIndex((prevIndex) => (prevIndex - 1 + typeaheadMobs.length) % typeaheadMobs.length);
+        typeaheadRef.current?.scrollTo(0, (highlightedIndex - 1) * 40);
+      } else if (e.key === 'Enter' && highlightedIndex >= 0) {
+        e.preventDefault();
+        handleTypeaheadClick(typeaheadMobs[highlightedIndex].name);
+      }
+    }
+  };
+
   return (
     !readOnlyRoom && (
       <Box as="form" p={4} bg="gray.50" borderWidth={1} borderRadius="md" shadow="md" onSubmit={handleAddMob}>
-        <FormControl mb={4}>
+        <FormControl mb={4} position="relative">
           <FormLabel color="blackAlpha.900">Mob Name</FormLabel>
           <Input
             type="text"
             value={name}
             color="blackAlpha.700"
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => handleMobNameChange(e)}
             placeholder="Enter mob name"
             required={true}
             data-testid="mob-name-input"
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+          />
+          <MobTypeahead
+            ref={typeaheadRef}
+            typeaheadMobs={typeaheadMobs}
+            highlightedIndex={highlightedIndex}
+            isFocused={isFocused}
+            searchTerm={name}
+            handleTypeaheadClick={handleTypeaheadClick}
           />
         </FormControl>
+
         <FormControl mb={4}>
           <FormLabel color="blackAlpha.900">Mob Initiative</FormLabel>
           <Input
@@ -49,6 +125,7 @@ export const MobForm = () => {
             data-testid="mob-initiative-input"
           />
         </FormControl>
+
         <FormControl mb={4}>
           <FormLabel color="blackAlpha.900">Mob Health</FormLabel>
           <Input
@@ -61,6 +138,7 @@ export const MobForm = () => {
             data-testid="mob-health-input"
           />
         </FormControl>
+
         <Button type="submit" variant="solid" width="full" data-testid="submit-mob-button">
           Add Mob
         </Button>

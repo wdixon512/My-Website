@@ -1,11 +1,6 @@
 import { Room } from '@lib/models/dm-helper/Room';
 import { ref, orderByChild, equalTo, get, query } from 'firebase/database';
 import { rtdb } from './firebase';
-import { User } from 'firebase/auth';
-
-export async function getRoombyId(userId: string, user: User): Promise<Room | null> {
-  return null;
-}
 
 export async function getRoomByOwnerUID(ownerUID: string): Promise<Room | null> {
   // Create a query to find rooms with the matching ownerUID
