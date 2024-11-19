@@ -155,19 +155,21 @@ export const DMHelperComponent = () => {
             </Flex>
           </TabPanel>
 
-          <TabPanel>
-            <Flex gap="4" justifyContent="center">
-              <HeroForm />
-              <HeroList />
-            </Flex>
-          </TabPanel>
-
-          <TabPanel>
-            <Flex gap="4" justifyContent="center">
-              <InviteOthersForm />
-            </Flex>
-          </TabPanel>
-
+          {!readOnlyRoom && (
+            <TabPanel>
+              <Flex gap="4" justifyContent="center">
+                <HeroForm />
+                <HeroList />
+              </Flex>
+            </TabPanel>
+          )}
+          {!readOnlyRoom && (
+            <TabPanel>
+              <Flex gap="4" justifyContent="center">
+                <InviteOthersForm />
+              </Flex>
+            </TabPanel>
+          )}
           <TabPanel>
             <UserRoomSettingsComponent />
           </TabPanel>

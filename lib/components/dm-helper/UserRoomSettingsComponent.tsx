@@ -45,7 +45,7 @@ export const UserRoomSettingsComponent: React.FC = () => {
           </Flex>
         ) : (
           <>
-            <Button variant="redSolid" onClick={handleLeaveRoom} data-testid="leave-room-btn">
+            <Button variant="redSolid" onClick={handleLeaveRoom} data-testid="leave-room-btn" w="fit-content">
               Leave Room
             </Button>
 
