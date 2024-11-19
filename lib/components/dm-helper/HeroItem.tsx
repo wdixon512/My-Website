@@ -20,7 +20,7 @@ export const HeroItem: React.FC<HeroItemProps> = ({
   textColor,
   ...props
 }) => {
-  const { removeEntity } = useContext(DMHelperContext);
+  const { removeEntity, readOnlyRoom } = useContext(DMHelperContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const showEntityEditForm = () => {
@@ -59,7 +59,7 @@ export const HeroItem: React.FC<HeroItemProps> = ({
           Remove
         </Button>
       )}
-      {showInitiative && (
+      {showInitiative && !readOnlyRoom && (
         <Tooltip label="Update Hero Initiative" aria-label="Update Hero Initiative" hasArrow>
           <Button
             variant="primarySolid"

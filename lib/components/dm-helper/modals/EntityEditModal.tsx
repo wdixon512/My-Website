@@ -10,10 +10,12 @@ import {
   FormLabel,
   Button,
   FormControl,
+  useToast,
 } from '@chakra-ui/react';
 import { useContext, useState, useRef } from 'react';
 import { EntityType, Entity } from '@lib/models/dm-helper/Entity';
 import { DMHelperContext } from '../../contexts/DMHelperContext';
+import { validateInitiative } from '@lib/util/dm-helper-utils';
 
 interface EntityEditModalProps {
   entity: Entity;
@@ -26,9 +28,22 @@ export const EntityEditModal: React.FC<EntityEditModalProps> = ({ entity, isOpen
   const [newInitiaive, setNewInitiative] = useState<string>(entity.initiative?.toString());
   const [newName, setNewName] = useState<string>(entity.name);
   const [newHealth, setNewHealth] = useState<string>(entity.health?.toString());
+  const toast = useToast();
 
   const handleDone = (success: boolean) => {
     if (success) {
+      if (entity.type === EntityType.HERO && !validateInitiative(newInitiaive)) {
+        toast({
+          title: 'Error',
+          description: 'Initiative must be a number.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+
+        return;
+      }
+
       updateEntities((prevEntities) =>
         prevEntities.map((e) => {
           if (e.id === entity.id) {
@@ -101,7 +116,9 @@ export const EntityEditModal: React.FC<EntityEditModalProps> = ({ entity, isOpen
                 </>
               )}
               <FormControl mb={4}>
-                <FormLabel color="blackAlpha.900">Mob Initiative</FormLabel>
+                <FormLabel color="blackAlpha.900">
+                  {entity.type === EntityType.MOB ? 'Mob' : 'Hero'} Initiative
+                </FormLabel>
                 <Input
                   type="number"
                   textColor="primary.400"

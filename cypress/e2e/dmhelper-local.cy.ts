@@ -19,6 +19,9 @@ import {
   removeHeroAndVerify,
   killMobAndVerify,
   removeQuickAddByIdAndVerify,
+  goToInviteOthersPanel,
+  copyJoinRoomLink,
+  dmHelperSignOut,
 } from '../helpers/dmhelper-utils';
 
 describe('DMHelper E2E Tests', () => {
@@ -67,6 +70,26 @@ describe('DMHelper E2E Tests', () => {
           return heroes.some((hero) => hero.id === 'warrior-1' && hero.name === 'Warrior');
         });
       });
+    });
+  });
+
+  describe('Room Invite', () => {
+    it('should sign out and join a room where combat has not started', () => {
+      goToInviteOthersPanel();
+      copyJoinRoomLink();
+      dmHelperSignOut();
+
+      cy.window()
+        .then((win) => {
+          return win.navigator.clipboard.readText(); // Return the promise from readText()
+        })
+        .then((clipboardText) => {
+          cy.visit(clipboardText);
+          cy.wait(2000);
+
+          // Verify that the page has loaded by checking for an expected element
+          cy.get('[data-testid="combat-ended-heading"]', { timeout: 10000 }).should('exist');
+        });
     });
   });
 
@@ -194,6 +217,26 @@ describe('DMHelper E2E Tests', () => {
           expect(matchingEntities.length).to.equal(count);
         });
       });
+    });
+
+    it('should sign out and join a room where combat has not started', () => {
+      goToInviteOthersPanel();
+      copyJoinRoomLink();
+      dmHelperSignOut();
+
+      cy.window()
+        .then((win) => {
+          return win.navigator.clipboard.readText(); // Return the promise from readText()
+        })
+        .then((clipboardText) => {
+          cy.visit(clipboardText);
+          cy.wait(2000);
+
+          cy.get('[data-testid="combat-ended-heading"]', { timeout: 10000 }).should('not.exist');
+          cy.get('[data-testid="combat-started-heading"]').should('exist');
+
+          cy.get('[data-testid="entity-list"]').should('contain', 'Warrior').should('contain', 'Goblin');
+        });
     });
 
     it('should end combat and verify the combat state in the database', () => {

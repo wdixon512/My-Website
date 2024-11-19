@@ -131,6 +131,10 @@ export const createRoom = () => {
   cy.wait(2000);
 };
 
+export const copyJoinRoomLink = () => {
+  cy.get('[data-testid="copy-join-room-link-btn"]').click();
+};
+
 export const startCombat = () => {
   cy.get('[data-testid="combat-panel"]').click();
   cy.get('[data-testid="start-combat-button"]').click();
@@ -182,12 +186,14 @@ export const deleteRooms = () => {
 };
 
 export const dmHelperSignIn = () => {
+  cy.get('[data-testid="user-room-settings-panel"]').click();
   cy.get('[data-testid="sign-in-btn"]').click();
   cy.login();
   cy.wait(1000);
 };
 
 export const dmHelperSignOut = () => {
+  cy.get('[data-testid="user-room-settings-panel"]').click();
   cy.get('[data-testid="sign-out-btn"]').click();
   cy.logout();
 };

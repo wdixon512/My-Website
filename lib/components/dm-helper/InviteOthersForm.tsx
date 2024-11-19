@@ -4,7 +4,7 @@ import { DMHelperContext } from '../contexts/DMHelperContext';
 import { useFirebaseGoogleAuth } from '../contexts/FirebaseGoogleAuthContext';
 import { auth } from '@lib/services/firebase';
 
-export const JoinRoomForm = () => {
+export const InviteOthersForm = () => {
   const { room, joinRoomLink, createRoom } = useContext(DMHelperContext);
   const { signInWithGoogle } = useFirebaseGoogleAuth();
   const toast = useToast();
@@ -48,9 +48,9 @@ export const JoinRoomForm = () => {
 
       {/* User is signed in and in a room */}
       {joinRoomLink || room.syncWithFirebase ? (
-        <Flex direction="column">
+        <Flex direction="column" alignItems="center">
           <Input value={joinRoomLink} isReadOnly />
-          <Button onClick={copyToClipboard} data-testid="copy-join-room-link-btn">
+          <Button onClick={copyToClipboard} data-testid="copy-join-room-link-btn" mt="4" w="fit-content">
             Copy Join Room Link
           </Button>
         </Flex>
