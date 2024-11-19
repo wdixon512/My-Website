@@ -1,21 +1,9 @@
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Text,
-  Input,
-  FormLabel,
-  Button,
-  FormControl,
-  useToast,
-} from '@chakra-ui/react';
-import { useContext, useState, useRef } from 'react';
-import { EntityType, Entity } from '@lib/models/dm-helper/Entity';
-import { DMHelperContext } from '../../contexts/DMHelperContext';
-import { validateInitiative } from '@lib/util/dm-helper-utils';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
+import { Entity } from '@lib/models/dm-helper/Entity';
+import MobDetailCard from '../MobCardComponent';
+import useDndApi from '@lib/services/dnd5eapi-service';
+import { DetailedMob } from '@lib/models/dnd5eapi/DetailedMob';
 
 interface EntityDetailModalProps {
   entity: Entity;
@@ -24,117 +12,33 @@ interface EntityDetailModalProps {
 }
 
 export const EntityDetailModal: React.FC<EntityDetailModalProps> = ({ entity, isOpen, onClose }) => {
-  const { updateEntities } = useContext(DMHelperContext);
-  const [newInitiaive, setNewInitiative] = useState<string>(entity.initiative?.toString());
-  const [newName, setNewName] = useState<string>(entity.name);
-  const [newHealth, setNewHealth] = useState<string>(entity.health?.toString());
-  const toast = useToast();
-
-  const handleDone = (success: boolean) => {
-    if (success) {
-      if (entity.type === EntityType.HERO && !validateInitiative(newInitiaive)) {
-        toast({
-          title: 'Error',
-          description: 'Initiative must be a number.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
-
-        return;
-      }
-
-      updateEntities((prevEntities) =>
-        prevEntities.map((e) => {
-          if (e.id === entity.id) {
-            if (entity.type === EntityType.MOB) {
-              const sameName = newName === entity.name;
-              const mobsWithSameName = prevEntities.filter((m) => m.name === newName);
-              const newNumber = sameName ? entity.number : mobsWithSameName.length + 1;
-
-              return {
-                ...e,
-                name: newName,
-                health: parseInt(newHealth, 10),
-                initiative: parseInt(newInitiaive, 10),
-                number: newNumber,
-                id: `${newName.toLowerCase()}-${newNumber}`,
-              };
-            }
-
-            return { ...e, initiative: parseInt(newInitiaive, 10) };
-          }
-          return e;
-        })
-      );
-    }
-
+  const { getMobByIndex } = useDndApi();
+  const [detailedMob, setDetailedMob] = useState<DetailedMob>();
+  const handleDone = () => {
     onClose();
   };
 
+  // On component mount, fetch the detailed mob data
+  useEffect(() => {
+    if (entity) {
+      getMobByIndex(entity.apiIndex).then((mob) => {
+        setDetailedMob(mob);
+      });
+    }
+  }, [entity]);
+
   return (
-    <Modal isOpen={isOpen} onClose={() => handleDone(true)} isCentered>
+    <Modal isOpen={isOpen} onClose={() => handleDone()} isCentered>
       <ModalOverlay />
-      <ModalContent
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            handleDone(true);
-          }
-        }}
-      >
+      <ModalContent maxW="1000px" maxH="90vh" overflow={'scroll'}>
         {entity && (
           <>
-            <ModalHeader textColor="primary.400">Update {entity.name}'s Initiative</ModalHeader>
+            <ModalHeader textColor="primary.400">{entity.name}</ModalHeader>
             <ModalBody>
-              {entity.type === EntityType.MOB && (
-                <>
-                  <FormControl mb={4}>
-                    <FormLabel color="blackAlpha.900">Mob Name</FormLabel>
-                    <Input
-                      type="text"
-                      value={newName}
-                      color="blackAlpha.700"
-                      onChange={(e) => setNewName(e.target.value)}
-                      placeholder="Enter mob name"
-                      required={true}
-                      data-testid="name-edit-modal-input"
-                    />
-                  </FormControl>
-
-                  <FormControl mb={4}>
-                    <FormLabel color="blackAlpha.900">Mob Health</FormLabel>
-                    <Input
-                      type="text"
-                      color="blackAlpha.700"
-                      value={newHealth}
-                      onChange={(e) => setNewHealth(e.target.value)}
-                      placeholder="Enter mob health"
-                      required={false}
-                      data-testid="health-edit-modal-input"
-                    />
-                  </FormControl>
-                </>
-              )}
-              <FormControl mb={4}>
-                <FormLabel color="blackAlpha.900">
-                  {entity.type === EntityType.MOB ? 'Mob' : 'Hero'} Initiative
-                </FormLabel>
-                <Input
-                  type="number"
-                  textColor="primary.400"
-                  placeholder="Enter initiative"
-                  value={newInitiaive}
-                  onChange={(e) => setNewInitiative(e.target.value)}
-                  required={true}
-                  data-testid="initiative-edit-modal-input"
-                />
-              </FormControl>
+              <MobDetailCard mob={detailedMob} />
             </ModalBody>
             <ModalFooter justifyContent="space-between">
-              <Button variant="redLink" onClick={() => handleDone(false)} data-testid="cancel-edit-modal-btn">
-                Cancel
-              </Button>
-              <Button variant="solid" onClick={() => handleDone(true)} data-testid="done-edit-modal-btn">
+              <Button variant="solid" onClick={() => handleDone()} data-testid="done-edit-modal-btn">
                 Done
               </Button>
             </ModalFooter>

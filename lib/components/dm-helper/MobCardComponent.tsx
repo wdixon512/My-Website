@@ -2,40 +2,40 @@ import React from 'react';
 import { Box, Text, Heading, Flex, Divider, List, ListItem, Badge } from '@chakra-ui/react';
 import { DetailedMob } from '@lib/models/dnd5eapi/DetailedMob';
 
-interface MonsterCardProps {
-  monster: DetailedMob;
+interface MobDetailCardProps {
+  mob: DetailedMob;
 }
 
-const MonsterCard: React.FC<MonsterCardProps> = ({ monster }) => {
+const MobDetailCard: React.FC<MobDetailCardProps> = ({ mob }) => {
   return (
     <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={5} bg="gray.50">
-      <Heading size="lg" mb={3} textAlign="center">
-        {monster.name}
+      <Heading size="lg" mb={3} textAlign="center" variant={'dark'}>
+        {mob.name}
       </Heading>
-      <Text fontSize="md" textAlign="center" color="gray.600" mb={3}>
-        {monster.size} {monster.type}, {monster.alignment}
+      <Text variant={'dark'} fontSize="md" textAlign="center" color="gray.600" mb={3}>
+        {mob.size} {mob.type}, {mob.alignment}
       </Text>
 
       <Divider my={3} />
 
       <Flex justifyContent="space-between" mb={3}>
         <Box>
-          <Text>
-            <strong>Armor Class:</strong> {monster.armor_class[0].value} ({monster.armor_class[0].type})
+          <Text variant={'dark'}>
+            <strong>Armor Class:</strong> {mob.armor_class[0].value} ({mob.armor_class[0].type})
           </Text>
-          <Text>
-            <strong>Hit Points:</strong> {monster.hit_points} ({monster.hit_dice})
+          <Text variant={'dark'}>
+            <strong>Hit Points:</strong> {mob.hit_points} ({mob.hit_dice})
           </Text>
-          <Text>
-            <strong>Speed:</strong> Walk {monster.speed.walk}, Climb {monster.speed.climb}
+          <Text variant={'dark'}>
+            <strong>Speed:</strong> Walk {mob.speed.walk}, Climb {mob.speed.climb}
           </Text>
         </Box>
         <Box>
-          <Text>
-            <strong>Challenge:</strong> {monster.challenge_rating} ({monster.xp} XP)
+          <Text variant={'dark'}>
+            <strong>Challenge:</strong> {mob.challenge_rating} ({mob.xp} XP)
           </Text>
-          <Text>
-            <strong>Proficiency Bonus:</strong> +{monster.proficiency_bonus}
+          <Text variant={'dark'}>
+            <strong>Proficiency Bonus:</strong> +{mob.proficiency_bonus}
           </Text>
         </Box>
       </Flex>
@@ -44,25 +44,25 @@ const MonsterCard: React.FC<MonsterCardProps> = ({ monster }) => {
 
       <Flex justifyContent="space-around" textAlign="center" mb={3}>
         <Box>
-          <Text>
-            <strong>STR:</strong> {monster.strength} ({Math.floor((monster.strength - 10) / 2)})
+          <Text variant={'dark'}>
+            <strong>STR:</strong> {mob.strength} ({Math.floor((mob.strength - 10) / 2)})
           </Text>
-          <Text>
-            <strong>DEX:</strong> {monster.dexterity} ({Math.floor((monster.dexterity - 10) / 2)})
+          <Text variant={'dark'}>
+            <strong>DEX:</strong> {mob.dexterity} ({Math.floor((mob.dexterity - 10) / 2)})
           </Text>
-          <Text>
-            <strong>CON:</strong> {monster.constitution} ({Math.floor((monster.constitution - 10) / 2)})
+          <Text variant={'dark'}>
+            <strong>CON:</strong> {mob.constitution} ({Math.floor((mob.constitution - 10) / 2)})
           </Text>
         </Box>
         <Box>
-          <Text>
-            <strong>INT:</strong> {monster.intelligence} ({Math.floor((monster.intelligence - 10) / 2)})
+          <Text variant={'dark'}>
+            <strong>INT:</strong> {mob.intelligence} ({Math.floor((mob.intelligence - 10) / 2)})
           </Text>
-          <Text>
-            <strong>WIS:</strong> {monster.wisdom} ({Math.floor((monster.wisdom - 10) / 2)})
+          <Text variant={'dark'}>
+            <strong>WIS:</strong> {mob.wisdom} ({Math.floor((mob.wisdom - 10) / 2)})
           </Text>
-          <Text>
-            <strong>CHA:</strong> {monster.charisma} ({Math.floor((monster.charisma - 10) / 2)})
+          <Text variant={'dark'}>
+            <strong>CHA:</strong> {mob.charisma} ({Math.floor((mob.charisma - 10) / 2)})
           </Text>
         </Box>
       </Flex>
@@ -70,11 +70,11 @@ const MonsterCard: React.FC<MonsterCardProps> = ({ monster }) => {
       <Divider my={3} />
 
       <Box mb={3}>
-        <Text fontSize="lg" fontWeight="bold" mb={1}>
+        <Text variant={'dark'} fontSize="lg" fontWeight="bold" mb={1}>
           Skills & Senses
         </Text>
         <List spacing={2}>
-          {monster.proficiencies.map((prof) => (
+          {mob.proficiencies.map((prof) => (
             <ListItem key={prof.proficiency.index}>
               <Badge colorScheme="teal" mr={2}>
                 {prof.proficiency.name}
@@ -83,8 +83,10 @@ const MonsterCard: React.FC<MonsterCardProps> = ({ monster }) => {
             </ListItem>
           ))}
           <ListItem>
-            <strong>Senses:</strong> Darkvision {monster.senses.darkvision}, Passive Perception{' '}
-            {monster.senses.passive_perception}
+            <Text variant={'dark'}>
+              <strong>Senses:</strong> Darkvision {mob.senses.darkvision}, Passive Perception{' '}
+            </Text>
+            <Text variant={'dark'}>{mob.senses.passive_perception}</Text>
           </ListItem>
         </List>
       </Box>
@@ -92,13 +94,16 @@ const MonsterCard: React.FC<MonsterCardProps> = ({ monster }) => {
       <Divider my={3} />
 
       <Box>
-        <Text fontSize="lg" fontWeight="bold" mb={1}>
+        <Text variant={'dark'} fontSize="lg" fontWeight="bold" mb={1}>
           Traits
         </Text>
         <List spacing={2}>
-          {monster.special_abilities.map((ability, index) => (
+          {mob.special_abilities.map((ability, index) => (
             <ListItem key={index}>
-              <Text fontWeight="bold">{ability.name}:</Text> {ability.desc}
+              <Text variant={'dark'} fontWeight="bold">
+                {ability.name}:
+              </Text>
+              <Text variant={'dark'}>{ability.desc}</Text>
             </ListItem>
           ))}
         </List>
@@ -107,13 +112,16 @@ const MonsterCard: React.FC<MonsterCardProps> = ({ monster }) => {
       <Divider my={3} />
 
       <Box>
-        <Text fontSize="lg" fontWeight="bold" mb={1}>
+        <Text variant={'dark'} fontSize="lg" fontWeight="bold" mb={1}>
           Actions
         </Text>
         <List spacing={2}>
-          {monster.actions.map((action, index) => (
+          {mob.actions.map((action, index) => (
             <ListItem key={index}>
-              <Text fontWeight="bold">{action.name}:</Text> {action.desc}
+              <Text variant={'dark'} fontWeight="bold">
+                {action.name}:
+              </Text>
+              <Text variant={'dark'}>{action.desc}</Text>
             </ListItem>
           ))}
         </List>
@@ -122,4 +130,4 @@ const MonsterCard: React.FC<MonsterCardProps> = ({ monster }) => {
   );
 };
 
-export default MonsterCard;
+export default MobDetailCard;

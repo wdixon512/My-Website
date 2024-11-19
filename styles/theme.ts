@@ -89,9 +89,24 @@ const theme = extendTheme({
   },
 
   components: {
+    Heading: {
+      baseStyle: {
+        color: 'text.500',
+      },
+      variants: {
+        dark: (props) => ({
+          color: 'blackAlpha.700',
+        }),
+      },
+    },
     Text: {
       baseStyle: {
         color: 'text.500',
+      },
+      variants: {
+        dark: (props) => ({
+          color: 'blackAlpha.700',
+        }),
       },
     },
     Link: {
