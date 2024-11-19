@@ -131,6 +131,10 @@ export const createRoom = () => {
   cy.wait(2000);
 };
 
+export const copyJoinRoomLink = () => {
+  cy.get('[data-testid="copy-join-room-link-btn"]').click();
+};
+
 export const startCombat = () => {
   cy.get('[data-testid="combat-panel"]').click();
   cy.get('[data-testid="start-combat-button"]').click();
