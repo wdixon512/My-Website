@@ -30,7 +30,7 @@ export const EntityDetailModal: React.FC<EntityDetailModalProps> = ({ entity, is
   return (
     <Modal isOpen={isOpen} onClose={() => handleDone()} isCentered>
       <ModalOverlay />
-      <ModalContent maxW="1000px" maxH="90vh" overflow={'scroll'}>
+      <ModalContent maxW="1000px" maxH="90vh" overflowY={'scroll'} overflowX="hidden">
         {entity && (
           <>
             <ModalHeader textColor="primary.400">{entity.name}</ModalHeader>

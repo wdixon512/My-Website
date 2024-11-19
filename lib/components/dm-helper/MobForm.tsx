@@ -5,6 +5,8 @@ import useDndApi from '@lib/services/dnd5eapi-service';
 import { SummaryMob } from '@lib/models/dnd5eapi/DetailedMob';
 import { debounce } from '@lib/util/js-utils';
 import { MobTypeahead } from './MobTypeahead';
+import { DiceRoller } from './DiceRoller';
+import { RollType } from '@lib/models/dm-helper/RollType';
 
 export const MobForm = () => {
   const [name, setName] = useState('');
@@ -45,7 +47,12 @@ export const MobForm = () => {
     setTypeaheadMobs(filteredMobs);
   };
 
-  const debouncedFetchTypeaheadMobs = useCallback(debounce(fetchTypeaheadMobs, 200), [summaryMobs]);
+  const debouncedFetchTypeaheadMobs = useCallback(
+    (userInput: string) => {
+      debounce(fetchTypeaheadMobs(userInput), 200);
+    },
+    [summaryMobs]
+  );
 
   const handleMobNameChange = async (e) => {
     const userInput = e.target.value as string;
@@ -143,6 +150,11 @@ export const MobForm = () => {
             required={false}
             data-testid="mob-initiative-input"
           />
+          <DiceRoller
+            mob={selectedTypeaheadMob}
+            rollType={RollType.Initiative}
+            afterRoll={(roll) => setInitiative(roll.toString())}
+          />
         </FormControl>
 
         <FormControl mb={4}>
@@ -155,6 +167,11 @@ export const MobForm = () => {
             placeholder="Enter mob health"
             required={false}
             data-testid="mob-health-input"
+          />
+          <DiceRoller
+            mob={selectedTypeaheadMob}
+            rollType={RollType.HitPoints}
+            afterRoll={(roll) => setHealth(roll.toString())}
           />
         </FormControl>
 
