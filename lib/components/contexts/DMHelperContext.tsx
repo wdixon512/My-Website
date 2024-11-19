@@ -102,9 +102,9 @@ export const DMHelperContextProvider = ({ children }) => {
             heroes: heroes,
           });
         }
-
-        setloadingFirebaseRoom(false);
       }
+
+      setloadingFirebaseRoom(false);
     });
 
     return () => unsubscribe();
