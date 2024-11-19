@@ -12,8 +12,8 @@ import {
 } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useContext, useState, useRef } from 'react';
-import Hero from '@lib/models/dm-helper/Hero';
-import Entity, { EntityType } from '@lib/models/dm-helper/Entity';
+import { Hero } from '@lib/models/dm-helper/Hero';
+import { EntityType, Entity } from '@lib/models/dm-helper/Entity';
 import { DMHelperContext } from '../../contexts/DMHelperContext';
 
 interface InitiativeModalProps {
@@ -23,7 +23,7 @@ interface InitiativeModalProps {
 }
 
 export const InitiativeModal: React.FC<InitiativeModalProps> = ({ isOpen, heroes, onClose }) => {
-  const { setEntities } = useContext(DMHelperContext);
+  const { updateEntities } = useContext(DMHelperContext);
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
   const [initiativeRolls, setInitiativeRolls] = useState<number[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -92,7 +92,7 @@ export const InitiativeModal: React.FC<InitiativeModalProps> = ({ isOpen, heroes
       initiative: initiativeRolls[index],
     }));
 
-    setEntities((prevEntities: Entity[]) =>
+    updateEntities((prevEntities: Entity[]) =>
       prevEntities.map((entity) =>
         entity.type === EntityType.HERO ? updatedHeroes.find((h) => h.id === entity.id) || entity : entity
       )
@@ -130,20 +130,31 @@ export const InitiativeModal: React.FC<InitiativeModalProps> = ({ isOpen, heroes
                     }
                   }
                 }}
+                data-testid="initiative-input"
               />
             </ModalBody>
             <ModalFooter justifyContent="space-between">
               {currentHeroIndex > 0 && (
-                <Button leftIcon={<ChevronLeftIcon />} lineHeight={5} onClick={handlePreviousHero}>
+                <Button
+                  leftIcon={<ChevronLeftIcon />}
+                  lineHeight={5}
+                  onClick={handlePreviousHero}
+                  data-testid="init-modal-back-btn"
+                >
                   Back ({heroes[currentHeroIndex - 1]?.name})
                 </Button>
               )}
               {currentHeroIndex < heroes.length - 1 ? (
-                <Button rightIcon={<ChevronRightIcon />} lineHeight={5} onClick={handleNextHero}>
+                <Button
+                  rightIcon={<ChevronRightIcon />}
+                  lineHeight={5}
+                  onClick={handleNextHero}
+                  data-testid="init-modal-next-btn"
+                >
                   Next ({heroes[currentHeroIndex + 1]?.name})
                 </Button>
               ) : (
-                <Button colorScheme="green" onClick={() => handleDone()}>
+                <Button colorScheme="green" onClick={() => handleDone()} data-testid="init-modal-done-btn">
                   Done
                 </Button>
               )}

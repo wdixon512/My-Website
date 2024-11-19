@@ -2,18 +2,18 @@ import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter,
 
 interface EndCombatConfirmationModalProps {
   isOpen: boolean;
-  setCombatStarted: (value: boolean) => void;
+  updateCombatStarted: (value: boolean) => void;
   onClose: () => void;
 }
 
 export const EndCombatConfirmationModal: React.FC<EndCombatConfirmationModalProps> = ({
   isOpen,
-  setCombatStarted,
+  updateCombatStarted,
   onClose,
 }) => {
   const handleDone = (success: boolean) => {
     if (success) {
-      setCombatStarted(false);
+      updateCombatStarted(false);
     }
 
     onClose();
@@ -25,10 +25,10 @@ export const EndCombatConfirmationModal: React.FC<EndCombatConfirmationModalProp
       <ModalContent>
         <ModalHeader textColor="primary.400">Are you sure you want to end combat?</ModalHeader>
         <ModalFooter justifyContent="center">
-          <Button variant="redLink" onClick={() => handleDone(false)}>
+          <Button variant="redLink" onClick={() => handleDone(false)} data-testid="end-combat-no-btn">
             No
           </Button>
-          <Button variant="solid" onClick={() => handleDone(true)}>
+          <Button variant="solid" onClick={() => handleDone(true)} data-testid="end-combat-yes-btn">
             Yes
           </Button>
         </ModalFooter>

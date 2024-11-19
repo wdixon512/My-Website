@@ -1,15 +1,18 @@
-import { Box, Icon, List, Text, useToast } from '@chakra-ui/react';
-import { useContext } from 'react';
+import { Box, Icon, List, Spinner, Text, useToast } from '@chakra-ui/react';
+import { Suspense, useContext } from 'react';
 import { DMHelperContext } from '../contexts/DMHelperContext';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { sortEntitiesByInitiative } from '@lib/util/mobUtils';
 import MobItem from './MobItem';
-import Entity, { EntityType } from '@lib/models/dm-helper/Entity';
+import { Entity, EntityType } from '@lib/models/dm-helper/Entity';
 import HeroItem from './HeroItem';
 import { FaUserEdit } from 'react-icons/fa';
+import { Mob } from '@lib/models/dm-helper/Mob';
+import { Hero } from '@lib/models/dm-helper/Hero';
 
 export const EntityList = () => {
-  const { entities, setEntities, combatStarted, isClient } = useContext(DMHelperContext);
+  const { entities, updateEntities, combatStarted, isClient, loadingFirebaseRoom, readOnlyRoom } =
+    useContext(DMHelperContext);
   const toast = useToast();
 
   const handleDragEnd = (result) => {
@@ -37,35 +40,59 @@ export const EntityList = () => {
       });
     }
 
-    setEntities(reorderedEntities);
+    updateEntities(reorderedEntities);
   };
 
   return (
     <Box p={4} bg="secondary.200" borderWidth={1} borderRadius="md" shadow="md" w={{ base: '100%', lg: '500px' }}>
-      {isClient && (
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="EntityList">
-            {(provided) => (
-              <List ref={provided.innerRef} {...provided.droppableProps}>
-                {sortEntitiesByInitiative(entities).map((entity: Entity, i) => (
-                  <Draggable key={entity.id} draggableId={entity.id} index={i}>
-                    {(provided) => (
-                      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                        {entity.type === EntityType.MOB ? (
-                          <MobItem mob={entity} />
-                        ) : (
-                          combatStarted && <HeroItem hero={entity} textColor={'interactive.200'} />
-                        )}
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </List>
-            )}
-          </Droppable>
-        </DragDropContext>
-      )}
+      {isClient &&
+        (loadingFirebaseRoom ? (
+          <Spinner size="lg" label="Loading entities..." />
+        ) : !readOnlyRoom ? (
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <Droppable droppableId="EntityList">
+              {(provided) => (
+                <List ref={provided.innerRef} {...provided.droppableProps} data-testid="entity-list">
+                  {sortEntitiesByInitiative(entities).map((entity: Entity, i) => (
+                    <Draggable key={entity.id} draggableId={entity.id} index={i}>
+                      {(provided) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          data-testid="entity-item"
+                        >
+                          {entity.type === EntityType.MOB ? (
+                            <MobItem mob={entity as Mob} />
+                          ) : (
+                            combatStarted && <HeroItem hero={entity as Hero} textColor={'interactive.200'} />
+                          )}
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </List>
+              )}
+            </Droppable>
+          </DragDropContext>
+        ) : combatStarted ? (
+          <List data-testid="entity-list">
+            {sortEntitiesByInitiative(entities).map((entity: Entity) => (
+              <div key={entity.id} data-testid="entity-item">
+                {entity.type === EntityType.MOB ? (
+                  <MobItem mob={entity as Mob} />
+                ) : (
+                  combatStarted && <HeroItem hero={entity as Hero} textColor={'interactive.200'} />
+                )}
+              </div>
+            ))}
+          </List>
+        ) : (
+          <>
+            <Text fontStyle="italic">When combat starts, intiative order will be shown here.</Text>
+          </>
+        ))}
     </Box>
   );
 };

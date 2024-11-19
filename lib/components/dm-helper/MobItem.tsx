@@ -1,6 +1,6 @@
 import { Text, Flex, FormControl, Input, Button, FlexProps, Tooltip, Icon, useDisclosure } from '@chakra-ui/react';
 import AnimatedFlex from '@components/global/AnimatedFlex';
-import Mob from '@lib/models/dm-helper/Mob';
+import { Mob } from '@lib/models/dm-helper/Mob';
 import { useContext, useState } from 'react';
 import { DMHelperContext } from '../contexts/DMHelperContext';
 import React from 'react';
@@ -13,11 +13,11 @@ interface MobItemProps extends FlexProps {
 }
 
 export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ...props }) => {
-  const { entities, removeEntity, setEntities } = useContext(DMHelperContext);
+  const { entities, removeEntity, updateEntities, readOnlyRoom } = useContext(DMHelperContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const updateHealth = (mob: Mob, newHealth) => {
-    setEntities(entities.map((m) => (m.id === mob.id ? new Mob(m.name, newHealth, m.number, m.initiative) : m)));
+    updateEntities(entities.map((m) => (m.id === mob.id ? { ...m, health: newHealth } : m)));
   };
 
   const showEntityEditForm = () => {
@@ -33,42 +33,56 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
       p={2}
       borderBottomWidth={1}
       _hover={{ bg: 'secondary.600', cursor: 'pointer' }}
+      data-testid={`${mob.id}-item`}
       {...props}
     >
       <Flex w="full">
-        <Flex alignItems="center" flex="1">
+        <Flex alignItems="center" flex="1" py={'2'}>
           <Text>
             {mob.initiative && (
-              <Text as="span" fontWeight="800" textColor={textColor}>
+              <Text as="span" fontWeight="800" textColor={textColor} data-testid={`${mob.id}-initiative`}>
                 ({mob.initiative})
               </Text>
             )}
-            <Text as="span" fontWeight="800" textColor={textColor}>
+            <Text as="span" fontWeight="800" textColor={textColor} data-testid={`${mob.id}-name`} color="marioRed.200">
               &nbsp;{mob.name} {mob.number > 1 ? `#${mob.number}` : ''}
             </Text>
           </Text>
         </Flex>
-        <Flex flex="1" alignItems="center">
-          <Text>Health:</Text>
-          <FormControl>
-            <Input
-              type="number"
-              fontWeight="800"
-              value={mob.health}
-              onChange={(e) => updateHealth(mob, parseInt(e.target.value))}
-              w="90px"
-              ml={2}
-            />
-          </FormControl>
-        </Flex>
-        <Button variant="redSolid" onClick={() => removeEntity(mob)} mr={2}>
-          Kill
-        </Button>
-        <Tooltip label="Update Mob" aria-label="Update Mob" hasArrow>
-          <Button variant="primarySolid" onClick={() => showEntityEditForm()}>
-            <Icon as={FaUserEdit} />
+        {!readOnlyRoom && (
+          <Flex flex="1" alignItems="center" justifyContent={readOnlyRoom ? 'flex-end' : 'flex-start'}>
+            <Text>Health:</Text>
+            <>
+              <FormControl>
+                <Input
+                  type="number"
+                  fontWeight="800"
+                  value={mob.health}
+                  onChange={(e) => updateHealth(mob, parseInt(e.target.value))}
+                  w="90px"
+                  ml={2}
+                  data-testid={`${mob.id}-health`}
+                />
+              </FormControl>
+            </>
+          </Flex>
+        )}
+        {!readOnlyRoom && (
+          <Button variant="redSolid" onClick={() => removeEntity(mob)} mr={2} data-testid={`${mob.id}-kill`}>
+            Kill
           </Button>
-        </Tooltip>
+        )}
+        {!readOnlyRoom && (
+          <Tooltip label="Update Mob" aria-label="Update Mob" hasArrow>
+            <Button
+              variant="primarySolid"
+              onClick={() => showEntityEditForm()}
+              data-testid={`${mob.id.toLowerCase()}-edit`}
+            >
+              <Icon as={FaUserEdit} />
+            </Button>
+          </Tooltip>
+        )}
       </Flex>
 
       <EntityEditModal entity={mob} isOpen={isOpen} onClose={onClose} />
