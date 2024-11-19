@@ -186,12 +186,14 @@ export const deleteRooms = () => {
 };
 
 export const dmHelperSignIn = () => {
+  cy.get('[data-testid="user-room-settings-panel"]').click();
   cy.get('[data-testid="sign-in-btn"]').click();
   cy.login();
   cy.wait(1000);
 };
 
 export const dmHelperSignOut = () => {
+  cy.get('[data-testid="user-room-settings-panel"]').click();
   cy.get('[data-testid="sign-out-btn"]').click();
   cy.logout();
 };

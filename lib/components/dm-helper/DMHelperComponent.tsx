@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Flex,
   Tabs,
@@ -5,11 +7,12 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-  Img,
   Text,
   Button,
   useDisclosure,
   Heading,
+  Icon,
+  Image,
 } from '@chakra-ui/react';
 import { MobForm } from '@lib/components/dm-helper/MobForm';
 import { HeroForm } from '@lib/components/dm-helper/HeroForm';
@@ -21,10 +24,11 @@ import { useContext } from 'react';
 import { InitiativeModal } from '@lib/components/dm-helper/modals/InititativeModal';
 import EndCombatConfirmationModal from './modals/EndCombatConfirmationModal';
 import { InviteOthersForm } from './InviteOthersForm';
-import DMHelperSignInComponent from './DMHelperSignInComponent';
+import { UserRoomSettingsComponent } from './UserRoomSettingsComponent';
+import { FaUserCog } from 'react-icons/fa';
 
 export const DMHelperComponent = () => {
-  const { combatStarted, updateCombatStarted, heroes, resetHeroInitiatives, isClient, readOnlyRoom } =
+  const { combatStarted, updateCombatStarted, heroes, resetHeroInitiatives, readOnlyRoom } =
     useContext(DMHelperContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: endCombatIsOpen, onOpen: onEndCombatModalOpen, onClose: onEndCombatModalClose } = useDisclosure();
@@ -46,57 +50,69 @@ export const DMHelperComponent = () => {
     }
   };
 
-  return isClient ? (
+  return (
     <>
-      <DMHelperSignInComponent />
       <Tabs display="flex" flexDir="column" alignContent={'center'}>
-        {!readOnlyRoom && (
-          <>
-            <TabList
-              alignSelf="center"
-              border="2px solid"
-              justifyContent="center"
-              mb="4"
-              p={2}
-              w="fit-content"
-              bgColor="secondary.500"
+        <>
+          <TabList
+            alignSelf="center"
+            border="2px solid"
+            justifyContent="center"
+            mb="4"
+            p={2}
+            w="fit-content"
+            bgColor="secondary.500"
+          >
+            <Tab
+              _selected={{ color: 'white', bg: 'primary.200' }}
+              borderRadius="lg"
+              fontWeight="bold"
+              data-testid="combat-panel"
             >
-              <Tab
-                _selected={{ color: 'white', bg: 'primary.200' }}
-                borderRadius="lg"
-                fontWeight="bold"
-                data-testid="combat-panel"
-              >
-                <Img src="/static/images/sword.png" alt="sword-icon" w="20px" h="20px" mr="1" />
-                <Text as="span" lineHeight="24px">
-                  Combat
-                </Text>
-              </Tab>
-              <Tab
-                _selected={{ color: 'white', bg: 'primary.200' }}
-                borderRadius="lg"
-                fontWeight="bold"
-                data-testid="heroes-panel"
-              >
-                <Img src="/static/images/knight.png" alt="knight" w="20px" h="20px" mr="1" />
-                <Text as="span" lineHeight="24px">
-                  Heroes
-                </Text>
-              </Tab>
-              <Tab
-                _selected={{ color: 'white', bg: 'primary.200' }}
-                borderRadius="lg"
-                fontWeight="bold"
-                data-testid="invite-others-panel"
-              >
-                <Img src="/static/images/join-party.png" alt="knight" w="20px" h="20px" mr="1" />
-                <Text as="span" lineHeight="24px">
-                  Invite Others
-                </Text>
-              </Tab>
-            </TabList>
-          </>
-        )}
+              <Image src="/static/images/sword.png" alt="sword-icon" w="20px" h="20px" mr="1" />
+              <Text as="span" lineHeight="24px">
+                Combat
+              </Text>
+            </Tab>
+            {!readOnlyRoom && (
+              <>
+                <Tab
+                  _selected={{ color: 'white', bg: 'primary.200' }}
+                  borderRadius="lg"
+                  fontWeight="bold"
+                  data-testid="heroes-panel"
+                >
+                  <Image src="/static/images/knight.png" alt="knight" w="20px" h="20px" mr="1" />
+                  <Text as="span" lineHeight="24px">
+                    Heroes
+                  </Text>
+                </Tab>
+                <Tab
+                  _selected={{ color: 'white', bg: 'primary.200' }}
+                  borderRadius="lg"
+                  fontWeight="bold"
+                  data-testid="invite-others-panel"
+                >
+                  <Image src="/static/images/join-party.png" alt="knight" w="20px" h="20px" mr="1" />
+                  <Text as="span" lineHeight="24px">
+                    Invite Others
+                  </Text>
+                </Tab>
+              </>
+            )}
+            <Tab
+              _selected={{ color: 'white', bg: 'primary.200' }}
+              borderRadius="lg"
+              fontWeight="bold"
+              data-testid="user-room-settings-panel"
+            >
+              <Icon as={FaUserCog} w={6} h={6} mr={2} />
+              <Text as="span" lineHeight="24px">
+                Manage
+              </Text>
+            </Tab>
+          </TabList>
+        </>
 
         <TabPanels>
           <TabPanel>
@@ -145,10 +161,15 @@ export const DMHelperComponent = () => {
               <HeroList />
             </Flex>
           </TabPanel>
+
           <TabPanel>
             <Flex gap="4" justifyContent="center">
               <InviteOthersForm />
             </Flex>
+          </TabPanel>
+
+          <TabPanel>
+            <UserRoomSettingsComponent />
           </TabPanel>
         </TabPanels>
       </Tabs>
@@ -160,5 +181,5 @@ export const DMHelperComponent = () => {
         onClose={onEndCombatModalClose}
       />
     </>
-  ) : null;
+  );
 };

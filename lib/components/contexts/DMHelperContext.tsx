@@ -45,13 +45,13 @@ export const DMHelperContextProvider = ({ children }) => {
   const [isClient, setIsClient] = useState(false);
   const [commitPending, setCommitPending] = useState(false);
   const [joinRoomLink, setJoinRoomLink] = useState<string | null>(null);
-  const [loadingFirebaseRoom, setloadingFirebaseRoom] = useState(false);
+  const [loadingFirebaseRoom, setloadingFirebaseRoom] = useState(true);
   const [joinedRoomId, setJoinedRoomId] = useLocalStorage('joinedRoomId', null);
 
   const toast = useToast();
 
   const heroes = useMemo(() => entities.filter((entity) => entity.type === EntityType.HERO) as Hero[], [entities]);
-  const readOnlyRoom = useMemo(() => joinedRoomId !== null, [joinedRoomId]);
+  const readOnlyRoom = useMemo(() => isClient && joinedRoomId !== null, [isClient, joinedRoomId]);
 
   // Utilities to update Room context state & Realtime Database
   const scheduleCommitRoomChanges = () => setCommitPending(true);
