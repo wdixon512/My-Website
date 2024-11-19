@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Text, Heading, Flex, Divider, List, ListItem, Badge } from '@chakra-ui/react';
+import { Box, Text, Heading, Flex, Divider, List, ListItem, Badge, Img } from '@chakra-ui/react';
 import { DetailedMob } from '@lib/models/dnd5eapi/DetailedMob';
 
 interface MobDetailCardProps {
@@ -9,6 +9,7 @@ interface MobDetailCardProps {
 const MobDetailCard: React.FC<MobDetailCardProps> = ({ mob }) => {
   return (
     <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={5} bg="gray.50">
+      <Img src={`/static/images/d&d5e-mobs/${mob.index}.jpg`} alt={mob.name} mb={3} mx="auto" display="block" />
       <Heading size="lg" mb={3} textAlign="center" variant={'dark'}>
         {mob.name}
       </Heading>
@@ -78,15 +79,17 @@ const MobDetailCard: React.FC<MobDetailCardProps> = ({ mob }) => {
             <ListItem key={prof.proficiency.index}>
               <Badge colorScheme="teal" mr={2}>
                 {prof.proficiency.name}
-              </Badge>{' '}
-              +{prof.value}
+              </Badge>
+              <Text as="span" variant="dark">
+                +{prof.value}
+              </Text>
             </ListItem>
           ))}
           <ListItem>
             <Text variant={'dark'}>
               <strong>Senses:</strong> Darkvision {mob.senses.darkvision}, Passive Perception{' '}
+              {mob.senses.passive_perception}
             </Text>
-            <Text variant={'dark'}>{mob.senses.passive_perception}</Text>
           </ListItem>
         </List>
       </Box>

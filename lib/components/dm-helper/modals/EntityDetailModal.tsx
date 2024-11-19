@@ -1,7 +1,7 @@
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { Entity } from '@lib/models/dm-helper/Entity';
-import MobDetailCard from '../MobCardComponent';
+import MobDetailCard from '../MobDetailCard';
 import useDndApi from '@lib/services/dnd5eapi-service';
 import { DetailedMob } from '@lib/models/dnd5eapi/DetailedMob';
 

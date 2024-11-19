@@ -135,7 +135,7 @@ export const MobForm = () => {
         <FormControl mb={4}>
           <FormLabel color="blackAlpha.900">Mob Initiative</FormLabel>
           <Input
-            type="text"
+            type="number"
             color="blackAlpha.700"
             value={initiative}
             onChange={(e) => setInitiative(e.target.value)}
@@ -148,7 +148,7 @@ export const MobForm = () => {
         <FormControl mb={4}>
           <FormLabel color="blackAlpha.900">Mob Health</FormLabel>
           <Input
-            type="text"
+            type="number"
             color="blackAlpha.700"
             value={health}
             onChange={(e) => setHealth(e.target.value)}

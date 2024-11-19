@@ -29,6 +29,7 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
 
   const handleMobDetailOpen = (e) => {
     e.preventDefault();
+    if (!mob.apiIndex) return;
     onMobDetailOpen();
   };
 
