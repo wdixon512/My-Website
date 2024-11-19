@@ -6,6 +6,7 @@ import { DMHelperContext } from '../contexts/DMHelperContext';
 import React from 'react';
 import { FaUserEdit } from 'react-icons/fa';
 import EntityEditModal from './modals/EntityEditModal';
+import EntityDetailModal from './modals/EntityDetailModal';
 
 interface MobItemProps extends FlexProps {
   mob: Mob;
@@ -15,13 +16,20 @@ interface MobItemProps extends FlexProps {
 export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ...props }) => {
   const { entities, removeEntity, updateEntities, readOnlyRoom } = useContext(DMHelperContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: mobDetailIsOpen, onOpen: onMobDetailOpen, onClose: onMobDetailClose } = useDisclosure();
 
   const updateHealth = (mob: Mob, newHealth) => {
     updateEntities(entities.map((m) => (m.id === mob.id ? { ...m, health: newHealth } : m)));
   };
 
-  const showEntityEditForm = () => {
+  const showEntityEditForm = (e) => {
+    e.preventDefault();
     onOpen();
+  };
+
+  const handleMobDetailOpen = (e) => {
+    e.preventDefault();
+    onMobDetailOpen();
   };
 
   return (
@@ -34,6 +42,7 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
       borderBottomWidth={1}
       _hover={{ bg: 'secondary.600', cursor: 'pointer' }}
       data-testid={`${mob.id}-item`}
+      onClick={(e) => handleMobDetailOpen(e)}
       {...props}
     >
       <Flex w="full">
@@ -76,7 +85,7 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
           <Tooltip label="Update Mob" aria-label="Update Mob" hasArrow>
             <Button
               variant="primarySolid"
-              onClick={() => showEntityEditForm()}
+              onClick={(e) => showEntityEditForm(e)}
               data-testid={`${mob.id.toLowerCase()}-edit`}
             >
               <Icon as={FaUserEdit} />
@@ -86,6 +95,7 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
       </Flex>
 
       <EntityEditModal entity={mob} isOpen={isOpen} onClose={onClose} />
+      <EntityDetailModal entity={mob} isOpen={mobDetailIsOpen} onClose={onMobDetailClose} />
     </AnimatedFlex>
   );
 };

@@ -23,7 +23,7 @@ export const DMHelperContext = createContext({
   entities: [] as Entity[],
   updateEntities: (() => null) as React.Dispatch<React.SetStateAction<Entity[]>>,
   removeEntity: (entity: Entity) => null,
-  addMob: (name: string, health: number | null, initiative: number | null) => null,
+  addMob: (name: string, health: number | null, initiative: number | null, apiIndex: string | null) => null,
   addHero: (name: string, health: number | null, initiative: number | null) => null,
   resetHeroInitiatives: () => null,
   mobFavorites: [] as Mob[],
@@ -321,11 +321,12 @@ export const DMHelperContextProvider = ({ children }) => {
     setJoinRoomLink(`${window.location.origin}/join/${dbRoom.id}`);
   };
 
-  const addMob = (name: string, health: number | null, initiative: number | null): boolean => {
+  const addMob = (name: string, health: number | null, initiative: number | null, apiIndex: string | null): boolean => {
     if (!validateName(name, toast) || !validateMobHealth(health, toast)) return false;
 
     const mob: Mob = {
       id: `${name.toLowerCase()}-${getNextEntityNumber(entities, name)}`,
+      apiIndex: apiIndex,
       name,
       health,
       number: getNextEntityNumber(entities, name),

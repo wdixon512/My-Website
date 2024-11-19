@@ -7,7 +7,7 @@ interface MobTypeaheadProps extends ListProps {
   highlightedIndex: number;
   isFocused: boolean;
   searchTerm: string;
-  handleTypeaheadClick: (mobName: string) => void;
+  handleTypeaheadClick: (summaryMob: SummaryMob) => void;
 }
 
 export const MobTypeahead = React.forwardRef<HTMLUListElement, MobTypeaheadProps>(
@@ -39,7 +39,7 @@ export const MobTypeahead = React.forwardRef<HTMLUListElement, MobTypeaheadProps
               bg={i === highlightedIndex ? 'gray.100' : 'white'}
               border={i === highlightedIndex ? '1px solid' : 'none'}
               borderColor="primary.200"
-              onClick={() => handleTypeaheadClick(mob.name)}
+              onClick={() => handleTypeaheadClick(mob)}
             >
               <Text color={'primary.200'} fontWeight={'bold'}>
                 {mob.name}

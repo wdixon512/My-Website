@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, Input, Text } from '@chakra-ui/react';
 import { useCallback, useContext, useState, useEffect, useRef } from 'react';
 import { DMHelperContext } from '../contexts/DMHelperContext';
 import useDndApi from '@lib/services/dnd5eapi-service';
@@ -10,6 +10,7 @@ export const MobForm = () => {
   const [name, setName] = useState('');
   const [health, setHealth] = useState<string>('');
   const [initiative, setInitiative] = useState<string>('');
+  const [selectedTypeaheadMob, setSelectedTypeaheadMob] = useState<SummaryMob | null>(null);
   const [typeaheadMobs, setTypeaheadMobs] = useState<SummaryMob[]>([]);
   const [isFocused, setIsFocused] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
@@ -24,10 +25,11 @@ export const MobForm = () => {
     const parsedHealth = health === '' ? null : parseInt(health, 10);
     const parsedInitiative = initiative === '' ? null : parseInt(initiative, 10);
 
-    if (addMob(name, parsedHealth, parsedInitiative)) {
+    if (addMob(name, parsedHealth, parsedInitiative, selectedTypeaheadMob?.index)) {
       setName('');
       setHealth('');
       setInitiative('');
+      setSelectedTypeaheadMob(null);
     }
   };
 
@@ -52,10 +54,16 @@ export const MobForm = () => {
     // Debounce the fetching of mobs against search term so it only happens once every 200ms
     debouncedFetchTypeaheadMobs(userInput);
     setHighlightedIndex(-1);
+
+    // Clear out the api index when the user types in a new mob name
+    setSelectedTypeaheadMob(null);
   };
 
-  const handleTypeaheadClick = (mobName: string) => {
-    setName(mobName);
+  const handleTypeaheadSelect = (summaryMob: SummaryMob) => {
+    setName(summaryMob.name);
+    setSelectedTypeaheadMob(summaryMob);
+
+    // Clear the typeahead list when a mob is selected
     setTypeaheadMobs([]);
     setHighlightedIndex(-1);
   };
@@ -81,7 +89,7 @@ export const MobForm = () => {
         typeaheadRef.current?.scrollTo(0, (highlightedIndex - 1) * 40);
       } else if (e.key === 'Enter' && highlightedIndex >= 0) {
         e.preventDefault();
-        handleTypeaheadClick(typeaheadMobs[highlightedIndex].name);
+        handleTypeaheadSelect(typeaheadMobs[highlightedIndex]);
       }
     }
   };
@@ -109,8 +117,19 @@ export const MobForm = () => {
             highlightedIndex={highlightedIndex}
             isFocused={isFocused}
             searchTerm={name}
-            handleTypeaheadClick={handleTypeaheadClick}
+            handleTypeaheadClick={handleTypeaheadSelect}
           />
+          {selectedTypeaheadMob && (
+            <FormLabel
+              fontSize="xs"
+              fontStyle="italic"
+              color="blackAlpha.700"
+              mt="1"
+              data-testid="selected-mob-typeahead-label"
+            >
+              You have selected: <b>{selectedTypeaheadMob.name}</b>
+            </FormLabel>
+          )}
         </FormControl>
 
         <FormControl mb={4}>

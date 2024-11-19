@@ -117,7 +117,7 @@ export const DMHelperComponent = () => {
         <TabPanels>
           <TabPanel>
             <Flex direction={{ base: 'column', lg: 'row' }} justifyContent="center" gap="12">
-              <Flex direction="column" gap="4">
+              <Flex direction="column" gap="4" w={{ base: '100%', lg: '35%' }}>
                 <MobForm />
                 <MobQuickAdd />
               </Flex>
