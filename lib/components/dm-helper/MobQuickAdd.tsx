@@ -9,7 +9,7 @@ export const MobQuickAdd = () => {
   const { mobFavorites, addMob, updateMobFavorites, isClient, readOnlyRoom } = useContext(DMHelperContext);
 
   const handleAddMob = (mob: Mob) => {
-    addMob(mob.name, mob.health, mob.initiative, mob.apiIndex);
+    addMob(mob.name, mob.health, mob.initiative);
   };
 
   const handleRemoveFavorite = (mob: Mob) => {

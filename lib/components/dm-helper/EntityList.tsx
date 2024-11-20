@@ -44,7 +44,7 @@ export const EntityList = () => {
   };
 
   return (
-    <Box p={4} bg="secondary.200" borderWidth={1} borderRadius="md" shadow="md" w={{ base: '100%', lg: '500px' }}>
+    <Box p={4} bg="secondary.200" borderWidth={1} borderRadius="md" shadow="md" w="100%">
       {isClient &&
         (loadingFirebaseRoom ? (
           <Spinner size="lg" label="Loading entities..." />
