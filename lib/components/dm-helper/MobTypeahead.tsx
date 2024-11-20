@@ -33,7 +33,7 @@ export const MobTypeahead = React.forwardRef<HTMLUListElement, MobTypeaheadProps
         >
           {typeaheadMobs.map((mob, i) => (
             <ListItem
-              key={mob.index}
+              key={mob.name}
               p={2}
               _hover={{ bg: 'gray.100', cursor: 'pointer' }}
               bg={i === highlightedIndex ? 'gray.100' : 'white'}

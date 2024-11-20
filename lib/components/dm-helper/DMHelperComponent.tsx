@@ -13,6 +13,7 @@ import {
   Heading,
   Icon,
   Image,
+  Box,
 } from '@chakra-ui/react';
 import { MobForm } from '@lib/components/dm-helper/MobForm';
 import { HeroForm } from '@lib/components/dm-helper/HeroForm';
@@ -115,12 +116,19 @@ export const DMHelperComponent = () => {
         </>
 
         <TabPanels>
-          <TabPanel>
-            <Flex direction={{ base: 'column', lg: 'row' }} justifyContent="center" gap="12">
-              <Flex direction="column" gap="4" w={{ base: '100%', lg: '35%' }}>
-                <MobForm />
-                <MobQuickAdd />
-              </Flex>
+          <TabPanel justifyItems={'center'}>
+            <Flex
+              direction={{ base: 'column', lg: 'row' }}
+              justifyContent="center"
+              gap="12"
+              w={readOnlyRoom ? { base: '100%', lg: '65%' } : '100%'}
+            >
+              {!readOnlyRoom && (
+                <Flex direction="column" gap="4" w={{ base: '100%', lg: '35%' }}>
+                  <MobForm />
+                  <MobQuickAdd />
+                </Flex>
+              )}
               <Flex direction="column" gap="4" flex="1">
                 {!readOnlyRoom ? (
                   <>
@@ -141,7 +149,7 @@ export const DMHelperComponent = () => {
                     )}
                   </>
                 ) : (
-                  <>
+                  <Box>
                     {combatStarted && (
                       <Heading variant="redSolid" data-testid="combat-started-heading" textAlign="center">
                         Combat has started...
@@ -152,7 +160,7 @@ export const DMHelperComponent = () => {
                         Combat has NOT started.
                       </Heading>
                     )}
-                  </>
+                  </Box>
                 )}
 
                 <EntityList />
