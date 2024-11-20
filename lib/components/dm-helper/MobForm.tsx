@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormLabel, Input, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, FormControl, FormLabel, Input, Text } from '@chakra-ui/react';
 import { useCallback, useContext, useState, useEffect, useRef } from 'react';
 import { DMHelperContext } from '../contexts/DMHelperContext';
 import useDndApi from '@lib/services/dnd5eapi-service';
@@ -141,38 +141,42 @@ export const MobForm = () => {
 
         <FormControl mb={4}>
           <FormLabel color="blackAlpha.900">Mob Initiative</FormLabel>
-          <Input
-            type="number"
-            color="blackAlpha.700"
-            value={initiative}
-            onChange={(e) => setInitiative(e.target.value)}
-            placeholder="Enter mob initiative"
-            required={false}
-            data-testid="mob-initiative-input"
-          />
-          <DiceRoller
-            mob={selectedTypeaheadMob}
-            rollType={RollType.Initiative}
-            afterRoll={(roll) => setInitiative(roll.toString())}
-          />
+          <Flex gap="2">
+            <Input
+              type="number"
+              color="blackAlpha.700"
+              value={initiative}
+              onChange={(e) => setInitiative(e.target.value)}
+              placeholder="Enter mob initiative"
+              required={false}
+              data-testid="mob-initiative-input"
+            />
+            <DiceRoller
+              mob={selectedTypeaheadMob}
+              rollType={RollType.Initiative}
+              afterRoll={(roll) => setInitiative(roll.toString())}
+            />
+          </Flex>
         </FormControl>
 
         <FormControl mb={4}>
           <FormLabel color="blackAlpha.900">Mob Health</FormLabel>
-          <Input
-            type="number"
-            color="blackAlpha.700"
-            value={health}
-            onChange={(e) => setHealth(e.target.value)}
-            placeholder="Enter mob health"
-            required={false}
-            data-testid="mob-health-input"
-          />
-          <DiceRoller
-            mob={selectedTypeaheadMob}
-            rollType={RollType.HitPoints}
-            afterRoll={(roll) => setHealth(roll.toString())}
-          />
+          <Flex gap="2">
+            <Input
+              type="number"
+              color="blackAlpha.700"
+              value={health}
+              onChange={(e) => setHealth(e.target.value)}
+              placeholder="Enter mob health"
+              required={false}
+              data-testid="mob-health-input"
+            />
+            <DiceRoller
+              mob={selectedTypeaheadMob}
+              rollType={RollType.HitPoints}
+              afterRoll={(roll) => setHealth(roll.toString())}
+            />
+          </Flex>
         </FormControl>
 
         <Button type="submit" variant="solid" width="full" data-testid="submit-mob-button">

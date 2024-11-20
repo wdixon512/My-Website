@@ -121,7 +121,7 @@ export const DMHelperComponent = () => {
                 <MobForm />
                 <MobQuickAdd />
               </Flex>
-              <Flex direction="column" gap="4">
+              <Flex direction="column" gap="4" flex="1">
                 {!readOnlyRoom ? (
                   <>
                     {combatStarted && (

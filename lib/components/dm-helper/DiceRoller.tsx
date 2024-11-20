@@ -38,10 +38,12 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({ mob, rollType, afterRoll
   };
 
   return (
-    <Flex direction="column" align="center" justify="center">
-      <Button onClick={rollDice} size={'sm'} alignSelf="flex-start">
-        Roll
-      </Button>
-    </Flex>
+    mob && (
+      <Flex direction="column" align="center" justify="center">
+        <Button onClick={rollDice} size={'sm'} alignSelf="flex-start">
+          Roll
+        </Button>
+      </Flex>
+    )
   );
 };

@@ -4,7 +4,7 @@ import { Mob } from '@lib/models/dm-helper/Mob';
 import { useContext, useState } from 'react';
 import { DMHelperContext } from '../contexts/DMHelperContext';
 import React from 'react';
-import { FaUserEdit } from 'react-icons/fa';
+import { FaDemocrat, FaEye, FaEyeSlash, FaUserEdit } from 'react-icons/fa';
 import EntityEditModal from './modals/EntityEditModal';
 import EntityDetailModal from './modals/EntityDetailModal';
 
@@ -43,7 +43,6 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
       borderBottomWidth={1}
       _hover={{ bg: 'secondary.600', cursor: 'pointer' }}
       data-testid={`${mob.id}-item`}
-      onClick={(e) => handleMobDetailOpen(e)}
       {...props}
     >
       <Flex w="full">
@@ -60,21 +59,17 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
           </Text>
         </Flex>
         {!readOnlyRoom && (
-          <Flex flex="1" alignItems="center" justifyContent={readOnlyRoom ? 'flex-end' : 'flex-start'}>
+          <Flex flex="1" alignItems="center" justifyContent={'flex-end'} mr="3">
             <Text>Health:</Text>
-            <>
-              <FormControl>
-                <Input
-                  type="number"
-                  fontWeight="800"
-                  value={mob.health}
-                  onChange={(e) => updateHealth(mob, parseInt(e.target.value))}
-                  w="90px"
-                  ml={2}
-                  data-testid={`${mob.id}-health`}
-                />
-              </FormControl>
-            </>
+            <Input
+              type="number"
+              fontWeight="800"
+              value={mob.health}
+              onChange={(e) => updateHealth(mob, parseInt(e.target.value))}
+              w="90px"
+              ml={2}
+              data-testid={`${mob.id}-health`}
+            />
           </Flex>
         )}
         {!readOnlyRoom && (
@@ -83,15 +78,30 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
           </Button>
         )}
         {!readOnlyRoom && (
-          <Tooltip label="Update Mob" aria-label="Update Mob" hasArrow>
-            <Button
-              variant="primarySolid"
-              onClick={(e) => showEntityEditForm(e)}
-              data-testid={`${mob.id.toLowerCase()}-edit`}
-            >
-              <Icon as={FaUserEdit} />
-            </Button>
-          </Tooltip>
+          <>
+            <Tooltip label="Update Mob" aria-label="Update Mob" hasArrow>
+              <Button
+                variant="primarySolid"
+                onClick={(e) => showEntityEditForm(e)}
+                data-testid={`${mob.id.toLowerCase()}-edit`}
+              >
+                <Icon as={FaUserEdit} />
+              </Button>
+            </Tooltip>
+            {mob.apiIndex ? (
+              <Tooltip label="View Mob Details" aria-label="View Mob Details" hasArrow>
+                <Button variant="primarySolid" onClick={(e) => handleMobDetailOpen(e)}>
+                  <Icon as={FaEye} />
+                </Button>
+              </Tooltip>
+            ) : (
+              <Tooltip label="Can't find details for mob">
+                <Button variant="primarySolid" onClick={(e) => handleMobDetailOpen(e)} _hover={{ bgColor: 'unset' }}>
+                  <Icon as={FaEyeSlash} />
+                </Button>
+              </Tooltip>
+            )}
+          </>
         )}
       </Flex>
 
