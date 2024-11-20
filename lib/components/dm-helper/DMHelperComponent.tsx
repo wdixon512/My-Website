@@ -124,13 +124,18 @@ export const DMHelperComponent = () => {
               <Flex direction="column" gap="4" flex="1">
                 {!readOnlyRoom ? (
                   <>
-                    {combatStarted && (
-                      <Button variant="redSolid" onClick={() => endCombat()} data-testid="end-combat-btn">
+                    {combatStarted ? (
+                      <Button
+                        variant="redSolid"
+                        onClick={() => endCombat()}
+                        data-testid="end-combat-btn"
+                        px="8"
+                        alignSelf="center"
+                      >
                         End Combat
                       </Button>
-                    )}
-                    {!combatStarted && (
-                      <Button onClick={() => startCombat()} data-testid="start-combat-button">
+                    ) : (
+                      <Button onClick={() => startCombat()} data-testid="start-combat-button" px="8" alignSelf="center">
                         Start Combat
                       </Button>
                     )}
