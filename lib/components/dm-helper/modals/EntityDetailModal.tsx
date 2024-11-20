@@ -1,5 +1,5 @@
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Entity } from '@lib/models/dm-helper/Entity';
 import { MobDetailCard } from '@lib/components/dm-helper/MobDetailCard';
 import useDndApi from '@lib/services/dnd5eapi-service';
@@ -14,13 +14,14 @@ interface EntityDetailModalProps {
 export const EntityDetailModal: React.FC<EntityDetailModalProps> = ({ entity, isOpen, onClose }) => {
   const { getMobByName } = useDndApi();
   const [detailedMob, setDetailedMob] = useState<DetailedMob>();
+
   const handleDone = () => {
     onClose();
   };
 
   // On component mount, fetch the detailed mob data
   useEffect(() => {
-    if (entity) {
+    if (entity && entity.name) {
       getMobByName(entity.name).then((mob) => {
         setDetailedMob(mob);
       });
@@ -31,19 +32,15 @@ export const EntityDetailModal: React.FC<EntityDetailModalProps> = ({ entity, is
     <Modal isOpen={isOpen} onClose={() => handleDone()} isCentered>
       <ModalOverlay />
       <ModalContent maxW="1000px" maxH="90vh" overflowX="hidden">
-        {entity && (
-          <>
-            <ModalHeader textColor="primary.400">{entity.name}</ModalHeader>
-            <ModalBody>
-              <MobDetailCard mob={detailedMob} />
-            </ModalBody>
-            <ModalFooter justifyContent="space-between">
-              <Button variant="solid" onClick={() => handleDone()} data-testid="done-edit-modal-btn">
-                Done
-              </Button>
-            </ModalFooter>
-          </>
-        )}
+        <ModalHeader textColor="primary.400">{entity.name}</ModalHeader>
+        <ModalBody>
+          <MobDetailCard mob={detailedMob} />
+        </ModalBody>
+        <ModalFooter justifyContent="space-between">
+          <Button variant="solid" onClick={() => handleDone()} data-testid="done-edit-modal-btn">
+            Done
+          </Button>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );

@@ -2,7 +2,7 @@ import { Box, Button, Flex, FormControl, FormLabel, Input, Text } from '@chakra-
 import { useCallback, useContext, useState, useEffect, useRef } from 'react';
 import { DMHelperContext } from '../contexts/DMHelperContext';
 import useDndApi from '@lib/services/dnd5eapi-service';
-import { SummaryMob } from '@lib/models/dnd5eapi/DetailedMob';
+import { DetailedMob, SummaryMob } from '@lib/models/dnd5eapi/DetailedMob';
 import { debounce } from '@lib/util/js-utils';
 import { MobTypeahead } from './MobTypeahead';
 import { DiceRoller } from './DiceRoller';
@@ -12,12 +12,12 @@ export const MobForm = () => {
   const [name, setName] = useState('');
   const [health, setHealth] = useState<string>('');
   const [initiative, setInitiative] = useState<string>('');
-  const [selectedTypeaheadMob, setSelectedTypeaheadMob] = useState<SummaryMob | null>(null);
+  const [selectedTypeaheadMob, setSelectedTypeaheadMob] = useState<DetailedMob | null>(null);
   const [typeaheadMobs, setTypeaheadMobs] = useState<SummaryMob[]>([]);
   const [isFocused, setIsFocused] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
   const typeaheadRef = useRef(null);
-  const { summaryMobs } = useDndApi();
+  const { summaryMobs, getMobByName, rollDice, getMobHitPoints } = useDndApi();
 
   const { addMob, clearMobs, readOnlyRoom } = useContext(DMHelperContext);
 
@@ -27,7 +27,7 @@ export const MobForm = () => {
     const parsedHealth = health === '' ? null : parseInt(health, 10);
     const parsedInitiative = initiative === '' ? null : parseInt(initiative, 10);
 
-    if (addMob(name, parsedHealth, parsedInitiative, selectedTypeaheadMob?.apiUrl)) {
+    if (addMob(name, parsedHealth, parsedInitiative)) {
       setName('');
       setHealth('');
       setInitiative('');
@@ -68,7 +68,15 @@ export const MobForm = () => {
 
   const handleTypeaheadSelect = (summaryMob: SummaryMob) => {
     setName(summaryMob.name);
-    setSelectedTypeaheadMob(summaryMob);
+
+    getMobByName(summaryMob.name).then((detailedMob) => {
+      setSelectedTypeaheadMob(detailedMob);
+      const initRoll = rollDice(detailedMob, RollType.Initiative);
+      const defaultHp = getMobHitPoints(detailedMob);
+
+      setHealth(defaultHp.toString());
+      setInitiative(initRoll.toString());
+    });
 
     // Clear the typeahead list when a mob is selected
     setTypeaheadMobs([]);
