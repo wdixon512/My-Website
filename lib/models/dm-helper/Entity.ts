@@ -5,6 +5,7 @@ export enum EntityType {
 
 export type Entity = {
   id: string;
+  apiUrl?: string;
   name: string;
   health?: number;
   number?: number;
