@@ -32,7 +32,6 @@ export const EntityDetailModal: React.FC<EntityDetailModalProps> = ({ entity, is
     <Modal isOpen={isOpen} onClose={() => handleDone()} isCentered>
       <ModalOverlay />
       <ModalContent maxW="1000px" maxH="90vh" overflowX="hidden">
-        <ModalHeader textColor="primary.400">{entity.name}</ModalHeader>
         <ModalBody>
           <MobDetailCard mob={detailedMob} />
         </ModalBody>
