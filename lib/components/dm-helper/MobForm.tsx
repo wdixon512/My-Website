@@ -27,7 +27,7 @@ export const MobForm = () => {
     const parsedHealth = health === '' ? null : parseInt(health, 10);
     const parsedInitiative = initiative === '' ? null : parseInt(initiative, 10);
 
-    if (addMob(name, parsedHealth, parsedInitiative, selectedTypeaheadMob?.index)) {
+    if (addMob(name, parsedHealth, parsedInitiative, selectedTypeaheadMob?.apiUrl)) {
       setName('');
       setHealth('');
       setInitiative('');

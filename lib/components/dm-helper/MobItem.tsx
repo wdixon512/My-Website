@@ -29,7 +29,7 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
 
   const handleMobDetailOpen = (e) => {
     e.preventDefault();
-    if (!mob.apiIndex) return;
+    if (!mob.name) return;
     onMobDetailOpen();
   };
 
@@ -88,7 +88,7 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
                 <Icon as={FaUserEdit} />
               </Button>
             </Tooltip>
-            {mob.apiIndex ? (
+            {mob ? (
               <Tooltip label="View Mob Details" aria-label="View Mob Details" hasArrow>
                 <Button variant="primarySolid" onClick={(e) => handleMobDetailOpen(e)}>
                   <Icon as={FaEye} />

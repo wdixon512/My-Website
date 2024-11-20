@@ -1,87 +1,49 @@
-export type ArmorClass = {
-  type: string;
-  value: number;
-};
+export interface DetailedMob {
+  name: string; // The monster's name
+  size: string; // Size (e.g., "S" for Small)
+  type: string; // Type and subtype (e.g., "humanoid (goblinoid), monster manual")
+  alignment: string; // Alignment (e.g., "neutral evil")
+  ac: string; // Armor Class (e.g., "15 (leather armor, shield)")
+  hp: string; // Hit Points (e.g., "7 (2d6)")
+  speed: string; // Speed (e.g., "30 ft.")
+  str: string; // Strength ability score
+  dex: string; // Dexterity ability score
+  con: string; // Constitution ability score
+  int: string; // Intelligence ability score
+  wis: string; // Wisdom ability score
+  cha: string; // Charisma ability score
+  skill: string[]; // Skills (e.g., ["Stealth +6"])
+  senses: string; // Senses (e.g., "darkvision 60 ft.")
+  passive: string; // Passive Perception (e.g., "9")
+  languages: string; // Languages (e.g., "Common, Goblin")
+  cr: string; // Challenge Rating (e.g., "1/4")
+  trait: Array<{
+    name: string; // Trait name
+    text: string[]; // Trait description as an array of strings
+  }>; // Traits (special abilities)
+  action: Array<{
+    name: string; // Action name
+    text: string[]; // Action description as an array of strings
+    attack?: string[]; // Attack information (e.g., ["|4|1d6+2"])
+  }>; // Actions
+  save: string[]; // Saving Throws (e.g., [])
+  resist: string[]; // Damage Resistances (e.g., [])
+  vulnerable: string[]; // Damage Vulnerabilities (e.g., [])
+  immune: string[]; // Damage Immunities (e.g., [])
+  conditionImmune: string[]; // Condition Immunities (e.g., [])
+  spells: string[]; // Spells (e.g., [])
+  slots: string[]; // Spell Slots (e.g., [])
+  legendary: Array<{
+    name: string; // Legendary action name
+    text: string[]; // Description of the legendary action
+  }>; // Legendary Actions
+  description: string[]; // Additional descriptions (e.g., [])
+  reaction: Array<{
+    name: string; // Reaction name
+    text: string[]; // Reaction description
+  }>; // Reactions
+}
 
-export type Speed = {
-  walk?: string;
-  climb?: string;
-};
-
-export type Proficiency = {
-  value: number;
-  proficiency: {
-    index: string;
-    name: string;
-    url: string;
-  };
-};
-
-export type Senses = {
-  darkvision?: string;
-  passive_perception: number;
-};
-
-export type SpecialAbility = {
-  name: string;
-  desc: string;
-};
-
-export type Action = {
-  name: string;
-  desc: string;
-  multiattack_type?: string;
-  actions?: {
-    action_name: string;
-    count: number;
-    type: string;
-  }[];
-  attack_bonus?: number;
-  damage?: {
-    damage_type: {
-      index: string;
-      name: string;
-      url: string;
-    };
-    damage_dice: string;
-  }[];
-};
-
-export type DetailedMob = {
-  index: string;
-  name: string;
-  size: string;
-  type: string;
-  alignment: string;
-  armor_class: ArmorClass[];
-  hit_points: number;
-  hit_dice: string;
-  hit_points_roll: string;
-  speed: Speed;
-  strength: number;
-  dexterity: number;
-  constitution: number;
-  intelligence: number;
-  wisdom: number;
-  charisma: number;
-  proficiencies: Proficiency[];
-  damage_vulnerabilities: string[];
-  damage_resistances: string[];
-  damage_immunities: string[];
-  condition_immunities: string[];
-  senses: Senses;
-  languages: string;
-  challenge_rating: number;
-  proficiency_bonus: number;
-  xp: number;
-  special_abilities: SpecialAbility[];
-  actions: Action[];
-  url: string;
-  legendary_actions: any[];
-};
-
-export type SummaryMob = {
-  index: string;
-  name: string;
-  challenge_rating: number;
-};
+export interface SummaryMob {
+  name: string; // The monster's name
+}

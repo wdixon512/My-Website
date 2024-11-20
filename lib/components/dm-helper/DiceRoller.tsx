@@ -13,12 +13,12 @@ interface DiceRollerProps {
 
 export const DiceRoller: React.FC<DiceRollerProps> = ({ mob, rollType, afterRoll }) => {
   const [currentRoll, setCurrentRoll] = useState<number | null>(null);
-  const { getMobByIndex } = useDndApi();
+  const { getMobByName } = useDndApi();
 
   const rollDice = () => {
     if (!mob) return;
 
-    getMobByIndex(mob.index).then((detailedMob) => {
+    getMobByName(mob.name).then((detailedMob) => {
       const diceString = RollTypeMethods[rollType].getDice(detailedMob);
 
       // parse the dice string to get the number of dice and the dice type
