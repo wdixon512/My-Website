@@ -7,3 +7,7 @@ export const debounce = (func, delay: number) => {
     }, delay);
   };
 };
+
+export const toKebabCase = (str: string) => {
+  return str?.replaceAll(' ', '-').toLowerCase();
+};

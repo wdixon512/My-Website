@@ -1,4 +1,5 @@
 import { Room, RoomResponse } from '@lib/models/dm-helper/Room';
+import { toKebabCase } from '../../lib/util/js-utils';
 
 // export const getElementByTestId = (testId: string) => {
 //   return cy.get(`[data-testid="${testId}"]`, timeout)
@@ -12,9 +13,13 @@ export const addGoblin = () => {
   cy.get('[data-testid="submit-mob-button"]').click();
 };
 
+export const verifyMobInEntityList = (mobName: string) => {
+  cy.get('[data-testid="entity-list"]').should('contain', mobName);
+};
+
 export const addGoblinAndVerify = () => {
   addGoblin();
-  cy.get('[data-testid="entity-list"]').should('contain', 'Goblin');
+  verifyMobInEntityList('Goblin');
 };
 
 export const addKobold = () => {
@@ -27,7 +32,7 @@ export const addKobold = () => {
 
 export const addKoboldAndVerify = () => {
   addKobold();
-  cy.get('[data-testid="entity-list"]').should('contain', 'Kobold');
+  verifyMobInEntityList('Kobold');
 };
 
 export const addOrc = () => {
@@ -200,4 +205,10 @@ export const dmHelperSignOut = () => {
 
 export const goToInviteOthersPanel = () => {
   cy.get('[data-testid="invite-others-panel"]').click();
+};
+
+export const addMobWithTypeahead = (name: string) => {
+  cy.get('[data-testid="mob-name-input"]').type(name);
+  cy.get(`[data-testid="typeahead-mob-${toKebabCase(name.toLowerCase())}"]`).click();
+  cy.get('[data-testid="submit-mob-button"]').click();
 };

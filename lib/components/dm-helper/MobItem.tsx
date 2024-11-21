@@ -90,7 +90,11 @@ export const MobItem: React.FC<MobItemProps> = ({ mob, handleDrop, textColor, ..
             </Tooltip>
             {mob ? (
               <Tooltip label="View Mob Details" aria-label="View Mob Details" hasArrow>
-                <Button variant="primarySolid" onClick={(e) => handleMobDetailOpen(e)}>
+                <Button
+                  variant="primarySolid"
+                  onClick={(e) => handleMobDetailOpen(e)}
+                  data-testid={`view-details-${mob.id}`}
+                >
                   <Icon as={FaEye} />
                 </Button>
               </Tooltip>
