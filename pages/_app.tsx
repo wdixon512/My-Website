@@ -8,25 +8,28 @@ import '@fontsource/rhodium-libre';
 import '../styles/global.css';
 import Head from 'next/head';
 import { FirebaseGoogleAuthProvider } from '@lib/components/contexts/FirebaseGoogleAuthContext';
+import { CacheProvider } from '@lib/components/contexts/CacheContext';
 
 function MyApp({ Component, pageProps }) {
   return (
     <ChakraProvider theme={theme}>
-      <SessionProvider session={pageProps.session}>
-        <FirebaseGoogleAuthProvider>
-          <GameContextProvider>
-            <Head>
-              <meta name="viewport" content="width=device-width, initial-scale=1" />
-              <link rel="icon" href="/favicon.ico" sizes="any" />
-            </Head>
-            <Fonts />
-            <Container width="100vw" maxW="100vw" px="0" mx="0" pb="20" minHeight="100vh" bgColor="lightSlate.500">
-              <NavigationBar />
-              <Component {...pageProps} />
-            </Container>
-          </GameContextProvider>
-        </FirebaseGoogleAuthProvider>
-      </SessionProvider>
+      <CacheProvider>
+        <SessionProvider session={pageProps.session}>
+          <FirebaseGoogleAuthProvider>
+            <GameContextProvider>
+              <Head>
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <link rel="icon" href="/favicon.ico" sizes="any" />
+              </Head>
+              <Fonts />
+              <Container width="100vw" maxW="100vw" px="0" mx="0" pb="20" minHeight="100vh" bgColor="lightSlate.500">
+                <NavigationBar />
+                <Component {...pageProps} />
+              </Container>
+            </GameContextProvider>
+          </FirebaseGoogleAuthProvider>
+        </SessionProvider>
+      </CacheProvider>
     </ChakraProvider>
   );
 }

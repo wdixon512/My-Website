@@ -1,52 +1,58 @@
+import { useClientCache } from '@lib/components/contexts/CacheContext';
 import { RollType, RollTypeMethods } from '@lib/models/dm-helper/RollType';
 import { AllMonstersResponse } from '@lib/models/dnd5eapi/AllMonstersResponse';
 import { DetailedMob, SummaryMob } from '@lib/models/dnd5eapi/DetailedMob';
-import { useState, useEffect } from 'react';
 
 const BASE_URL = `/api/monsters`;
 
 // Define the types for the API responses
 interface UseDndApiHook {
+  getAllMobsAsync: () => Promise<SummaryMob[]>;
   getMobByName: (mobName: string) => Promise<DetailedMob | null>;
-  rollDice: (mob: DetailedMob, rollType: RollType) => number;
   getMobHitPoints: (mob: DetailedMob) => number;
-  summaryMobs: SummaryMob[];
+  rollDice: (mob: DetailedMob, rollType: RollType) => number;
 }
 
 // Custom hook to interact with the D&D 5e API
 export const useDndApi = (): UseDndApiHook => {
-  const [summaryMobs, setSummaryMobs] = useState<SummaryMob[]>([]);
+  const { cacheLoadAsync } = useClientCache();
 
-  useEffect(() => {
-    // Load a list of monsters when the hook is first used
-    const fetchMonsters = async () => {
+  const getAllMobsAsync = async (): Promise<SummaryMob[]> => {
+    return cacheLoadAsync('allMonsters', async () => {
       try {
         const response = await fetch(BASE_URL);
         if (!response.ok) {
           throw new Error('Failed to fetch monsters');
         }
-        const monsterData: AllMonstersResponse = await response.json();
-        setSummaryMobs(monsterData.monsters);
+        return (await response.json()) as AllMonstersResponse;
       } catch (error) {
         console.error('Failed to fetch monsters:', error);
       }
-    };
-
-    fetchMonsters();
-  }, []);
+    }).then((monsterData) => {
+      return monsterData.monsters;
+    });
+  };
 
   // Fetch details of a specific monster by its index
   const getMobByName = async (mobName: string): Promise<DetailedMob | null> => {
-    try {
-      const response = await fetch(`${BASE_URL}/${mobName.replace(' ', '_').toLowerCase()}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch monster details');
+    const cacheKey = mobName.replace(' ', '_').toLowerCase();
+
+    return cacheLoadAsync(cacheKey, async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/${mobName.replace(' ', '_').toLowerCase()}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch monster details');
+        }
+        return (await response.json()) as DetailedMob;
+      } catch (error) {
+        console.error('Failed to fetch monster details:', error);
+        return null;
       }
-      return (await response.json()) as DetailedMob;
-    } catch (error) {
-      console.error('Failed to fetch monster details:', error);
-      return null;
-    }
+    });
+  };
+
+  const getMobHitPoints = (mob: DetailedMob): number => {
+    return parseInt(mob.hp.split('(')[0], 10);
   };
 
   const rollDice = (mob: DetailedMob, rollType: RollType): number => {
@@ -66,16 +72,12 @@ export const useDndApi = (): UseDndApiHook => {
     return roll;
   };
 
-  const getMobHitPoints = (mob: DetailedMob): number => {
-    return parseInt(mob.hp.split('(')[0], 10);
-  };
-
   // Return the list of monsters and the method to fetch detailed monster data
   return {
+    getAllMobsAsync,
     getMobByName,
     rollDice,
     getMobHitPoints,
-    summaryMobs,
   };
 };
 

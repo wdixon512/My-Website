@@ -1,12 +1,12 @@
 import { Box, Button, Flex, FormControl, FormLabel, Input, Text } from '@chakra-ui/react';
-import { useCallback, useContext, useState, useEffect, useRef } from 'react';
+import { useContext, useState, useRef, useCallback } from 'react';
 import { DMHelperContext } from '../contexts/DMHelperContext';
 import useDndApi from '@lib/services/dnd5eapi-service';
 import { DetailedMob, SummaryMob } from '@lib/models/dnd5eapi/DetailedMob';
-import { debounce } from '@lib/util/js-utils';
 import { MobTypeahead } from './MobTypeahead';
 import { DiceRoller } from './DiceRoller';
 import { RollType } from '@lib/models/dm-helper/RollType';
+import { debounce } from '@lib/util/js-utils';
 
 export const MobForm = () => {
   const [name, setName] = useState('');
@@ -17,7 +17,7 @@ export const MobForm = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
   const typeaheadRef = useRef(null);
-  const { summaryMobs, getMobByName, rollDice, getMobHitPoints } = useDndApi();
+  const { getAllMobsAsync, getMobByName, rollDice, getMobHitPoints } = useDndApi();
 
   const { addMob, clearMobs, readOnlyRoom } = useContext(DMHelperContext);
 
@@ -42,16 +42,18 @@ export const MobForm = () => {
     }
 
     // Filter the list of mobs based on the user's input
-    const filteredMobs = summaryMobs.filter((mob) => mob.name.toLowerCase().includes(userInput.toLowerCase()));
+    const filteredMobs = (await getAllMobsAsync()).filter((mob) =>
+      mob.name.toLowerCase().includes(userInput.toLowerCase())
+    );
 
     setTypeaheadMobs(filteredMobs);
   };
 
   const debouncedFetchTypeaheadMobs = useCallback(
-    (userInput: string) => {
-      debounce(fetchTypeaheadMobs(userInput), 200);
-    },
-    [summaryMobs]
+    debounce((userInput: string) => {
+      fetchTypeaheadMobs(userInput);
+    }, 200),
+    []
   );
 
   const handleMobNameChange = async (e) => {

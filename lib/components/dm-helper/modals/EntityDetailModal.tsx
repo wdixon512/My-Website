@@ -21,12 +21,12 @@ export const EntityDetailModal: React.FC<EntityDetailModalProps> = ({ entity, is
 
   // On component mount, fetch the detailed mob data
   useEffect(() => {
-    if (entity && entity.name) {
+    if (entity?.name) {
       getMobByName(entity.name).then((mob) => {
         setDetailedMob(mob);
       });
     }
-  }, [entity]);
+  }, [entity?.name]);
 
   return (
     <Modal isOpen={isOpen} onClose={() => handleDone()} isCentered>
