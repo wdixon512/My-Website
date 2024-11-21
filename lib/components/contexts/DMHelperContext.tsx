@@ -12,6 +12,7 @@ import { auth, rtdb } from '@services/firebase';
 import { ref, get, set, update, push, onValue } from 'firebase/database';
 import useLocalStorage from '@lib/hooks/useLocalStorage';
 import { getRoomByOwnerUID } from '@lib/services/dm-helper-firebase-service';
+import { toKebabCase } from '@lib/util/js-utils';
 
 export const DMHelperContext = createContext({
   room: {} as Room,
@@ -325,7 +326,7 @@ export const DMHelperContextProvider = ({ children }) => {
     if (!validateName(name, toast) || !validateMobHealth(health, toast)) return false;
 
     const mob: Mob = {
-      id: `${name.toLowerCase()}-${getNextEntityNumber(entities, name)}`,
+      id: `${toKebabCase(name.toLowerCase())}-${getNextEntityNumber(entities, name)}`,
       name,
       health,
       number: getNextEntityNumber(entities, name),
@@ -352,7 +353,7 @@ export const DMHelperContextProvider = ({ children }) => {
     if (!validateName(name, toast)) return false;
 
     const hero: Hero = {
-      id: `${name.toLowerCase()}-${getNextEntityNumber(entities, name)}`,
+      id: `${toKebabCase(name.toLowerCase())}-${getNextEntityNumber(entities, name)}`,
       name,
       health,
       number: getNextEntityNumber(entities, name),
