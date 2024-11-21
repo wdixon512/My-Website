@@ -89,19 +89,6 @@ export const EntityEditModal: React.FC<EntityEditModalProps> = ({ entity, isOpen
               {entity.type === EntityType.MOB && (
                 <>
                   <FormControl mb={4}>
-                    <FormLabel color="blackAlpha.900">Mob Name</FormLabel>
-                    <Input
-                      type="text"
-                      value={newName}
-                      color="blackAlpha.700"
-                      onChange={(e) => setNewName(e.target.value)}
-                      placeholder="Enter mob name"
-                      required={true}
-                      data-testid="name-edit-modal-input"
-                    />
-                  </FormControl>
-
-                  <FormControl mb={4}>
                     <FormLabel color="blackAlpha.900">Mob Health</FormLabel>
                     <Input
                       type="text"
