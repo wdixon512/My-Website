@@ -31,7 +31,6 @@ export const CacheProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const cachedValue = getCacheValue<T | Promise<T>>(key);
 
     if (cachedValue) {
-      console.log('Cache hit: ', key);
       // This prevents the cache from being called/updated multiple times when the same key is requested concurrently
       if (cachedValue instanceof Promise) {
         return cachedValue; // Return in-flight promise
@@ -41,7 +40,6 @@ export const CacheProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
 
     // No cache hit; call the loadFunction and store the Promise in the cache
-    console.log('Cache miss: ', key);
     const promise = loadFunction();
     cacheRef.current.set(key, promise);
 
