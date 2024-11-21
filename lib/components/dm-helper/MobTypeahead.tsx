@@ -1,5 +1,6 @@
 import { List, ListItem, ListProps, Text } from '@chakra-ui/react';
 import { SummaryMob } from '@lib/models/dnd5eapi/DetailedMob';
+import { toKebabCase } from '@lib/util/js-utils';
 import React from 'react';
 
 interface MobTypeaheadProps extends ListProps {
@@ -40,6 +41,7 @@ export const MobTypeahead = React.forwardRef<HTMLUListElement, MobTypeaheadProps
               border={i === highlightedIndex ? '1px solid' : 'none'}
               borderColor="primary.200"
               onClick={() => handleTypeaheadClick(mob)}
+              data-testid={`typeahead-mob-${toKebabCase(mob.name)}`}
             >
               <Text color={'primary.200'} fontWeight={'bold'}>
                 {mob.name}
