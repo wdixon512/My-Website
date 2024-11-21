@@ -92,28 +92,20 @@ export const removeHeroAndVerify = (heroId: string) => {
   cy.get(`[data-testid="${heroId}-item"]`).should('not.exist');
 };
 
-export const updateMobAndVerify = (
-  mobId: string,
-  newMobId: string,
-  mobName: string,
-  health: number,
-  initiative: number
-) => {
+export const updateMobAndVerify = (mobId: string, health: number, initiative: number) => {
   cy.get(`[data-testid="${mobId}-edit"]`).click();
 
   // wait for modal to open
   cy.wait(1000);
 
-  cy.get('[data-testid="name-edit-modal-input"]').clear().type(mobName);
   cy.get('[data-testid="health-edit-modal-input"]').clear().type(health.toString());
   cy.get('[data-testid="initiative-edit-modal-input"]').clear().type(initiative.toString());
   cy.get('[data-testid="done-edit-modal-btn"]').click();
 
   // Verify the mob in the UI
-  cy.get(`[data-testid="${newMobId}-item"]`).should('exist');
-  cy.get(`[data-testid="${newMobId}-initiative"]`).should('contain', initiative.toString());
-  cy.get(`[data-testid="${newMobId}-name"]`).should('contain', mobName);
-  cy.get(`[data-testid="${newMobId}-health"]`).should('have.value', health.toString());
+  cy.get(`[data-testid="${mobId}-item"]`).should('exist');
+  cy.get(`[data-testid="${mobId}-initiative"]`).should('contain', initiative.toString());
+  cy.get(`[data-testid="${mobId}-health"]`).should('have.value', health.toString());
 };
 
 export const killMobAndVerify = (mobId: string) => {

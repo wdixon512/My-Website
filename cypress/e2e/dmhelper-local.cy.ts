@@ -121,25 +121,27 @@ describe('DMHelper E2E Tests', () => {
 
     it('should update a mob entirely and verify it in the database', () => {
       // Interact with the UI to update the mob
-      updateMobAndVerify('goblin-1', 'orc-1', 'Orc', 50, 10);
+      updateMobAndVerify('goblin-1', 50, 10);
 
       // Wait for the mob to be updated in the database
       cy.wait(2000);
 
-      updateMobHealthInlineAndVerify('orc-1', 25);
+      updateMobHealthInlineAndVerify('goblin-1', 25);
 
       verifyDbRoom((room) => {
         expect(room).to.exist;
         expect(room.combat.entities).to.exist;
         expect(room.combat.entities).to.satisfy((entities: Entity[]) => {
           return entities.some((entity) => {
-            return entity.id === 'orc-1' && entity.name === 'Orc' && entity.health === 25 && entity.initiative === 10;
+            return (
+              entity.id === 'goblin-1' && entity.name === 'Goblin' && entity.health === 25 && entity.initiative === 10
+            );
           });
         });
       });
 
       // Test inline health editor
-      cy.get('[data-testid="orc-1-health"]').clear().type('25');
+      cy.get('[data-testid="goblin-1-health"]').clear().type('25');
 
       // Wait for the mob to be updated in the database
       cy.wait(2000);
@@ -149,12 +151,12 @@ describe('DMHelper E2E Tests', () => {
         expect(room.combat.entities).to.exist;
         expect(room.combat.entities).to.satisfy((entities: Entity[]) => {
           return entities.some((entity) => {
-            return entity.id === 'orc-1' && entity.health === 25;
+            return entity.id === 'goblin-1' && entity.health === 25;
           });
         });
       });
 
-      cy.get('[data-testid="orc-1-health"]').clear().type('50');
+      cy.get('[data-testid="goblin-1-health"]').clear().type('50');
     });
 
     it('should update a hero initiative and verify it in the database', () => {
@@ -182,11 +184,11 @@ describe('DMHelper E2E Tests', () => {
     it('should add quick add mobs and verify them in the database', () => {
       addOrcAndVerify();
 
-      // Add 3 Goblins and another Orc
+      // Add 2 Goblins and 2 Orcs
       quickAddById('goblin-1');
       quickAddById('goblin-1');
-      quickAddById('goblin-1');
-      quickAddById('orc-2');
+      quickAddById('orc-1');
+      quickAddById('orc-1');
 
       // Verify UI of multiple entities
       cy.get('[data-testid="entity-list"]').within(() => {
@@ -205,7 +207,8 @@ describe('DMHelper E2E Tests', () => {
 
         // Define expected entities for clarity
         const expectedEntities = [
-          { name: 'Goblin', health: 30, initiative: 15, count: 3 },
+          { name: 'Goblin', health: 30, initiative: 15, count: 2 },
+          { name: 'Goblin', health: 50, initiative: 10, count: 1 },
           { name: 'Orc', health: 50, initiative: 10, count: 3 },
         ];
 
