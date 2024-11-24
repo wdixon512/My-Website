@@ -1,4 +1,4 @@
-import { Center, Grid, Heading } from "@chakra-ui/react";
+import { Center, Heading } from '@chakra-ui/react';
 
 export function Photos({ Component, pageProps }) {
   return (
