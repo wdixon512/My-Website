@@ -12,7 +12,7 @@ export const PRIMARY_NAV_ITEMS: PrimaryNavItem[] = [
     href: '/stats',
   },
   {
-    label: 'DM Helper',
+    label: 'DM Squire',
     href: 'https://www.dmsquire.com',
   },
 ];
