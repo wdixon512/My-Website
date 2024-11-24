@@ -4,15 +4,15 @@ export type PrimaryNavItem = {
 };
 export const PRIMARY_NAV_ITEMS: PrimaryNavItem[] = [
   {
-    label: "Photos",
-    href: "/photos",
+    label: 'Photos',
+    href: '/photos',
   },
   {
-    label: "Steam Stats",
-    href: "/stats",
+    label: 'Steam Stats',
+    href: '/stats',
   },
   {
-    label: "DM Helper",
-    href: "/dm-helper",
+    label: 'DM Squire',
+    href: 'https://www.dmsquire.com',
   },
 ];
