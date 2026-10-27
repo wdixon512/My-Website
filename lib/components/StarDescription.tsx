@@ -28,7 +28,7 @@ export const StarDescription = (props: StarDescriptionProps) => {
     <SlideFade in={activeStar != null}>
       <Container maxW="container.xl">
         <Flex direction="column" align="center" mt="12">
-          <Heading as="h1" fontFamily="SM64" fontSize="48" textAlign="center">
+          <Heading as="h2" fontFamily="SM64" fontSize="48" textAlign="center">
             {starTitle}
           </Heading>
           <Text whiteSpace="pre-line">

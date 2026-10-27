@@ -11,8 +11,4 @@ export const PRIMARY_NAV_ITEMS: PrimaryNavItem[] = [
     label: 'Steam Stats',
     href: '/stats',
   },
-  {
-    label: 'DM Squire',
-    href: 'https://www.dmsquire.com',
-  },
 ];
