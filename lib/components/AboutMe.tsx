@@ -28,7 +28,7 @@ export const AboutMe = () => {
         overflow="hidden"
       >
         <Image
-          src="/static/images/bzs-me.jpg"
+          src="/images/will-about.jpg"
           alt="Will Dixon"
           width={256}
           height={256}
