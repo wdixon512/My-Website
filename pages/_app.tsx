@@ -69,7 +69,8 @@ function MyApp({ Component, pageProps }) {
               />
             </Head>
             <Fonts />
-            <Container width="100vw" maxW="100vw" px="0" mx="0" pb="20" minHeight="100vh" bgColor="lightSlate.500">
+            <Container width="100%" maxW="100%" px="0" mx="0" pb="20" minHeight="100vh" bgColor="primary.500" overflowX="hidden">
+
               <NavigationBar />
               <Component {...pageProps} />
             </Container>

@@ -13,12 +13,13 @@ export const NavigationBar = (props: NavigationBarProps) => {
         w="full"
         maxH="24"
         bg="secondary.500"
-        px="6"
+        px={{ base: 3, md: 6 }}
         py="4"
-        gap="12"
+        gap={{ base: 4, md: 12 }}
         alignItems="center"
         justifyContent={"space-between"}
         position="relative"
+        overflow="hidden"
       >
         <Circle
           flex="1"

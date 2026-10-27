@@ -35,13 +35,14 @@ const theme = extendTheme({
     text: {
       100: '#ffffff',
       200: '#ffffff',
-      300: '#f5f5f5',
-      400: '#f0f0f0',
-      500: '#F5F5F5', // existing Off-White
-      600: '#e5e5e5',
+      300: '#ffffff',
+      400: '#f8f8f8',
+      500: '#FFFFFF', // high-contrast white on slate (WCAG AA)
+      600: '#E8EEF0',
       700: '#d5d5d5',
       800: '#c5c5c5',
     },
+
     interactive: {
       100: '#72c472', // Lighter Green
       200: '#5db65d', // Slightly darker green
@@ -188,12 +189,18 @@ const theme = extendTheme({
   },
   styles: {
     global: {
+      html: {
+        overflowX: 'hidden',
+      },
       body: {
-        bg: 'primary.500',
+        bg: 'primary.600',
         color: 'text.500',
+        fontSize: '16px',
+        lineHeight: '1.7',
+        overflowX: 'hidden',
       },
       a: {
-        color: 'accent.500',
+        color: 'accent.100',
         _hover: {
           textDecoration: 'underline',
         },
@@ -201,5 +208,6 @@ const theme = extendTheme({
     },
   },
 });
+
 
 export default theme;
