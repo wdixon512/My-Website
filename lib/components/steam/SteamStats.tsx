@@ -11,8 +11,10 @@ import {
   VStack,
   SimpleGrid,
 } from "@chakra-ui/react";
-import { PlayerSummary } from "@lib/models/steam/PlayerSummary";
-import { PersonaState } from "next-auth-steam";
+import {
+  PersonaState,
+  PlayerSummary,
+} from "@lib/models/steam/PlayerSummary";
 import { useSession } from "next-auth/react";
 import { TopPlayedGames } from "./TopPlayedGames";
 
