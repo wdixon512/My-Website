@@ -10,9 +10,11 @@ export function getAuthOptions(req: NextApiRequest): AuthOptions {
   return {
     providers: [
       SteamProvider(req, {
+        // next-auth-steam 0.1.x typings drop clientSecret from SteamProviderOptions
+        // even though the runtime provider still reads provider.clientSecret.
         clientSecret: process.env.STEAM_API_KEY!,
         callbackUrl: process.env.NEXT_PUBLIC_CALLBACK_URL!,
-      }),
+      } as Parameters<typeof SteamProvider>[1]),
     ],
     callbacks: {
       jwt({ token, account, profile }) {

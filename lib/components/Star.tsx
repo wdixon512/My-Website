@@ -50,25 +50,22 @@ export const Star = (props: StarsProps) => {
           setHoveredStar(null);
         }}
         onClick={() => {
-          if (!activeStar || activeStar.id !== star.id) {
-            setActiveStar({ ...star, completed: true });
-            setStarSrc(animatedStar);
-          } else {
-            setActiveStar(null);
-          }
+          setActiveStar({ ...star, completed: true });
+          setStarSrc(animatedStar);
         }}
       >
         <Box>
           <Image
-            width="128"
-            height="128"
+            width={96}
+            height={96}
             src={starSrc}
             alt=""
             aria-hidden
+            style={{ width: "clamp(64px, 18vw, 96px)", height: "auto" }}
           />
         </Box>
       </Button>
-      <Text fontFamily="Pixel" fontSize="sm">
+      <Text fontFamily="Pixel" fontSize={{ base: "0.7rem", md: "0.85rem" }}>
         {star.title}
       </Text>
     </Flex>
