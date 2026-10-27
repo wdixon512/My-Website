@@ -29,6 +29,8 @@ The part that sold me is that it doesn't just YOLO it. That Peppino's location d
 
 Same deal with a Panera order: it built the cart, flagged that DoorDash had quietly bumped my default tip, and let me set it back before placing anything. Then it remembered how I like that order so I don't have to explain it next time.
 
+It's not perfect, though. One time I asked it for a buffalo chicken pizza, and it ordered a regular pizza with chicken on it. Technically chicken. Technically pizza. So yes, I still check the cart.
+
 Is ordering a pizza hard? No. But "open app, find store, find item, item doesn't exist, find a substitute, fix the tip, checkout" is exactly the kind of tiny friction I don't want in my evening.
 
 ## developer guy: the one I actually trust with prod (sort of)
@@ -37,9 +39,9 @@ This is the bot writing this post, technically, and the one I lean on hardest.
 
 developer guy doesn't use some magic cloud sandbox. It drives the Cursor CLI on my own PC. It runs the agent in a real checkout of my repo, then it handles the rest: runs the build, pushes a branch, opens the PR on GitHub, and waits on the Vercel check.
 
-Today alone it shipped a pile of stuff to this site:
+In the last couple weeks it shipped a pile of stuff to this site:
 
-- The Super Mario 64 redesign you're probably looking at right now. Work history became "level cards" with company logos, skills turned into chips, and certifications became power-up badges.
+- The Super Mario redesign you're probably looking at right now. Work history became "level cards" with company logos, skills turned into chips, and certifications became power-up badges.
 - Swapped my About photo for one I don't hate, and pointed the social share image at it too.
 - Fixed some ugly red lines that showed up whenever you clicked the stars to jump around the home page.
 - Fixed the mobile hamburger menu, which was opening just fine and then getting clipped out of existence. Classic `overflow: hidden`.
@@ -55,11 +57,11 @@ My job turned into reviewing PRs and saying "yes" or "no, that's ugly." Which, h
 
 I'm an engineer. I'm not going to write promo posts about my addon every weekday. hype guy does, or at least it drafts the posts, and I approve them before anything goes out under my name.
 
-It also reads the daily ahprice numbers and tells me what actually matters, like "the dip is because the beta ended, don't panic." The coolest moment was when it noticed search traffic slipping and suggested a home page title change. I told it to "talk to developer guy about that," and it did. The two bots passed the request back and forth and I got a ready-to-run prompt out the other end. Watching two agents coordinate a change without me copy-pasting between them is kind of wild.
+It also reads the daily ahprice numbers and tells me what actually matters, like when it told me a downloads dip was just because the beta ended and not worth panicking over. The coolest moment was when it noticed search traffic slipping and suggested a home page title change. I told it to "talk to developer guy about that," and it did. The two bots passed the request back and forth and I got a ready-to-run prompt out the other end. Watching two agents coordinate a change without me copy-pasting between them is kind of wild.
 
 ## work work and finances guy: the boring adults
 
-work work helps with work stuff, like resume updates. finances guy runs a daily money check-in and sets reminders for things I'd otherwise forget, like "go double-check that a bill actually got paid on the 28th." Neither of these is flashy. Both of them save me from my own brain.
+work work helps with work stuff, like resume updates. finances guy runs a daily money check-in and sets reminders for things I'd otherwise forget, like reminding me to double-check that a bill actually got paid on the 28th. Neither of these is flashy. Both of them save me from my own brain.
 
 I'm not going to share details on either, for obvious reasons.
 
