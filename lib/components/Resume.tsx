@@ -1,15 +1,10 @@
 import {
   Box,
-  Flex,
   Heading,
-  Text,
-  Image,
   Stack,
-  VStack,
   UnorderedList,
   ListItem,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import { WorkExperienceItem } from "./WorkExperienceItem";
 
 export const Resume = () => {
@@ -46,16 +41,66 @@ export const Resume = () => {
         </Heading>
         <Stack gap="12">
           <WorkExperienceItem
+            company="BDO"
+            role="Software Engineer II"
+            startDate="Apr 2026"
+            endDate="Present"
+            link="https://www.bdo.com/"
+          >
+            <UnorderedList>
+              <ListItem>
+                Led the www.bdo.com relaunch with an external vendor and large
+                enterprise team, delivering 2 weeks ahead of schedule
+              </ListItem>
+              <ListItem>
+                Migrated Kentico 13 to Xperience by Kentico
+              </ListItem>
+              <ListItem>
+                AI-assisted development and custom features throughout the
+                engagement
+              </ListItem>
+              <ListItem>
+                Received repeated kudos from leadership
+              </ListItem>
+            </UnorderedList>
+          </WorkExperienceItem>
+          <WorkExperienceItem
+            company="XTG (Xponential Technology Group)"
+            role="Web Application Engineer III"
+            startDate="May 2025"
+            endDate="Feb 2026"
+            link="https://www.rfmw.com/"
+          >
+            <UnorderedList>
+              <ListItem>
+                Led full ecommerce Xperience by Kentico build for rfmw.com,
+                migrated from Kentico 13
+              </ListItem>
+              <ListItem>
+                Catalog of 1M+ SKUs with CQRS on Azure
+              </ListItem>
+              <ListItem>
+                ERP/PIM/CRM pipelines and integrations
+              </ListItem>
+              <ListItem>
+                Faceted search, cart, and checkout
+              </ListItem>
+            </UnorderedList>
+          </WorkExperienceItem>
+          <WorkExperienceItem
             company="BIZSTREAM"
             role="Full Stack Web Developer"
             startDate="May 2022"
-            endDate="Present"
+            endDate="May 2025"
             link="https://www.bizstream.com/"
             imageSrc="/static/images/bizstream-logo.png"
           >
             <UnorderedList>
               <ListItem>
                 Full-stack CMS web development with Kentico & Kontent.AI
+              </ListItem>
+              <ListItem>
+                Tech lead for 15+ clients
               </ListItem>
               <ListItem>
                 Agile development over multiple projects from start to finish
@@ -66,7 +111,7 @@ export const Resume = () => {
                 frameworks/libraries
               </ListItem>
               <ListItem>
-                Mentor, tech lead, and frequent client-communicator
+                Mentor and frequent client-communicator
               </ListItem>
               <ListItem>
                 Maintenance of CI/CD across multiple company- and
@@ -93,26 +138,6 @@ export const Resume = () => {
               <ListItem>
                 Use of SSRS, FDS, SQL, TFS, and JIRA for reporting
               </ListItem>
-            </UnorderedList>
-          </WorkExperienceItem>
-          <WorkExperienceItem
-            company="BS&A SOFTWARE"
-            role="Software Developer Intern"
-            startDate="Jan 2020"
-            endDate="April 2020"
-            link="https://www.bsasoftware.com/"
-            imageSrc="/static/images/bsa-software-logo.png"
-          >
-            <UnorderedList>
-              <ListItem>
-                Developed a web application for the company to plan events with
-                ASP.NET Framework and SQL backend
-              </ListItem>
-              <ListItem>
-                Continued web development on a Trello-like workboard application
-                with a team of three interns
-              </ListItem>
-              <ListItem>Collaborated with Visual Studio TFS</ListItem>
             </UnorderedList>
           </WorkExperienceItem>
         </Stack>
