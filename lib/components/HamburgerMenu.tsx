@@ -12,6 +12,8 @@ import { PRIMARY_NAV_ITEMS } from "@data/primary-nav-data";
 const HamburgerMenu = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  if (PRIMARY_NAV_ITEMS.length === 0) return null;
+
   return (
     <Flex
       justifyContent={"end"}
