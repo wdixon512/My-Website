@@ -1,49 +1,48 @@
-import { Heading, Link, Stack, Text, UnorderedList, ListItem } from "@chakra-ui/react";
+import { Heading, UnorderedList, ListItem, VStack } from "@chakra-ui/react";
+import { LevelCard } from "./LevelCard";
 
 export const Projects = () => {
   return (
-    <Stack mt={10} gap="10" align="start" w="full">
-      <Stack gap="3" align="start">
-        <Heading as="h3" fontSize="2xl" fontFamily="Pixel">
-          <Link href="https://dmsquire.com" isExternal>
-            DM Squire
-          </Link>
-        </Heading>
-        <Text>
-          D&amp;D 5e combat tracker built with Next.js and Firebase.
-        </Text>
+    <VStack align="stretch" gap={6} w="full" maxW="820px">
+      <Heading
+        as="h2"
+        fontFamily="SM64"
+        fontSize={{ base: "1.75rem", md: "2.25rem" }}
+        color="text.500"
+      >
+        Projects
+      </Heading>
+
+      <LevelCard
+        worldLabel="WORLD 3-1 / dm squire"
+        title="dm squire"
+        meta="D&D 5e combat tracker"
+        link="https://dmsquire.com"
+        imageSrc="/static/images/sword.png"
+        imageAlt="dm squire"
+      >
         <UnorderedList>
-          <ListItem>
-            Live at{" "}
-            <Link href="https://dmsquire.com" isExternal color="marioRed.500">
-              dmsquire.com
-            </Link>
-          </ListItem>
+          <ListItem>Live at dmsquire.com</ListItem>
           <ListItem>Next.js + Firebase</ListItem>
+          <ListItem>Real-time combat tracking for tabletop sessions</ListItem>
         </UnorderedList>
-      </Stack>
-      <Stack gap="3" align="start">
-        <Heading as="h3" fontSize="2xl" fontFamily="Pixel">
-          <Link href="https://ahprice.com" isExternal>
-            ahprice
-          </Link>
-        </Heading>
-        <Text>
-          WoW Forever auction-price addon, helper app, price site, and public
-          MCP server.
-        </Text>
+      </LevelCard>
+
+      <LevelCard
+        worldLabel="WORLD 3-2 / ahprice"
+        title="ahprice"
+        meta="WoW Forever auction-price toolkit"
+        link="https://ahprice.com"
+        imageSrc="/static/images/knight.png"
+        imageAlt="ahprice"
+      >
         <UnorderedList>
-          <ListItem>
-            Live at{" "}
-            <Link href="https://ahprice.com" isExternal color="marioRed.500">
-              ahprice.com
-            </Link>
-          </ListItem>
+          <ListItem>Live at ahprice.com</ListItem>
           <ListItem>Auction-price addon, helper app, and price site</ListItem>
-          <ListItem>Public MCP server</ListItem>
+          <ListItem>Public MCP server for price data</ListItem>
         </UnorderedList>
-      </Stack>
-    </Stack>
+      </LevelCard>
+    </VStack>
   );
 };
 

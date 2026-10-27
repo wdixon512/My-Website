@@ -1,45 +1,42 @@
-import {
-  Flex,
-  VStack,
-  Heading,
-  Image,
-  Text,
-  ChakraProps,
-} from "@chakra-ui/react";
-import Link from "next/link";
+import { LevelCard, LevelCardProps } from "./LevelCard";
 
-export type WorkExperienceItemProps = ChakraProps & {
+export type WorkExperienceItemProps = Omit<
+  LevelCardProps,
+  "worldLabel" | "title"
+> & {
   company: string;
   role: string;
   startDate: string;
   endDate: string;
-  link: string;
-  imageSrc?: string;
-  children: React.ReactNode;
+  worldLabel?: string;
+  children?: React.ReactNode;
 };
 
+/** @deprecated Prefer LevelCard directly; kept for compatibility. */
 export const WorkExperienceItem = (props: WorkExperienceItemProps) => {
+  const {
+    company,
+    role,
+    startDate,
+    endDate,
+    link,
+    imageSrc,
+    worldLabel = "LEVEL",
+    children,
+    ...rest
+  } = props;
+
   return (
-    <Flex gap="12">
-      {props.imageSrc && (
-        <Link href={props.link}>
-          <Image
-            src={props.imageSrc}
-            maxWidth="225px"
-            alt={`${props.company} logo`}
-          />
-        </Link>
-      )}
-      <VStack alignItems="start">
-        <Heading as="h3" fontSize="2xl" fontFamily="Pixel">
-          <Link href={props.link}>{props.company}</Link>
-        </Heading>
-        <Text>Role: {props.role}</Text>
-        <Text fontStyle="italic">
-          {props.startDate} - {props.endDate}
-        </Text>
-        {props.children}
-      </VStack>
-    </Flex>
+    <LevelCard
+      worldLabel={worldLabel}
+      title={company}
+      meta={`${role} · ${startDate} – ${endDate}`}
+      link={link}
+      imageSrc={imageSrc}
+      imageAlt={company}
+      {...rest}
+    >
+      {children}
+    </LevelCard>
   );
 };
