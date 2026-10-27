@@ -2,6 +2,7 @@ import { Text } from "@chakra-ui/react";
 import StarLevel from "@lib/models/StarLevel";
 import Resume from "@lib/components/Resume";
 import { AboutMe } from "@lib/components/AboutMe";
+import { Projects } from "@lib/components/Projects";
 
 export const NUM_STARS = 5;
 
@@ -22,7 +23,7 @@ export const STAR_LEVELS: StarLevel[] = [
   {
     id: 3,
     title: "Portfolio Pavilion: Prestige Perusal",
-    description: <Text>Coming soon!</Text>,
+    description: <Projects />,
     completed: false,
   },
   {
