@@ -11,6 +11,32 @@ export const Resume = () => {
   return (
     <Stack mt={10} gap="12">
       <Box>
+        <Heading as="h2" mb={6}>
+          Certifications
+        </Heading>
+        <UnorderedList>
+          <ListItem>Kentico 13 Developer</ListItem>
+          <ListItem>Xperience by Kentico Developer</ListItem>
+        </UnorderedList>
+      </Box>
+      <Box>
+        <Heading as="h2" mb={6}>
+          Skills
+        </Heading>
+        <UnorderedList>
+          <ListItem>C#</ListItem>
+          <ListItem>.NET/ASP.NET Core</ListItem>
+          <ListItem>React</ListItem>
+          <ListItem>TypeScript</ListItem>
+          <ListItem>Next.js</ListItem>
+          <ListItem>SQL Server</ListItem>
+          <ListItem>Azure</ListItem>
+          <ListItem>CQRS</ListItem>
+          <ListItem>CI/CD</ListItem>
+          <ListItem>AI-assisted development</ListItem>
+        </UnorderedList>
+      </Box>
+      <Box>
         <Heading as="h2" mb={12}>
           Education
         </Heading>
