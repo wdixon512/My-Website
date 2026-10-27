@@ -49,7 +49,12 @@ export const SteamStats = ({ playerData, ownedGames }: SteamStatsProps) => {
     >
       <Grid templateColumns="repeat(2, 1fr)" gap={6}>
         <Box>
-          <Image src={playerData.avatar} borderRadius="full" boxSize="100px" />
+          <Image
+            src={playerData.avatar}
+            borderRadius="full"
+            boxSize="100px"
+            alt={`${playerData.personaname} Steam avatar`}
+          />
           <Text fontSize="xl" fontWeight="bold" color="white">
             {playerData.personaname}
           </Text>

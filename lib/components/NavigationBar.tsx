@@ -7,9 +7,6 @@ import SteamLogout from "./steam/SteamLogout";
 type NavigationBarProps = {};
 
 export const NavigationBar = (props: NavigationBarProps) => {
-  const handleContactClick = () => {
-    alert("Contact form coming soon!");
-  };
   return (
     <>
       <Flex
@@ -30,10 +27,10 @@ export const NavigationBar = (props: NavigationBarProps) => {
           maxH="16"
           position="relative"
         >
-          <Link href="/home">
+          <Link href="/home" aria-label="Home">
             <Image
               src="/static/images/agios-nikolaos.jpg"
-              alt="My Fiance and I in Agios Nikolaos, Crete"
+              alt="Will Dixon and fiancée in Agios Nikolaos, Crete"
               width="128"
               height="234"
               style={{ objectFit: "cover" }}
@@ -58,10 +55,11 @@ export const NavigationBar = (props: NavigationBarProps) => {
         <Flex display={{ base: "none", md: "flex" }}>
           <Flex w="full" justify="flex-end" flex="1" gap="6" align="center">
             <Button
+              as="a"
+              href="mailto:wdixon@will-dixon.com"
               bg="marioRed.500"
               color="white"
               fontFamily="Pixel"
-              onClick={handleContactClick}
             >
               Contact Me
             </Button>

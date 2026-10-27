@@ -1,41 +1,84 @@
-import { ChakraProps, Fade, Flex, Heading, Text } from "@chakra-ui/react";
-import { useEffect, useState, useContext } from "react";
-import { GameContext } from "./contexts/GameContext";
+import { Button, ChakraProps, Flex, Heading, Stack, Text } from "@chakra-ui/react";
 
 export type MainMenuProps = ChakraProps;
 
 export const MainMenu = (props: MainMenuProps) => {
-  const { gameStarted, setGameStarted } = useContext(GameContext);
-
-  useEffect(() => {
-    window.addEventListener("keypress", () => {
-      if (!gameStarted) {
-        setGameStarted(true);
-      }
-    });
-  });
   return (
-    <Fade in={!gameStarted} unmountOnExit>
-      <Flex
-        className="typewriter"
-        direction="column"
-        bgImage="/static/images/Mario.gif"
-        justify="start"
-        align="center"
-        textAlign="center"
-        height={"100vh"}
-        pt="12"
-        bgSize="contain"
+    <Flex
+      direction="column"
+      justify="center"
+      align="center"
+      textAlign="center"
+      px="6"
+      py="16"
+      bgImage="linear-gradient(180deg, rgba(20,30,48,0.85), rgba(36,59,85,0.75)), url('/static/images/coding-background2.jpg')"
+      bgSize="cover"
+      bgPosition="center"
+      {...props}
+    >
+      <Heading as="h1" color="white" fontFamily="SM64" fontSize={{ base: "48", md: "64" }}>
+        Will Dixon
+      </Heading>
+      <Text
+        pt="4"
+        color="white"
+        fontFamily="Pixel"
+        fontSize={{ base: "sm", md: "md" }}
+        maxW="3xl"
       >
-        <Flex direction="column" w="fit-content">
-          <Heading as="h1" color="white" fontFamily="Pixel">
-            Welcome
-          </Heading>
-          <Text pt="4" color="white" fontFamily="Pixel">
-            Press any button to continue...
-          </Text>
-        </Flex>
-      </Flex>
-    </Fade>
+        Senior Full-Stack .NET/React Engineer · Xperience by Kentico specialist ·
+        10+ years
+      </Text>
+      <Stack
+        direction={{ base: "column", sm: "row" }}
+        mt="8"
+        gap="4"
+        flexWrap="wrap"
+        justify="center"
+      >
+        <Button
+          as="a"
+          href="/William_Dixon_Resume.pdf"
+          download
+          bg="marioRed.500"
+          color="white"
+          fontFamily="Pixel"
+          _hover={{ bg: "marioRed.600" }}
+        >
+          Download Resume
+        </Button>
+        <Button
+          as="a"
+          href="https://www.linkedin.com/in/william-d-79529a138/"
+          target="_blank"
+          rel="noopener noreferrer"
+          bg="secondary.500"
+          color="white"
+          fontFamily="Pixel"
+        >
+          LinkedIn
+        </Button>
+        <Button
+          as="a"
+          href="https://github.com/wdixon512"
+          target="_blank"
+          rel="noopener noreferrer"
+          bg="secondary.500"
+          color="white"
+          fontFamily="Pixel"
+        >
+          GitHub
+        </Button>
+        <Button
+          as="a"
+          href="mailto:wdixon@will-dixon.com"
+          bg="secondary.500"
+          color="white"
+          fontFamily="Pixel"
+        >
+          Email
+        </Button>
+      </Stack>
+    </Flex>
   );
 };

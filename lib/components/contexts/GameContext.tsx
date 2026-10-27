@@ -1,8 +1,8 @@
-import { createContext, useMemo, useState } from "react";
+import { createContext, useState } from "react";
 import StarLevel from "@lib/models/StarLevel";
 
 export const GameContext = createContext({
-  gameStarted: false,
+  gameStarted: true,
   setGameStarted: (gameStarted: boolean) => null,
 
   activeStar: null as StarLevel | null,
@@ -13,7 +13,7 @@ export const GameContext = createContext({
 });
 
 export const GameContextProvider = ({ children }) => {
-  const [gameStarted, setGameStarted] = useState(false);
+  const [gameStarted, setGameStarted] = useState(true);
   const [hoveredStar, setHoveredStar] = useState<StarLevel | null>(null);
   const [activeStar, setActiveStar] = useState<StarLevel | null>(null);
 
