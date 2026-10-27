@@ -31,10 +31,6 @@ function SectionHighlight({
       justifyContent="center"
       px={{ base: 4, md: 6 }}
       py={{ base: 8, md: 12 }}
-      outline={isHighlighted ? "3px solid" : "3px solid transparent"}
-      outlineColor={isHighlighted ? "marioRed.500" : "transparent"}
-      outlineOffset="4px"
-      transition="outline-color 0.2s ease"
     >
       {children}
     </Box>
