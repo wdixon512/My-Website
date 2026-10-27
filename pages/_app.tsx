@@ -36,7 +36,7 @@ function MyApp({ Component, pageProps }) {
               />
               <meta
                 property="og:image"
-                content="https://www.will-dixon.com/static/images/bzs-me.jpg"
+                content="https://www.will-dixon.com/images/will-about.jpg"
               />
               <meta name="twitter:card" content="summary" />
               <meta
@@ -49,7 +49,7 @@ function MyApp({ Component, pageProps }) {
               />
               <meta
                 name="twitter:image"
-                content="https://www.will-dixon.com/static/images/bzs-me.jpg"
+                content="https://www.will-dixon.com/images/will-about.jpg"
               />
               <script
                 type="application/ld+json"
