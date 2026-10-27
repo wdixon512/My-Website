@@ -19,7 +19,6 @@ export const NavigationBar = (props: NavigationBarProps) => {
         alignItems="center"
         justifyContent={"space-between"}
         position="relative"
-        overflow="hidden"
       >
         <Circle
           flex="1"
