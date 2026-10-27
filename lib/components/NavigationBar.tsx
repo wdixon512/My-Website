@@ -27,10 +27,10 @@ export const NavigationBar = (props: NavigationBarProps) => {
           maxH="16"
           position="relative"
         >
-          <Link href="/home">
+          <Link href="/home" aria-label="Home">
             <Image
               src="/static/images/agios-nikolaos.jpg"
-              alt="My Fiance and I in Agios Nikolaos, Crete"
+              alt="Will Dixon and fiancée in Agios Nikolaos, Crete"
               width="128"
               height="234"
               style={{ objectFit: "cover" }}

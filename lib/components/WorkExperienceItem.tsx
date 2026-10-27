@@ -31,7 +31,7 @@ export const WorkExperienceItem = (props: WorkExperienceItemProps) => {
         </Link>
       )}
       <VStack alignItems="start">
-        <Heading fontSize="2xl" fontFamily="Pixel">
+        <Heading as="h3" fontSize="2xl" fontFamily="Pixel">
           <Link href={props.link}>{props.company}</Link>
         </Heading>
         <Text>Role: {props.role}</Text>
