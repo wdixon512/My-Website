@@ -1,7 +1,7 @@
 ---
-title: "I have five AI bots now and they do my chores"
+title: "I have five AI agents now and they do my chores"
 date: "2026-10-27"
-summary: "How I use Grok Bot to order my food, ship code to my own website, and run the boring parts of a side project. Plus the parts that still suck."
+summary: "How I use five Grok Bot AI agents to order food, ship code to my site, and market my side project, plus the parts that still suck."
 draft: false
 ---
 
@@ -23,9 +23,9 @@ Yes, the names are stupid. They're also instantly clear, which is more than I ca
 
 ## food guy: the gateway drug
 
-This is the one that hooked me. I text it something like "make an order to the local peppino's, one margherita pizza, breadsticks, and a grilled chicken fajita wrap," and it goes and builds the cart on DoorDash.
+This is the one that hooked me. I text it something like "make an order to my local pizza place, one margherita pizza, breadsticks, and a grilled chicken fajita wrap," and it goes and builds the cart on DoorDash.
 
-The part that sold me is that it doesn't just YOLO it. That Peppino's location didn't actually have the fajita wrap. So instead of guessing, it came back with the closest wraps they did have and asked me to pick. I changed the pizza size, picked a wrap, switched it to pickup, and it showed me the final cart and total. Nothing got placed until I said yes.
+The part that sold me is that it doesn't just YOLO it. That place didn't actually have the fajita wrap. So instead of guessing, it came back with the closest wraps they did have and asked me to pick. I changed the pizza size, picked a wrap, switched it to pickup, and it showed me the final cart and total. Nothing got placed until I said yes.
 
 Same deal with a Panera order: it built the cart, flagged that DoorDash had quietly bumped my default tip, and let me set it back before placing anything. Then it remembered how I like that order so I don't have to explain it next time.
 
@@ -35,7 +35,7 @@ Is ordering a pizza hard? No. But "open app, find store, find item, item doesn't
 
 ## developer guy: the one I actually trust with prod (sort of)
 
-This is the bot writing this post, technically, and the one I lean on hardest.
+This is the one I lean on hardest. developer guy helped draft this post; the opinions and swearing are mine.
 
 developer guy doesn't use some magic cloud sandbox. It drives the Cursor CLI on my own PC. It runs the agent in a real checkout of my repo, then it handles the rest: runs the build, pushes a branch, opens the PR on GitHub, and waits on the Vercel check.
 
@@ -49,19 +49,19 @@ In the last couple weeks it shipped a pile of stuff to this site:
 
 It even fixed a Vercel build that broke because Node 18 got discontinued, which is precisely the kind of chore I'd let rot for a month.
 
-For my WoW addon side project, ahprice, it handles the engineering grunt work: deploy pipelines, the beta server, and a daily stats dashboard that just shows up in the morning.
+For my WoW Forever addon side project, [ahprice](https://ahprice.com/?ref=blog), it handles the engineering grunt work: deploy pipelines and the beta server.
 
 My job turned into reviewing PRs and saying "yes" or "no, that's ugly." Which, honestly, is what I wanted my job to be.
 
 ## hype guy: marketing I don't have to do
 
-I'm an engineer. I'm not going to write promo posts about my addon every weekday. hype guy does, or at least it drafts the posts, and I approve them before anything goes out under my name.
+I'm an engineer, not a marketer. hype guy plans the marketing and writes the launch posts, and nothing goes out under my name until I approve the exact text.
 
-It also reads the daily ahprice numbers and tells me what actually matters, like when it told me a downloads dip was just because the beta ended and not worth panicking over. The coolest moment was when it noticed search traffic slipping and suggested a home page title change. I told it to "talk to developer guy about that," and it did. The two bots passed the request back and forth and I got a ready-to-run prompt out the other end. Watching two agents coordinate a change without me copy-pasting between them is kind of wild.
+It also owns the daily ahprice stats dashboard and tells me what actually matters, like when it told me a downloads dip was just because the beta ended and not worth panicking over. The coolest moment was when it noticed search traffic slipping and suggested a home page title change. I told it to "talk to developer guy about that," and it did. The two bots passed the request back and forth and I got a ready-to-run prompt out the other end. Watching two agents coordinate a change without me copy-pasting between them is kind of wild.
 
 ## work work and finances guy: the boring adults
 
-work work helps with work stuff, like resume updates. finances guy runs a daily money check-in and sets reminders for things I'd otherwise forget, like reminding me to double-check that a bill actually got paid on the 28th. Neither of these is flashy. Both of them save me from my own brain.
+work work helps with work stuff, like resume updates. finances guy runs a daily money check-in and sets reminders for things I'd otherwise forget, like double-checking that a bill actually got paid. Neither of these is flashy. Both of them save me from my own brain.
 
 I'm not going to share details on either, for obvious reasons.
 
