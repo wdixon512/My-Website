@@ -3,10 +3,10 @@ import { LevelCard } from "./LevelCard";
 
 export const Projects = () => {
   return (
-    <VStack align="stretch" gap={6} w="full" maxW="820px">
+    <VStack align="stretch" gap={6} w="full" maxW="820px" mx="auto">
       <Heading
         as="h2"
-        fontFamily="SM64"
+        fontFamily="var(--font-heading), system-ui, sans-serif" fontWeight="800" letterSpacing="-0.01em" textAlign="center"
         fontSize={{ base: "1.75rem", md: "2.25rem" }}
         color="text.500"
       >

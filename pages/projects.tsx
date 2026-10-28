@@ -1,6 +1,6 @@
 import { Link, ListItem, Text, UnorderedList } from "@chakra-ui/react";
 import { LevelCard } from "@lib/components/LevelCard";
-import { PageShell, Todo } from "@lib/components/PageShell";
+import { PageShell } from "@lib/components/PageShell";
 
 const linkProps = { color: "text.500", textDecoration: "underline", isExternal: true };
 
@@ -28,8 +28,7 @@ export default function ProjectsPage() {
           <ListItem>An addon, a helper app, and the ahprice.com price site.</ListItem>
           <ListItem>Built with AI tools by an experienced software engineer.</ListItem>
           <ListItem>
-            <Text as="span" fontWeight="bold">Stack:</Text> Python helper app.{" "}
-            <Todo>addon language and site stack</Todo>
+            <Text as="span" fontWeight="bold">Stack:</Text> Lua addon, Python helper app (Windows setup exe in C#), Python site server (standard-library http.server with server-rendered HTML) on SQLite, Caddy reverse proxy, DigitalOcean Droplet, Namecheap DNS, GitHub Actions CI/CD.
           </ListItem>
           <ListItem>
             <Text as="span" fontWeight="bold">Code:</Text> private repo.

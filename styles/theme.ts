@@ -7,18 +7,18 @@ const theme = extendTheme({
       200: '#445d63',
       300: '#3a4f54',
       400: '#303f44',
-      500: '#2F4F4F', // existing Dark Slate Gray
-      600: '#253232',
-      700: '#1b2426',
-      800: '#111717',
+      500: '#0b1020', // page background (deep navy)
+      600: '#111827',
+      700: '#26314a', // subtle borders
+      800: '#1a2236',
     },
     secondary: {
       100: '#2e3943',
       200: '#28333d',
       300: '#222d37',
-      400: '#1d2731',
-      500: '#1C2833', // existing Gunmetal
-      600: '#161e28',
+      400: '#1c2540',
+      500: '#151c2e', // card surface
+      600: '#10172a',
       700: '#101722',
       800: '#0a111c',
     },
@@ -190,14 +190,14 @@ const theme = extendTheme({
   styles: {
     global: {
       html: {
-        overflowX: 'hidden',
+        overflowX: 'clip',
       },
       body: {
         bg: 'primary.600',
         color: 'text.500',
         fontSize: '16px',
         lineHeight: '1.7',
-        overflowX: 'hidden',
+        overflowX: 'clip',
       },
       a: {
         color: 'accent.100',

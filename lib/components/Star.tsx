@@ -32,6 +32,7 @@ export const Star = (props: StarsProps) => {
     <Flex direction="column" align="center" gap="2">
       <Button
         variant="unstyled"
+        className="wow-bump"
         h="auto"
         minW="auto"
         p="0"

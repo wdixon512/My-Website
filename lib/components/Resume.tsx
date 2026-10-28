@@ -30,18 +30,18 @@ const CERTIFICATIONS = [
 
 export const Resume = () => {
   return (
-    <VStack align="stretch" gap={{ base: 8, md: 10 }} w="full" maxW="820px">
+    <VStack align="stretch" gap={{ base: 8, md: 10 }} w="full" maxW="820px" mx="auto">
       <Box>
         <Heading
           as="h2"
-          fontFamily="SM64"
+          fontFamily="var(--font-heading), system-ui, sans-serif" fontWeight="800" letterSpacing="-0.01em" textAlign="center"
           fontSize={{ base: "1.75rem", md: "2.25rem" }}
           mb={5}
           color="text.500"
         >
           Certifications
         </Heading>
-        <VStack align="stretch" gap={3}>
+        <VStack align="center" gap={3}>
           {CERTIFICATIONS.map((cert) => (
             <PowerUpBadge key={cert} label={cert} />
           ))}
@@ -51,14 +51,14 @@ export const Resume = () => {
       <Box>
         <Heading
           as="h2"
-          fontFamily="SM64"
+          fontFamily="var(--font-heading), system-ui, sans-serif" fontWeight="800" letterSpacing="-0.01em" textAlign="center"
           fontSize={{ base: "1.75rem", md: "2.25rem" }}
           mb={5}
           color="text.500"
         >
           Skills
         </Heading>
-        <Flex flexWrap="wrap" gap={3}>
+        <Flex flexWrap="wrap" gap={3} justify="center">
           {SKILLS.map((skill) => (
             <PixelChip key={skill}>{skill}</PixelChip>
           ))}
@@ -68,7 +68,7 @@ export const Resume = () => {
       <Box>
         <Heading
           as="h2"
-          fontFamily="SM64"
+          fontFamily="var(--font-heading), system-ui, sans-serif" fontWeight="800" letterSpacing="-0.01em" textAlign="center"
           fontSize={{ base: "1.75rem", md: "2.25rem" }}
           mb={5}
           color="text.500"
@@ -168,7 +168,7 @@ export const Resume = () => {
       <Box>
         <Heading
           as="h2"
-          fontFamily="SM64"
+          fontFamily="var(--font-heading), system-ui, sans-serif" fontWeight="800" letterSpacing="-0.01em" textAlign="center"
           fontSize={{ base: "1.75rem", md: "2.25rem" }}
           mb={5}
           color="text.500"
