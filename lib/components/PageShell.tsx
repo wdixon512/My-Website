@@ -27,8 +27,8 @@ export const PageShell = ({ title, description, intro, children }: PageShellProp
     >
       <Heading
         as="h1"
-        fontFamily="SM64"
-        fontSize={{ base: "1.75rem", md: "2.25rem" }}
+        fontFamily="var(--font-heading), system-ui, sans-serif" fontWeight="800" letterSpacing="-0.01em"
+        fontSize={{ base: "1.875rem", md: "2.5rem" }} lineHeight="1.15"
         color="text.500"
       >
         {title}

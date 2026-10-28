@@ -21,9 +21,9 @@ export const MainMenu = (props: MainMenuProps) => {
       <Heading
         as="h1"
         color="white"
-        fontFamily="SM64"
-        fontSize={{ base: "2rem", sm: "2.75rem", md: "4rem" }}
-        lineHeight="1.2"
+        fontFamily="var(--font-heading), system-ui, sans-serif" fontWeight="800" letterSpacing="-0.01em"
+        fontSize={{ base: "2.25rem", sm: "3rem", md: "4rem" }}
+        lineHeight="1.1"
         px={1}
       >
         Will Dixon
