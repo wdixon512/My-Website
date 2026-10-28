@@ -61,8 +61,8 @@ const hardware: Item[] = [
   { name: "Storage", note: "WD_BLACK SN850X 4 TB + WD_BLACK SN850X 1 TB NVMe, plus an SK hynix 500 GB SSD" },
   { name: "Three 27\" monitors", note: "Gigabyte G27QC A, AOC 27G51F and Acer VG271 P. yes, three. no, I don't need them" },
   { name: "HyperX Cloud III Wireless", note: "wireless headset" },
-  { name: <Todo>keyboard</Todo> },
-  { name: <Todo>mouse</Todo> },
+  { name: "Corsair K100 RGB", note: "keyboard" },
+  { name: "UtechSmart Venus Pro Wireless MMO Gaming Mouse", note: "yea, I'm a WoW player, of course I need an MMO mouse" },
 ];
 
 const tools: Item[] = [
