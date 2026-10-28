@@ -143,7 +143,7 @@ export const LevelCard = (props: LevelCardProps) => {
 
           {meta && (
             <Text
-              fontSize={{ base: "0.95rem", md: "1rem" }}
+              fontSize="1rem"
               color="text.600"
               lineHeight="1.5"
             >
