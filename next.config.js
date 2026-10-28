@@ -7,6 +7,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/uses',
+        destination: '/setup',
+        permanent: true,
+      },
+      {
         source: '/dm-helper',
         destination: 'https://www.dmsquire.com',
         permanent: true,

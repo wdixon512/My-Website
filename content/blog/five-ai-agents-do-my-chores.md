@@ -59,7 +59,7 @@ In the last couple weeks it shipped a pile of stuff to this site:
 - Swapped my About photo for one I don't hate, and pointed the social share image at it too.
 - Fixed some ugly red lines that showed up whenever you clicked the stars to jump around the home page.
 - Fixed the mobile hamburger menu, which was opening just fine and then getting clipped out of existence. Classic `overflow: hidden`.
-- Built the pages for projects, this blog, a uses page, and contact.
+- Built the pages for projects, this blog, a setup page, and contact.
 
 It even fixed a Vercel build that broke because Node 18 got discontinued, which is precisely the kind of chore I'd let rot for a month.
 

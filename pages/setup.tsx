@@ -1,5 +1,5 @@
 import { Box, Flex, Heading, Text, VStack } from "@chakra-ui/react";
-import { PageShell, Todo } from "@lib/components/PageShell";
+import { PageShell } from "@lib/components/PageShell";
 
 type Item = { name: React.ReactNode; note?: React.ReactNode };
 
@@ -90,10 +90,10 @@ const music: Item[] = [
   { name: "Voicemeeter", note: "virtual audio mixer for routing all the sound on my PC" },
 ];
 
-export default function UsesPage() {
+export default function SetupPage() {
   return (
     <PageShell
-      title="Uses"
+      title="Setup"
       description="The hardware, editor, tools and services Will Dixon uses to build stuff and make music."
       intro="The gear and software I actually use every day. No affiliate links, just the stuff on my desk."
     >

@@ -6,7 +6,7 @@ export const PRIMARY_NAV_ITEMS: PrimaryNavItem[] = [
   { label: 'Home', href: '/home' },
   { label: 'Projects', href: '/projects' },
   { label: 'Blog', href: '/blog' },
-  { label: 'Uses', href: '/uses' },
+  { label: 'Setup', href: '/setup' },
   { label: 'Contact', href: '/contact' },
 ];
 
