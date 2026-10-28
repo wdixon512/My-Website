@@ -25,7 +25,7 @@ const formatDate = (d: string) =>
 
 const panel = {
   bg: "secondary.500",
-  border: "3px solid",
+  border: "1px solid",
   borderColor: "primary.700",
   boxShadow: "4px 4px 0 #1b2426",
 } as const;

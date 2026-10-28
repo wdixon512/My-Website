@@ -43,7 +43,7 @@ export const LevelCard = (props: LevelCardProps) => {
       w="full"
       maxW="820px"
       bg="secondary.500"
-      border="3px solid"
+      border="1px solid"
       borderColor="primary.700"
       boxShadow={pixelShadow}
       px={{ base: 4, md: 6 }}

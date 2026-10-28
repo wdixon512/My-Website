@@ -56,7 +56,7 @@ html { scroll-behavior: smooth; }
 .wow-sky {
   --sy: 0;
   position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: linear-gradient(180deg, #3d6fd6 0%, #5c94fc 45%, #8fb8ff 75%, #2f4f4f 100%);
+  background: linear-gradient(180deg, #3d6fd6 0%, #5c94fc 45%, #8fb8ff 75%, #0b1020 100%);
 }
 .wow-layer { position: absolute; inset: 0; will-change: transform; }
 .wow-layer-far { transform: translate3d(0, calc(var(--sy) * 0.15px), 0); }
@@ -144,3 +144,15 @@ html { scroll-behavior: smooth; }
   .wow-card:hover { transform: none; }
 }
 
+
+/* Page background: deep navy with faint glow + dot texture */
+.wow-page {
+  background-color: #0b1020;
+  background-image:
+    radial-gradient(1200px 600px at 10% 0%, rgba(245, 65, 3, 0.07), transparent 60%),
+    radial-gradient(900px 600px at 90% 20%, rgba(255, 215, 92, 0.05), transparent 60%),
+    radial-gradient(1000px 800px at 50% 100%, rgba(60, 110, 230, 0.08), transparent 60%),
+    radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: auto, auto, auto, 22px 22px;
+  background-attachment: fixed, fixed, fixed, scroll;
+}

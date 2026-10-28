@@ -13,15 +13,15 @@ export const AboutMe = () => {
     >
       <Heading
         as="h2"
-        fontFamily="SM64"
+        fontFamily="var(--font-heading), system-ui, sans-serif" fontWeight="800" letterSpacing="-0.01em" textAlign="center"
         fontSize={{ base: "1.75rem", md: "2.25rem" }}
         color="text.500"
-        alignSelf="flex-start"
+        alignSelf="center"
       >
         About
       </Heading>
       <Box
-        border="3px solid"
+        border="1px solid"
         borderColor="primary.700"
         boxShadow="4px 4px 0 #1b2426"
         lineHeight={0}

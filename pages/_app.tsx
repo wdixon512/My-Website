@@ -18,7 +18,6 @@ function MyApp({ Component, pageProps }) {
           <GameContextProvider>
             <Head>
               <link rel="preload" href="/static/fonts/PublicPixel.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
-              <link rel="preload" href="/static/fonts/SM64.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
               <title>Will Dixon | Senior Full-Stack Engineer (.NET, React, Kentico)</title>
               <meta
                 name="description"
@@ -72,7 +71,7 @@ function MyApp({ Component, pageProps }) {
               />
             </Head>
             <Fonts />
-            <Container className={headingFont.variable} width="100%" maxW="100%" px="0" mx="0" pb="20" minHeight="100vh" bgColor="primary.500" overflowX="clip">
+            <Container className={`${headingFont.variable} wow-page`} width="100%" maxW="100%" px="0" mx="0" pb="20" minHeight="100vh" bgColor="primary.500" overflowX="clip">
 
               <NavigationBar />
               <Component {...pageProps} />

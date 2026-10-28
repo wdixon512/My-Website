@@ -33,7 +33,7 @@ function SectionHighlight({
       px={{ base: 4, md: 6 }}
       py={{ base: 8, md: 12 }}
     >
-      <Reveal>{children}</Reveal>
+      <Reveal><Box w="full" maxW="820px" mx="auto">{children}</Box></Reveal>
     </Box>
   );
 }
@@ -54,9 +54,8 @@ export function Home() {
       <MainMenu />
       <Flex direction="column" align="center" px={{ base: 4, md: 6 }}>
         <Heading
-          textAlign="center"
           as="h2"
-          fontFamily="SM64"
+          fontFamily="var(--font-heading), system-ui, sans-serif" fontWeight="800" letterSpacing="-0.01em" textAlign="center"
           fontSize={{ base: "1.5rem", md: "2.5rem", lg: "3rem" }}
           mt={{ base: 8, md: 12 }}
           px={2}
