@@ -3,6 +3,20 @@ title: "I have five AI agents now and they do my chores"
 date: "2026-10-27"
 summary: "How I use five Grok Bot AI agents to order food, ship code to my site, and market my side project, plus the parts that still suck."
 draft: false
+author: "Will Dixon"
+cover:
+  src: "/images/blog/five-ai-agents-cover.jpg"
+  alt: "Pixel-art platformer level with five little robot helpers carrying a pizza, a laptop, a megaphone, a briefcase and a coin"
+tags:
+  - ai
+  - automation
+  - grok-bot
+  - side-projects
+links:
+  - label: "ahprice"
+    url: "https://ahprice.com/?ref=blog"
+  - label: "Download ahprice"
+    url: "https://ahprice.com/download?ref=blog"
 ---
 
 I'm a senior software engineer. I've spent years being skeptical of every "AI will do your job" pitch. So it's a little embarrassing to admit that I now have five Grok Bot agents, each with a dumb name, and they handle a real chunk of my actual life.

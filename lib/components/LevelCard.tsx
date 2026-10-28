@@ -39,6 +39,7 @@ export const LevelCard = (props: LevelCardProps) => {
   return (
     <Box
       as="article"
+      className="wow-card"
       w="full"
       maxW="820px"
       bg="secondary.500"

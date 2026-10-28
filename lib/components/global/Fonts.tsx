@@ -6,7 +6,8 @@ const Fonts = () => (
         /* latin */
         @font-face {
           font-family: 'Pixel';
-          src: url('../static/fonts/PublicPixel.ttf') format('truetype');
+          src: url('/static/fonts/PublicPixel.ttf') format('truetype');
+          font-display: block;
           font-style: normal;
           font-weight: 100;
         }
@@ -14,7 +15,8 @@ const Fonts = () => (
         /* latin */
         @font-face {
           font-family: 'SM64';
-          src: url('../static/fonts/SM64.ttf') format('truetype');
+          src: url('/static/fonts/SM64.ttf') format('truetype');
+          font-display: block;
           font-style: normal;
           font-weight: 100;
           font-size: 48px;

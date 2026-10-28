@@ -7,6 +7,7 @@ import { AboutMe } from "@lib/components/AboutMe";
 import { Resume } from "@lib/components/Resume";
 import { Projects } from "@lib/components/Projects";
 import { GameContext } from "@lib/components/contexts/GameContext";
+import { Reveal } from "@lib/components/wow/Reveal";
 
 const SECTION_IDS = ["about", "experience", "projects"] as const;
 
@@ -32,7 +33,7 @@ function SectionHighlight({
       px={{ base: 4, md: 6 }}
       py={{ base: 8, md: 12 }}
     >
-      {children}
+      <Reveal>{children}</Reveal>
     </Box>
   );
 }

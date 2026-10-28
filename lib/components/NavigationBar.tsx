@@ -1,74 +1,98 @@
 import { Button, Circle, Flex, Stack, Link } from "@chakra-ui/react";
 import Image from "next/image";
-import { PRIMARY_NAV_ITEMS } from "@data/primary-nav-data";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
+import { PRIMARY_NAV_ITEMS, isActiveNav } from "@data/primary-nav-data";
 import HamburgerMenu from "./HamburgerMenu";
 import SteamLogout from "./steam/SteamLogout";
 
 type NavigationBarProps = {};
 
 export const NavigationBar = (props: NavigationBarProps) => {
+  const { asPath } = useRouter();
+  const path = asPath.split(/[?#]/)[0];
   return (
-    <>
-      <Flex
-        w="full"
-        maxH="24"
-        bg="secondary.500"
-        px={{ base: 3, md: 6 }}
-        py="4"
-        gap={{ base: 4, md: 12 }}
-        alignItems="center"
-        justifyContent={"space-between"}
+    <Flex
+      as="header"
+      className="wow-header"
+      w="full"
+      h={{ base: "72px", md: "80px" }}
+      bg="rgba(28, 40, 51, 0.82)"
+      borderBottom="2px solid rgba(255,255,255,0.08)"
+      boxShadow="0 6px 20px rgba(0,0,0,0.25)"
+      px={{ base: 3, md: 6 }}
+      gap={{ base: 4, md: 10 }}
+      alignItems="center"
+      justifyContent="space-between"
+      position="sticky"
+      top="0"
+      zIndex="1100"
+    >
+      <Circle
+        flexShrink={0}
+        overflow="hidden"
+        size={{ base: "52px", md: "56px" }}
         position="relative"
+        border="2px solid rgba(255,255,255,0.6)"
       >
-        <Circle
-          flex="1"
-          overflow="hidden"
-          maxW="16"
-          maxH="16"
-          position="relative"
-        >
-          <Link href="/home" aria-label="Home">
-            <Image
-              src="/static/images/agios-nikolaos.jpg"
-              alt="Will Dixon and fiancée in Agios Nikolaos, Crete"
-              width="128"
-              height="234"
-              style={{ objectFit: "cover" }}
-            />
-          </Link>
-        </Circle>
+        <Link as={NextLink} href="/home" aria-label="Home">
+          <Image
+            src="/static/images/agios-nikolaos.jpg"
+            alt="Will Dixon and fiancée in Agios Nikolaos, Crete"
+            width="128"
+            height="234"
+            priority
+            style={{ objectFit: "cover" }}
+          />
+        </Link>
+      </Circle>
 
-        <Stack
-          display={{ base: "none", md: "flex" }}
-          direction="row"
-          flex="1"
-          align="center"
-          aria-label="primary-nav"
-          gap="12"
-        >
-          {PRIMARY_NAV_ITEMS.map((item, index) => (
-            <Link key={index} href={item.href} fontFamily="Pixel">
+      <Stack
+        as="nav"
+        display={{ base: "none", md: "flex" }}
+        direction="row"
+        flex="1"
+        align="center"
+        aria-label="Primary"
+        gap="10"
+      >
+        {PRIMARY_NAV_ITEMS.map((item) => {
+          const active = isActiveNav(item.href, path);
+          return (
+            <Link
+              key={item.href}
+              as={NextLink}
+              href={item.href}
+              className="wow-navlink"
+              aria-current={active ? "page" : undefined}
+              fontFamily="Pixel"
+              color={active ? "#ffd75c" : "white"}
+              _hover={{ textDecoration: "none", color: "#ffd75c" }}
+            >
               {item.label}
             </Link>
-          ))}
-        </Stack>
-        <Flex display={{ base: "none", md: "flex" }}>
-          <Flex w="full" justify="flex-end" flex="1" gap="6" align="center">
-            <Button
-              as="a"
-              href="mailto:wdixon@will-dixon.com"
-              bg="marioRed.500"
-              color="white"
-              fontFamily="Pixel"
-            >
-              Contact Me
-            </Button>
-          </Flex>
-        </Flex>
-        <SteamLogout />
-        <HamburgerMenu />
+          );
+        })}
+      </Stack>
+      <Flex display={{ base: "none", md: "flex" }} justify="flex-end" gap="6" align="center">
+        <Button
+          as="a"
+          href="mailto:wdixon@will-dixon.com"
+          className="wow-coin"
+          bg="marioRed.700"
+          color="white"
+          fontFamily="Pixel"
+          border="2px solid"
+          borderColor="#1b2426"
+          boxShadow="3px 3px 0 #1b2426"
+          _hover={{ bg: "marioRed.800" }}
+        >
+          Contact Me
+        </Button>
       </Flex>
-    </>
+      <SteamLogout />
+      <HamburgerMenu />
+    </Flex>
   );
 };
 

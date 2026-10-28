@@ -1,5 +1,7 @@
 import { Heading, Text, VStack } from "@chakra-ui/react";
 import Head from "next/head";
+import { Children } from "react";
+import { Reveal } from "./wow/Reveal";
 
 type PageShellProps = {
   title: string;
@@ -38,7 +40,7 @@ export const PageShell = ({ title, description, intro, children }: PageShellProp
           {intro}
         </Text>
       )}
-      {children}
+      {Children.map(children, (child, i) => (child ? <Reveal delay={Math.min(i, 4) * 0.06}>{child}</Reveal> : child))}
     </VStack>
   </>
 );

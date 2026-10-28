@@ -1,44 +1,60 @@
 import { Button, ChakraProps, Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import { MarioSky } from "./wow/MarioSky";
 
 export type MainMenuProps = ChakraProps;
+
+const btn = {
+  w: { base: "full", sm: "auto" },
+  color: "white",
+  fontFamily: "Pixel",
+  fontSize: { base: "0.7rem", md: "0.8rem" },
+  border: "2px solid",
+  borderColor: "#1b2426",
+  boxShadow: "3px 3px 0 #1b2426",
+  className: "wow-coin",
+} as const;
 
 export const MainMenu = (props: MainMenuProps) => {
   return (
     <Flex
+      className="wow-hero"
       direction="column"
       justify="center"
       align="center"
       textAlign="center"
       px={{ base: 4, md: 6 }}
-      py={{ base: 10, md: 16 }}
+      pt={{ base: 14, md: 24 }}
+      pb={{ base: 24, md: 32 }}
+      minH={{ base: "460px", md: "560px" }}
       w="full"
-      overflow="hidden"
-      bgImage="linear-gradient(180deg, rgba(20,30,48,0.85), rgba(36,59,85,0.75)), url('/static/images/coding-background2.jpg')"
-      bgSize="cover"
-      bgPosition="center"
       {...props}
     >
+      <MarioSky />
       <Heading
         as="h1"
+        className="wow-hero-title"
         color="white"
-        fontFamily="var(--font-heading), system-ui, sans-serif" fontWeight="800" letterSpacing="-0.01em"
-        fontSize={{ base: "2.25rem", sm: "3rem", md: "4rem" }}
-        lineHeight="1.1"
+        fontFamily="var(--font-heading), system-ui, sans-serif"
+        fontWeight="800"
+        letterSpacing="-0.02em"
+        fontSize={{ base: "2.75rem", sm: "3.5rem", md: "5rem" }}
+        lineHeight="1.05"
         px={1}
       >
         Will Dixon
       </Heading>
       <Text
-        pt="4"
+        className="wow-hero-tag"
+        mt="5"
+        px={{ base: 4, md: 5 }}
+        py={2}
         color="white"
         fontFamily="Pixel"
         fontSize={{ base: "0.7rem", md: "0.85rem" }}
         maxW="3xl"
         lineHeight="1.6"
-        px={1}
       >
-        Senior Full-Stack .NET/React Engineer · Xperience by Kentico specialist ·
-        10+ years
+        Senior Full-Stack .NET/React Engineer · Xperience by Kentico specialist · 10+ years
       </Text>
       <Stack
         direction={{ base: "column", sm: "row" }}
@@ -48,61 +64,30 @@ export const MainMenu = (props: MainMenuProps) => {
         justify="center"
         align="center"
         w="full"
-        maxW="420px"
+        maxW="520px"
       >
         <Button
           as="a"
           href="/William_Dixon_Resume.pdf"
           download
-          w={{ base: "full", sm: "auto" }}
+          {...btn}
           maxW="100%"
-          bg="marioRed.500"
-          color="white"
-          fontFamily="Pixel"
-          fontSize={{ base: "0.7rem", md: "0.8rem" }}
+          bg="marioRed.700"
           px={{ base: 4, md: 6 }}
           whiteSpace="normal"
           h="auto"
           py={3}
-          _hover={{ bg: "marioRed.600" }}
+          _hover={{ bg: "marioRed.800" }}
         >
           Download Resume
         </Button>
-        <Button
-          as="a"
-          href="https://www.linkedin.com/in/william-d-79529a138/"
-          target="_blank"
-          rel="noopener noreferrer"
-          w={{ base: "full", sm: "auto" }}
-          bg="secondary.500"
-          color="white"
-          fontFamily="Pixel"
-          fontSize={{ base: "0.7rem", md: "0.8rem" }}
-        >
+        <Button as="a" href="https://www.linkedin.com/in/william-d-79529a138/" target="_blank" rel="noopener noreferrer" {...btn} bg="secondary.500" _hover={{ bg: "secondary.400" }}>
           LinkedIn
         </Button>
-        <Button
-          as="a"
-          href="https://github.com/wdixon512"
-          target="_blank"
-          rel="noopener noreferrer"
-          w={{ base: "full", sm: "auto" }}
-          bg="secondary.500"
-          color="white"
-          fontFamily="Pixel"
-          fontSize={{ base: "0.7rem", md: "0.8rem" }}
-        >
+        <Button as="a" href="https://github.com/wdixon512" target="_blank" rel="noopener noreferrer" {...btn} bg="secondary.500" _hover={{ bg: "secondary.400" }}>
           GitHub
         </Button>
-        <Button
-          as="a"
-          href="mailto:wdixon@will-dixon.com"
-          w={{ base: "full", sm: "auto" }}
-          bg="secondary.500"
-          color="white"
-          fontFamily="Pixel"
-          fontSize={{ base: "0.7rem", md: "0.8rem" }}
-        >
+        <Button as="a" href="mailto:wdixon@will-dixon.com" {...btn} bg="secondary.500" _hover={{ bg: "secondary.400" }}>
           Email
         </Button>
       </Stack>

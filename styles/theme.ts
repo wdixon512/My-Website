@@ -190,14 +190,14 @@ const theme = extendTheme({
   styles: {
     global: {
       html: {
-        overflowX: 'hidden',
+        overflowX: 'clip',
       },
       body: {
         bg: 'primary.600',
         color: 'text.500',
         fontSize: '16px',
         lineHeight: '1.7',
-        overflowX: 'hidden',
+        overflowX: 'clip',
       },
       a: {
         color: 'accent.100',
