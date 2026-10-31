@@ -63,7 +63,7 @@ export const LevelCard = (props: LevelCardProps) => {
         {worldLabel}
       </Text>
 
-      <Flex gap={{ base: 3, md: 4 }} align="flex-start">
+      <Flex gap={{ base: 3, md: 4 }} align="flex-start" minW={0}>
         <Flex
           flexShrink={0}
           w="64px"
