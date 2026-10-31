@@ -4,6 +4,7 @@
 
 title: "Post title"              # required. shown as the H1
 date: "2026-01-01"               # required. YYYY-MM-DD
+publishAt: "2026-01-01T09:00:00" # optional ISO. go-live time (default: date at 00:00 ET). no Z/offset → America/New_York. Scheduled posts appear within ~1 min of the first visit after that time; no deploy needed.
 summary: "One or two sentences." # shown under the title, on /blog, and in search/social previews
 draft: true                      # true = only visible in `npm run dev`. set false to publish
 author: "Will Dixon"             # optional. defaults to Will Dixon
