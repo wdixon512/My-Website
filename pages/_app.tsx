@@ -9,8 +9,16 @@ import '../styles/global.css';
 import Head from 'next/head';
 import { headingFont } from '@lib/fonts';
 import { CacheProvider } from '@lib/components/contexts/CacheContext';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { initAnalytics } from '@lib/analytics/client';
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+  useEffect(() => {
+    initAnalytics(router);
+  }, [router]);
+
   return (
     <ChakraProvider theme={theme}>
       <CacheProvider>
@@ -71,7 +79,7 @@ function MyApp({ Component, pageProps }) {
               />
             </Head>
             <Fonts />
-            <Container className={`${headingFont.variable} wow-page`} width="100%" maxW="100%" px="0" mx="0" pb="20" minHeight="100vh" bgColor="primary.500" overflowX="clip">
+            <Container className={`${headingFont.variable} wow-page`} width="100%" maxW="100%" minW={0} px="0" mx="0" pb="20" minHeight="100vh" bgColor="primary.500" overflowX="clip">
 
               <NavigationBar />
               <Component {...pageProps} />

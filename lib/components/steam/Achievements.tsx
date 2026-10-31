@@ -9,7 +9,7 @@ export const Achievements: React.FC<AchievementsProps> = ({ games }) => {
   return (
     <Box>
       {games.map((game) => (
-        <Box>
+        <Box key={game.appid}>
           {game.achievements.map((achievement) => (
             <Box key={achievement.apiname} p={2}>
               <Image src={""} alt={achievement.name} />

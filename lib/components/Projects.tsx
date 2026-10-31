@@ -18,6 +18,7 @@ export const Projects = () => {
         title="dm squire"
         meta="D&D 5e combat tracker"
         link="https://dmsquire.com"
+        projectSlug="dmsquire"
         imageSrc="/static/images/sword.png"
         imageAlt="dm squire"
       >
@@ -33,6 +34,7 @@ export const Projects = () => {
         title="ahprice"
         meta="WoW Forever auction-price toolkit"
         link="https://ahprice.com"
+        projectSlug="ahprice"
         imageSrc="/static/images/knight.png"
         imageAlt="ahprice"
       >

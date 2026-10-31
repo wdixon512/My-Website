@@ -16,6 +16,8 @@ export const NavigationBar = (props: NavigationBarProps) => {
       as="header"
       className="wow-header"
       w="full"
+      maxW="100%"
+      minW={0}
       h={{ base: "72px", md: "80px" }}
       bg="rgba(28, 40, 51, 0.82)"
       borderBottom="2px solid rgba(255,255,255,0.08)"
@@ -27,6 +29,7 @@ export const NavigationBar = (props: NavigationBarProps) => {
       position="sticky"
       top="0"
       zIndex="1100"
+      overflowX="clip"
     >
       <Circle
         flexShrink={0}
@@ -78,6 +81,7 @@ export const NavigationBar = (props: NavigationBarProps) => {
         <Button
           as="a"
           href="mailto:wdixon@will-dixon.com"
+          data-track="hire_cta"
           className="wow-coin"
           bg="marioRed.700"
           color="white"
