@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="School placeholder">
+  <rect width="64" height="64" rx="4" fill="#2f3e46"/>
+  <rect x="8" y="18" width="48" height="30" rx="2" fill="#52796f"/>
+  <polygon points="32,8 56,20 8,20" fill="#84a98c"/>
+  <rect x="28" y="32" width="8" height="16" fill="#cad2c5"/>
+  <rect x="14" y="26" width="8" height="8" fill="#cad2c5"/>
+  <rect x="42" y="26" width="8" height="8" fill="#cad2c5"/>
+</svg>
