@@ -50,7 +50,7 @@ export const EXPERIENCE_GROUPS: ExperienceGroup[] = [
           "Led delivery of the www.bdo.com relaunch alongside an external vendor and a large enterprise team, shipping 2 weeks ahead of schedule.",
           "Migrated the firm's flagship corporate site end to end from Kentico 13 to Xperience by Kentico (.NET).",
           "Architected and integrated custom features and extensions into the enterprise Kentico solution.",
-          "Used AI tools day to day to ship faster without tanking code quality.",
+          "Used AI-assisted development workflows to speed up delivery and raise code quality.",
           "Earned repeated kudos from leadership and stakeholders for ownership and collaboration on the launch.",
         ],
       },
@@ -81,7 +81,7 @@ export const EXPERIENCE_GROUPS: ExperienceGroup[] = [
           "Led full-stack CMS implementations across multiple versions of Kentico and Storyblok.",
           "Architected internal .NET projects and reusable templates to speed up delivery.",
           "Designed, maintained, and optimized CI/CD pipelines and cloud implementations for diverse client requirements.",
-          "Owned the technical side of projects, worked across teams, and handled the messy problems.",
+          "Drove project success through technical ownership, cross-team collaboration, and problem solving.",
         ],
       },
       {
