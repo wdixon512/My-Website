@@ -65,7 +65,33 @@ export default function ProjectsPage() {
       </LevelCard>
 
       <LevelCard
-        worldLabel="WORLD 1-3 / will-dixon.com"
+        worldLabel="WORLD 1-3 / 99.recipes"
+        title="99.recipes"
+        meta="AI recipe app"
+        link="https://www.99.recipes"
+        projectSlug="99-recipes"
+        imageSrc="/static/images/99-recipes.png"
+        imageAlt="99.recipes logo"
+      >
+        <UnorderedList>
+          <ListItem>
+            An AI recipe app I built with a friend who codes as a hobby. It has
+            a free tier and a $2.99/mo Premium plan.
+          </ListItem>
+          <ListItem>
+            I redesigned the app and built the theming, form validation, OAuth,
+            recipe create/edit/delete and UX, mobile nav, and regenerate-recipe.
+            I also reviewed my friend&apos;s PRs.
+          </ListItem>
+          <ListItem>
+            <Text as="span" fontWeight="bold">Code:</Text> private repo. My PRs
+            are #14-#39, from June 2025.
+          </ListItem>
+        </UnorderedList>
+      </LevelCard>
+
+      <LevelCard
+        worldLabel="WORLD 1-4 / will-dixon.com"
         title="will-dixon.com"
         meta="This site"
         link="https://www.will-dixon.com"
