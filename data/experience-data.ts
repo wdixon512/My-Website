@@ -166,11 +166,15 @@ export const EXPERIENCE_GROUPS: ExperienceGroup[] = [
       {
         worldLabel: "WORLD 4-1 / MSU",
         title: "Michigan State University",
-        meta: "B.S. Computer Science · East Lansing, MI · 2017 – 2021",
+        meta: "B.S. Computer Science, Minor in Cognitive Science · East Lansing, MI · Aug 2017 – May 2021",
         link: "https://www.msu.edu/",
         imageSrc: "/images/msu-logo.svg",
         imageAlt: "Michigan State University",
-        bullets: [],
+        bullets: [
+          "GPA: 3.96/4.00",
+          "Honors College State Scholarship for exceptional ACT scores (34 overall)",
+          "Dean's List all 8 semesters",
+        ],
       },
     ],
   },
