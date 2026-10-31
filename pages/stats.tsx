@@ -48,26 +48,49 @@ function BarChart({
   color: string;
 }) {
   const peak = Math.max(1, ...days.map((d) => d[valueKey]));
+  const dense = days.length > 14;
   return (
-    <Flex align="flex-end" gap={1} h="140px" w="full" overflowX="auto" pb={1}>
-      {days.map((d) => {
+    <Flex align="flex-end" gap={{ base: 0.5, md: 1 }} h="140px" w="full" minW={0} overflowX="auto" pb={1}>
+      {days.map((d, i) => {
         const v = d[valueKey];
         const h = Math.max(v > 0 ? 8 : 2, Math.round((v / peak) * 120));
+        const showValueOnMobile = !dense;
+        const showDayOnMobile = !dense || i % 5 === 0 || i === days.length - 1;
         return (
           <Flex
             key={d.day}
             direction="column"
             align="center"
             justify="flex-end"
-            minW={{ base: "28px", md: "36px" }}
+            minW={{ base: 0, md: "36px" }}
             flex="1"
             title={`${d.day}: ${v}`}
           >
-            <Text fontSize="0.65rem" color="text.600" mb={1}>
+            <Text
+              fontSize="0.65rem"
+              color="text.600"
+              mb={1}
+              display={{ base: showValueOnMobile ? "block" : "none", md: "block" }}
+              lineHeight="1"
+              overflow="hidden"
+              textOverflow="ellipsis"
+              maxW="100%"
+            >
               {v}
             </Text>
             <Box w="full" maxW="28px" h={`${h}px`} bg={color} borderRadius="2px" />
-            <Text fontSize="0.55rem" color="text.700" mt={1} fontFamily="Pixel">
+            <Text
+              fontSize={{ base: "0.45rem", md: "0.55rem" }}
+              color="text.700"
+              mt={1}
+              fontFamily="Pixel"
+              display={{ base: showDayOnMobile ? "block" : "none", md: "block" }}
+              lineHeight="1"
+              overflow="hidden"
+              textOverflow="ellipsis"
+              maxW="100%"
+              whiteSpace="nowrap"
+            >
               {d.day.slice(5)}
             </Text>
           </Flex>
@@ -106,7 +129,7 @@ function RankTable({
           No data yet.
         </Text>
       ) : (
-        <Box w="full" minW={0} overflow="hidden">
+        <Box w="full" maxW="100%" minW={0} overflowX="auto">
           <Table size="sm" variant="simple" w="full" sx={{ tableLayout: "fixed" }}>
             <Thead>
               <Tr>
@@ -126,6 +149,7 @@ function RankTable({
                   px={tableCellPx}
                   fontSize={thFontSize}
                   w="30%"
+                  whiteSpace="nowrap"
                 >
                   Count
                 </Th>
@@ -168,8 +192,16 @@ function RankTable({
 
 function StatCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
-    <Box {...panel} p={4}>
-      <Text fontFamily="Pixel" fontSize="0.65rem" color="marioRed.300" mb={2}>
+    <Box {...panel} p={{ base: 3, md: 4 }} w="full" minW={0} overflow="hidden">
+      <Text
+        fontFamily="Pixel"
+        fontSize="0.65rem"
+        color="marioRed.300"
+        mb={2}
+        overflow="hidden"
+        textOverflow="ellipsis"
+        whiteSpace="nowrap"
+      >
         {label}
       </Text>
       <Text
@@ -178,11 +210,19 @@ function StatCard({ label, value, hint }: { label: string; value: string; hint?:
         fontSize={{ base: "1.6rem", md: "1.85rem" }}
         color="text.500"
         lineHeight="1.1"
+        overflowWrap="anywhere"
+        wordBreak="break-word"
       >
         {value}
       </Text>
       {hint && (
-        <Text mt={1} fontSize="0.85rem" color="text.600">
+        <Text
+          mt={1}
+          fontSize={{ base: "0.75rem", md: "0.85rem" }}
+          color="text.600"
+          overflowWrap="anywhere"
+          wordBreak="break-word"
+        >
           {hint}
         </Text>
       )}
@@ -281,7 +321,12 @@ export default function AnalyticsStatsPage({ data, token }: Props) {
             >
               Site analytics
             </Heading>
-            <Text mt={2} color="text.600" fontSize={{ base: "0.9rem", md: "1rem" }}>
+            <Text
+              mt={2}
+              color="text.600"
+              fontSize={{ base: "0.9rem", md: "1rem" }}
+              overflowWrap="anywhere"
+            >
               Privacy-friendly totals · no cookies · no PII
               {data.demo ? " · demo sample data" : ""}
             </Text>
@@ -312,19 +357,19 @@ export default function AnalyticsStatsPage({ data, token }: Props) {
           </Flex>
         </Flex>
 
-        <SimpleGrid columns={{ base: 2, md: 4 }} gap={3}>
+        <SimpleGrid columns={{ base: 2, md: 4 }} gap={3} w="full" minW={0}>
           <StatCard label="Visitors" value={String(data.totals.visitors)} hint={`sum of daily uniques · ${data.range}d`} />
           <StatCard label="Pageviews" value={String(data.totals.pageviews)} />
           <StatCard label="Conversions" value={String(data.totals.conversions)} hint="contact + resume + hire" />
           <StatCard label="Conv. rate" value={pct(data.totals.conversionRate)} hint="per visitor" />
         </SimpleGrid>
 
-        <Box {...panel} p={{ base: 4, md: 5 }}>
+        <Box {...panel} p={{ base: 3, md: 5 }} w="full" minW={0} overflow="hidden">
           <Heading
             as="h2"
             fontFamily="var(--font-heading), system-ui, sans-serif"
             fontWeight="800"
-            fontSize="1.15rem"
+            fontSize={{ base: "1.05rem", md: "1.15rem" }}
             mb={4}
           >
             Daily visitors
@@ -332,12 +377,12 @@ export default function AnalyticsStatsPage({ data, token }: Props) {
           <BarChart days={data.days} valueKey="visitors" color="#007BFF" />
         </Box>
 
-        <Box {...panel} p={{ base: 4, md: 5 }}>
+        <Box {...panel} p={{ base: 3, md: 5 }} w="full" minW={0} overflow="hidden">
           <Heading
             as="h2"
             fontFamily="var(--font-heading), system-ui, sans-serif"
             fontWeight="800"
-            fontSize="1.15rem"
+            fontSize={{ base: "1.05rem", md: "1.15rem" }}
             mb={4}
           >
             Daily pageviews
@@ -345,12 +390,12 @@ export default function AnalyticsStatsPage({ data, token }: Props) {
           <BarChart days={data.days} valueKey="pageviews" color="#1e8a1e" />
         </Box>
 
-        <Box {...panel} p={{ base: 4, md: 5 }}>
+        <Box {...panel} p={{ base: 3, md: 5 }} w="full" minW={0} overflow="hidden">
           <Heading
             as="h2"
             fontFamily="var(--font-heading), system-ui, sans-serif"
             fontWeight="800"
-            fontSize="1.15rem"
+            fontSize={{ base: "1.05rem", md: "1.15rem" }}
             mb={4}
           >
             Daily conversions
@@ -371,109 +416,114 @@ export default function AnalyticsStatsPage({ data, token }: Props) {
           {data.byRef.length === 0 ? (
             <Text color="text.600">No referral data yet.</Text>
           ) : (
-            <Table size="sm" w="full" sx={{ tableLayout: "fixed" }}>
-              <Thead>
-                <Tr>
-                  <Th
-                    color="text.600"
-                    borderColor="primary.700"
-                    px={tableCellPx}
-                    fontSize={thFontSize}
-                    w={{ base: "28%", md: "34%" }}
-                  >
-                    Ref
-                  </Th>
-                  <Th
-                    isNumeric
-                    color="text.600"
-                    borderColor="primary.700"
-                    px={tableCellPx}
-                    fontSize={thFontSize}
-                    w={{ base: "24%", md: "22%" }}
-                  >
-                    <Box as="span" display={{ base: "none", md: "inline" }}>
-                      Visitors
-                    </Box>
-                    <Box as="span" display={{ base: "inline", md: "none" }}>
-                      Vis
-                    </Box>
-                  </Th>
-                  <Th
-                    isNumeric
-                    color="text.600"
-                    borderColor="primary.700"
-                    px={tableCellPx}
-                    fontSize={thFontSize}
-                    w={{ base: "28%", md: "28%" }}
-                  >
-                    <Box as="span" display={{ base: "none", md: "inline" }}>
-                      Conversions
-                    </Box>
-                    <Box as="span" display={{ base: "inline", md: "none" }}>
-                      Conv
-                    </Box>
-                  </Th>
-                  <Th
-                    isNumeric
-                    color="text.600"
-                    borderColor="primary.700"
-                    px={tableCellPx}
-                    fontSize={thFontSize}
-                    w={{ base: "20%", md: "16%" }}
-                  >
-                    Rate
-                  </Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {data.byRef.map((r) => (
-                  <Tr key={r.ref}>
-                    <Td
+            <Box w="full" maxW="100%" minW={0} overflowX="auto">
+              <Table size="sm" w="full" sx={{ tableLayout: "fixed" }}>
+                <Thead>
+                  <Tr>
+                    <Th
+                      color="text.600"
                       borderColor="primary.700"
                       px={tableCellPx}
-                      fontSize={tableFontSize}
-                      whiteSpace="nowrap"
-                      overflow="hidden"
-                      textOverflow="ellipsis"
-                      title={r.ref}
+                      fontSize={thFontSize}
+                      w={{ base: "28%", md: "34%" }}
                     >
-                      {r.ref}
-                    </Td>
-                    <Td
+                      Ref
+                    </Th>
+                    <Th
                       isNumeric
+                      color="text.600"
                       borderColor="primary.700"
                       px={tableCellPx}
-                      fontSize={tableFontSize}
+                      fontSize={thFontSize}
+                      w={{ base: "24%", md: "22%" }}
                       whiteSpace="nowrap"
                     >
-                      {r.visitors}
-                    </Td>
-                    <Td
+                      <Box as="span" display={{ base: "none", md: "inline" }}>
+                        Visitors
+                      </Box>
+                      <Box as="span" display={{ base: "inline", md: "none" }}>
+                        Vis
+                      </Box>
+                    </Th>
+                    <Th
                       isNumeric
+                      color="text.600"
                       borderColor="primary.700"
                       px={tableCellPx}
-                      fontSize={tableFontSize}
+                      fontSize={thFontSize}
+                      w={{ base: "28%", md: "28%" }}
                       whiteSpace="nowrap"
                     >
-                      {r.conversions}
-                    </Td>
-                    <Td
+                      <Box as="span" display={{ base: "none", md: "inline" }}>
+                        Conversions
+                      </Box>
+                      <Box as="span" display={{ base: "inline", md: "none" }}>
+                        Conv
+                      </Box>
+                    </Th>
+                    <Th
                       isNumeric
+                      color="text.600"
                       borderColor="primary.700"
                       px={tableCellPx}
-                      fontSize={tableFontSize}
+                      fontSize={thFontSize}
+                      w={{ base: "20%", md: "16%" }}
                       whiteSpace="nowrap"
                     >
-                      {pct(r.rate)}
-                    </Td>
+                      Rate
+                    </Th>
                   </Tr>
-                ))}
-              </Tbody>
-            </Table>
+                </Thead>
+                <Tbody>
+                  {data.byRef.map((r) => (
+                    <Tr key={r.ref}>
+                      <Td
+                        borderColor="primary.700"
+                        px={tableCellPx}
+                        fontSize={tableFontSize}
+                        whiteSpace="nowrap"
+                        overflow="hidden"
+                        textOverflow="ellipsis"
+                        title={r.ref}
+                      >
+                        {r.ref}
+                      </Td>
+                      <Td
+                        isNumeric
+                        borderColor="primary.700"
+                        px={tableCellPx}
+                        fontSize={tableFontSize}
+                        whiteSpace="nowrap"
+                      >
+                        {r.visitors}
+                      </Td>
+                      <Td
+                        isNumeric
+                        borderColor="primary.700"
+                        px={tableCellPx}
+                        fontSize={tableFontSize}
+                        whiteSpace="nowrap"
+                      >
+                        {r.conversions}
+                      </Td>
+                      <Td
+                        isNumeric
+                        borderColor="primary.700"
+                        px={tableCellPx}
+                        fontSize={tableFontSize}
+                        whiteSpace="nowrap"
+                      >
+                        {pct(r.rate)}
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </Box>
           )}
         </Box>
 
-        <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} minW={0}>
+        <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} w="full" minW={0}>
           <RankTable title="Top pages" rows={data.topPages} nameLabel="Path" />
           <RankTable title="Blog reads" rows={data.topBlog} nameLabel="Slug" />
           <RankTable title="Outbound clicks" rows={data.outbound} nameLabel="Target" />
