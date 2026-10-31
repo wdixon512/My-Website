@@ -29,7 +29,7 @@ function MyApp({ Component, pageProps }) {
               <title>Will Dixon | Senior Full-Stack Engineer (.NET, React, Kentico)</title>
               <meta
                 name="description"
-                content="Will Dixon — Senior Full-Stack .NET/React Engineer and Xperience by Kentico specialist with 10+ years of experience building enterprise web applications."
+                content="I'm a senior full-stack .NET/React engineer and Xperience by Kentico specialist with 10+ years building enterprise web apps."
               />
               <meta name="viewport" content="width=device-width, initial-scale=1" />
               <link rel="canonical" href="https://www.will-dixon.com/" />
@@ -42,7 +42,7 @@ function MyApp({ Component, pageProps }) {
               />
               <meta
                 property="og:description"
-                content="Senior Full-Stack .NET/React Engineer and Xperience by Kentico specialist with 10+ years of experience."
+                content="I'm a senior full-stack .NET/React engineer and Xperience by Kentico specialist with 10+ years of experience."
               />
               <meta
                 property="og:image"
@@ -55,7 +55,7 @@ function MyApp({ Component, pageProps }) {
               />
               <meta
                 name="twitter:description"
-                content="Senior Full-Stack .NET/React Engineer and Xperience by Kentico specialist with 10+ years of experience."
+                content="I'm a senior full-stack .NET/React engineer and Xperience by Kentico specialist with 10+ years of experience."
               />
               <meta
                 name="twitter:image"

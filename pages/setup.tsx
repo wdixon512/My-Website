@@ -94,7 +94,7 @@ export default function SetupPage() {
   return (
     <PageShell
       title="Setup"
-      description="The hardware, editor, tools and services Will Dixon uses to build stuff and make music."
+      description="The hardware, editor, tools and services I use to build stuff and make music."
       intro="The gear and software I actually use every day. No affiliate links, just the stuff on my desk."
     >
       <Section world="WORLD 1-1 / gear" title="Hardware" items={hardware} />

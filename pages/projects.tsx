@@ -8,7 +8,7 @@ export default function ProjectsPage() {
   return (
     <PageShell
       title="Projects"
-      description="Side projects by Will Dixon: ahprice, dm squire, and will-dixon.com."
+      description="My side projects: ahprice, dm squire, and will-dixon.com."
       intro="Things I build outside of work."
     >
       <LevelCard
@@ -27,7 +27,7 @@ export default function ProjectsPage() {
             shares scans with other players.
           </ListItem>
           <ListItem>An addon, a helper app, and the ahprice.com price site.</ListItem>
-          <ListItem>Built with AI tools by an experienced software engineer.</ListItem>
+          <ListItem>I built this with a lot of help from AI tools.</ListItem>
           <ListItem>
             <Text as="span" fontWeight="bold">Stack:</Text> Lua addon, Python helper app (Windows setup exe in C#), Python site server (standard-library http.server with server-rendered HTML) on SQLite, Caddy reverse proxy, DigitalOcean Droplet, Namecheap DNS, GitHub Actions CI/CD.
           </ListItem>
