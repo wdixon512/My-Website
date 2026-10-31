@@ -28,7 +28,7 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => voi
         console.error(error);
       }
     },
-    [key, storedValue]
+    [key, storedValue, isClient]
   );
 
   return [storedValue, setValue];

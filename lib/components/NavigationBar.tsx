@@ -78,6 +78,7 @@ export const NavigationBar = (props: NavigationBarProps) => {
         <Button
           as="a"
           href="mailto:wdixon@will-dixon.com"
+          data-track="hire_cta"
           className="wow-coin"
           bg="marioRed.700"
           color="white"

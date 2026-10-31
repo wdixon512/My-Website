@@ -16,6 +16,7 @@ export default function ProjectsPage() {
         title="ahprice"
         meta="Free auction house price addon for World of Warcraft Forever"
         link="https://ahprice.com"
+        projectSlug="ahprice"
         imageSrc="/static/images/knight.png"
         imageAlt="ahprice"
       >
@@ -41,6 +42,7 @@ export default function ProjectsPage() {
         title="dm squire"
         meta="D&D 5e combat tracker"
         link="https://dmsquire.com"
+        projectSlug="dmsquire"
         imageSrc="/static/images/sword.png"
         imageAlt="dm squire"
       >
@@ -67,6 +69,7 @@ export default function ProjectsPage() {
         title="will-dixon.com"
         meta="This site"
         link="https://www.will-dixon.com"
+        projectSlug="will-dixon"
         imageSrc="/static/images/static-star.png"
         imageAlt="will-dixon.com"
       >

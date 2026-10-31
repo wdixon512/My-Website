@@ -70,6 +70,7 @@ export const MainMenu = (props: MainMenuProps) => {
           as="a"
           href="/William_Dixon_Resume.pdf"
           download
+          data-track="resume_download"
           {...btn}
           maxW="100%"
           bg="marioRed.700"
@@ -87,7 +88,7 @@ export const MainMenu = (props: MainMenuProps) => {
         <Button as="a" href="https://github.com/wdixon512" target="_blank" rel="noopener noreferrer" {...btn} bg="secondary.500" _hover={{ bg: "secondary.400" }}>
           GitHub
         </Button>
-        <Button as="a" href="mailto:wdixon@will-dixon.com" {...btn} bg="secondary.500" _hover={{ bg: "secondary.400" }}>
+        <Button as="a" href="mailto:wdixon@will-dixon.com" data-track="hire_cta" {...btn} bg="secondary.500" _hover={{ bg: "secondary.400" }}>
           Email
         </Button>
       </Stack>

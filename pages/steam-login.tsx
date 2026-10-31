@@ -27,7 +27,7 @@ export async function getServerSideProps(
 
   // If the user is already logged in, redirect.
   if (session) {
-    return { redirect: { permanent: false, destination: "/stats" } };
+    return { redirect: { permanent: false, destination: "/steam-stats" } };
   }
 
   const providers = await getProviders();

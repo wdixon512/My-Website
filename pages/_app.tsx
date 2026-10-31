@@ -9,8 +9,16 @@ import '../styles/global.css';
 import Head from 'next/head';
 import { headingFont } from '@lib/fonts';
 import { CacheProvider } from '@lib/components/contexts/CacheContext';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { initAnalytics } from '@lib/analytics/client';
 
 function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+  useEffect(() => {
+    initAnalytics(router);
+  }, [router]);
+
   return (
     <ChakraProvider theme={theme}>
       <CacheProvider>
