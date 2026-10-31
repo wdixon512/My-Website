@@ -9,13 +9,13 @@ import { Reveal } from "@lib/components/wow/Reveal";
 
 export const getStaticPaths: GetStaticPaths = async () => ({
   paths: getAllPosts().map((p) => ({ params: { slug: p.slug } })),
-  fallback: false,
+  fallback: "blocking",
 });
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const post = getPost(String(params?.slug));
-  if (!post) return { notFound: true };
-  return { props: post };
+  if (!post) return { notFound: true, revalidate: 60 };
+  return { props: post, revalidate: 60 };
 };
 
 const SITE = "https://www.will-dixon.com";

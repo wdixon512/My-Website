@@ -8,6 +8,7 @@ import { getAllPosts, PostMeta } from "@lib/blog/posts";
 
 export const getStaticProps: GetStaticProps = async () => ({
   props: { posts: getAllPosts() },
+  revalidate: 60,
 });
 
 export default function BlogIndex({ posts }: { posts: PostMeta[] }) {

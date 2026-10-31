@@ -1,6 +1,7 @@
 ---
 title: "I'm launching a WoW addon on day one, which is probably a mistake"
 date: "2026-11-01"
+publishAt: "2026-11-01T09:00:00-05:00"
 summary: "What it's like shipping an auction house addon before the game it's for even launches, plus the parts that still suck."
 draft: false
 author: "Will Dixon"

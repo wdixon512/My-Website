@@ -1,4 +1,9 @@
 const nextConfig = {
+  // Ensure markdown posts are available at runtime for ISR revalidation on Vercel.
+  outputFileTracingIncludes: {
+    "/blog": ["./content/blog/**/*"],
+    "/blog/[slug]": ["./content/blog/**/*"],
+  },
   async redirects() {
     return [
       {
