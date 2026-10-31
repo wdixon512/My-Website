@@ -77,6 +77,10 @@ function BarChart({
   );
 }
 
+const tableCellPx = { base: 1.5, md: 3 } as const;
+const tableFontSize = { base: "0.75rem", md: "0.875rem" } as const;
+const thFontSize = { base: "0.65rem", md: "0.75rem" } as const;
+
 function RankTable({
   title,
   rows,
@@ -87,12 +91,12 @@ function RankTable({
   nameLabel?: string;
 }) {
   return (
-    <Box {...panel} p={{ base: 4, md: 5 }} w="full">
+    <Box {...panel} p={{ base: 3, md: 5 }} w="full" minW={0}>
       <Heading
         as="h2"
         fontFamily="var(--font-heading), system-ui, sans-serif"
         fontWeight="800"
-        fontSize="1.15rem"
+        fontSize={{ base: "1.05rem", md: "1.15rem" }}
         mb={3}
       >
         {title}
@@ -102,14 +106,27 @@ function RankTable({
           No data yet.
         </Text>
       ) : (
-        <Box overflowX="auto">
-          <Table size="sm" variant="simple">
+        <Box w="full" minW={0} overflow="hidden">
+          <Table size="sm" variant="simple" w="full" sx={{ tableLayout: "fixed" }}>
             <Thead>
               <Tr>
-                <Th color="text.600" borderColor="primary.700">
+                <Th
+                  color="text.600"
+                  borderColor="primary.700"
+                  px={tableCellPx}
+                  fontSize={thFontSize}
+                  w="70%"
+                >
                   {nameLabel}
                 </Th>
-                <Th isNumeric color="text.600" borderColor="primary.700">
+                <Th
+                  isNumeric
+                  color="text.600"
+                  borderColor="primary.700"
+                  px={tableCellPx}
+                  fontSize={thFontSize}
+                  w="30%"
+                >
                   Count
                 </Th>
               </Tr>
@@ -117,10 +134,26 @@ function RankTable({
             <Tbody>
               {rows.map((r) => (
                 <Tr key={r.name}>
-                  <Td borderColor="primary.700" color="text.500" maxW="220px" overflow="hidden" textOverflow="ellipsis">
+                  <Td
+                    borderColor="primary.700"
+                    color="text.500"
+                    px={tableCellPx}
+                    fontSize={tableFontSize}
+                    whiteSpace="nowrap"
+                    overflow="hidden"
+                    textOverflow="ellipsis"
+                    title={r.name}
+                  >
                     {r.name}
                   </Td>
-                  <Td isNumeric borderColor="primary.700" color="text.500">
+                  <Td
+                    isNumeric
+                    borderColor="primary.700"
+                    color="text.500"
+                    px={tableCellPx}
+                    fontSize={tableFontSize}
+                    whiteSpace="nowrap"
+                  >
                     {r.count}
                   </Td>
                 </Tr>
@@ -229,12 +262,14 @@ export default function AnalyticsStatsPage({ data, token }: Props) {
         minW={0}
       >
         <Flex
-          direction={{ base: "column", sm: "row" }}
+          direction={{ base: "column", md: "row" }}
           justify="space-between"
-          align={{ base: "stretch", sm: "flex-end" }}
+          align={{ base: "stretch", md: "flex-end" }}
           gap={4}
+          flexWrap="wrap"
+          minW={0}
         >
-          <Box>
+          <Box minW={0} flex="1">
             <Heading
               as="h1"
               fontFamily="var(--font-heading), system-ui, sans-serif"
@@ -246,12 +281,12 @@ export default function AnalyticsStatsPage({ data, token }: Props) {
             >
               Site analytics
             </Heading>
-            <Text mt={2} color="text.600" fontSize="1rem">
+            <Text mt={2} color="text.600" fontSize={{ base: "0.9rem", md: "1rem" }}>
               Privacy-friendly totals · no cookies · no PII
               {data.demo ? " · demo sample data" : ""}
             </Text>
           </Box>
-          <Flex gap={2}>
+          <Flex gap={2} flexShrink={0} alignSelf={{ base: "flex-start", md: "flex-end" }}>
             {([7, 30] as const).map((r) => {
               const active = data.range === r;
               return (
@@ -323,12 +358,12 @@ export default function AnalyticsStatsPage({ data, token }: Props) {
           <BarChart days={data.days} valueKey="conversions" color="#F54103" />
         </Box>
 
-        <Box {...panel} p={{ base: 4, md: 5 }} w="full" overflowX="auto">
+        <Box {...panel} p={{ base: 3, md: 5 }} w="full" minW={0} overflow="hidden">
           <Heading
             as="h2"
             fontFamily="var(--font-heading), system-ui, sans-serif"
             fontWeight="800"
-            fontSize="1.15rem"
+            fontSize={{ base: "1.05rem", md: "1.15rem" }}
             mb={3}
           >
             By referral (first-touch)
@@ -336,19 +371,56 @@ export default function AnalyticsStatsPage({ data, token }: Props) {
           {data.byRef.length === 0 ? (
             <Text color="text.600">No referral data yet.</Text>
           ) : (
-            <Table size="sm">
+            <Table size="sm" w="full" sx={{ tableLayout: "fixed" }}>
               <Thead>
                 <Tr>
-                  <Th color="text.600" borderColor="primary.700">
+                  <Th
+                    color="text.600"
+                    borderColor="primary.700"
+                    px={tableCellPx}
+                    fontSize={thFontSize}
+                    w={{ base: "28%", md: "34%" }}
+                  >
                     Ref
                   </Th>
-                  <Th isNumeric color="text.600" borderColor="primary.700">
-                    Visitors
+                  <Th
+                    isNumeric
+                    color="text.600"
+                    borderColor="primary.700"
+                    px={tableCellPx}
+                    fontSize={thFontSize}
+                    w={{ base: "24%", md: "22%" }}
+                  >
+                    <Box as="span" display={{ base: "none", md: "inline" }}>
+                      Visitors
+                    </Box>
+                    <Box as="span" display={{ base: "inline", md: "none" }}>
+                      Vis
+                    </Box>
                   </Th>
-                  <Th isNumeric color="text.600" borderColor="primary.700">
-                    Conversions
+                  <Th
+                    isNumeric
+                    color="text.600"
+                    borderColor="primary.700"
+                    px={tableCellPx}
+                    fontSize={thFontSize}
+                    w={{ base: "28%", md: "28%" }}
+                  >
+                    <Box as="span" display={{ base: "none", md: "inline" }}>
+                      Conversions
+                    </Box>
+                    <Box as="span" display={{ base: "inline", md: "none" }}>
+                      Conv
+                    </Box>
                   </Th>
-                  <Th isNumeric color="text.600" borderColor="primary.700">
+                  <Th
+                    isNumeric
+                    color="text.600"
+                    borderColor="primary.700"
+                    px={tableCellPx}
+                    fontSize={thFontSize}
+                    w={{ base: "20%", md: "16%" }}
+                  >
                     Rate
                   </Th>
                 </Tr>
@@ -356,14 +428,42 @@ export default function AnalyticsStatsPage({ data, token }: Props) {
               <Tbody>
                 {data.byRef.map((r) => (
                   <Tr key={r.ref}>
-                    <Td borderColor="primary.700">{r.ref}</Td>
-                    <Td isNumeric borderColor="primary.700">
+                    <Td
+                      borderColor="primary.700"
+                      px={tableCellPx}
+                      fontSize={tableFontSize}
+                      whiteSpace="nowrap"
+                      overflow="hidden"
+                      textOverflow="ellipsis"
+                      title={r.ref}
+                    >
+                      {r.ref}
+                    </Td>
+                    <Td
+                      isNumeric
+                      borderColor="primary.700"
+                      px={tableCellPx}
+                      fontSize={tableFontSize}
+                      whiteSpace="nowrap"
+                    >
                       {r.visitors}
                     </Td>
-                    <Td isNumeric borderColor="primary.700">
+                    <Td
+                      isNumeric
+                      borderColor="primary.700"
+                      px={tableCellPx}
+                      fontSize={tableFontSize}
+                      whiteSpace="nowrap"
+                    >
                       {r.conversions}
                     </Td>
-                    <Td isNumeric borderColor="primary.700">
+                    <Td
+                      isNumeric
+                      borderColor="primary.700"
+                      px={tableCellPx}
+                      fontSize={tableFontSize}
+                      whiteSpace="nowrap"
+                    >
                       {pct(r.rate)}
                     </Td>
                   </Tr>
@@ -373,7 +473,7 @@ export default function AnalyticsStatsPage({ data, token }: Props) {
           )}
         </Box>
 
-        <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+        <SimpleGrid columns={{ base: 1, md: 2 }} gap={4} minW={0}>
           <RankTable title="Top pages" rows={data.topPages} nameLabel="Path" />
           <RankTable title="Blog reads" rows={data.topBlog} nameLabel="Slug" />
           <RankTable title="Outbound clicks" rows={data.outbound} nameLabel="Target" />
