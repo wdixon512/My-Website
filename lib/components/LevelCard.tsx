@@ -17,6 +17,8 @@ export type LevelCardProps = ChakraProps & {
   linkLabel?: string;
   imageSrc?: string;
   imageAlt?: string;
+  /** Analytics project slug for project_view events */
+  projectSlug?: string;
   children?: React.ReactNode;
 };
 
@@ -32,6 +34,7 @@ export const LevelCard = (props: LevelCardProps) => {
     linkLabel = "Visit ↗",
     imageSrc,
     imageAlt,
+    projectSlug,
     children,
     ...rest
   } = props;
@@ -120,6 +123,9 @@ export const LevelCard = (props: LevelCardProps) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Visit ${title} website`}
+                {...(projectSlug
+                  ? { "data-track": "project_view", "data-project": projectSlug }
+                  : {})}
                 fontFamily="Pixel"
                 fontSize={{ base: "0.65rem", md: "0.7rem" }}
                 color="text.500"

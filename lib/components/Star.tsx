@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import Image from "next/image";
 import { GameContext } from "./contexts/GameContext";
 import type { ChakraProps } from "@chakra-ui/react";
@@ -15,18 +15,11 @@ export const Star = (props: StarsProps) => {
   const animatedStar = "/static/images/animated-star.gif";
 
   const { activeStar, setActiveStar, setHoveredStar } = useContext(GameContext);
-
-  const [starSrc, setStarSrc] = useState(
-    activeStar === star ? animatedStar : staticStar
-  );
-
-  useEffect(() => {
-    if (!activeStar || activeStar.id !== star.id) {
-      setStarSrc(staticStar);
-    }
-  }, [activeStar, star.id]);
+  const [hoverAnim, setHoverAnim] = useState(false);
+  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const isActive = activeStar?.id === star.id;
+  const starSrc = isActive || hoverAnim ? animatedStar : staticStar;
 
   return (
     <Flex direction="column" align="center" gap="2">
@@ -39,20 +32,19 @@ export const Star = (props: StarsProps) => {
         aria-pressed={isActive}
         aria-label={`${star.title} section`}
         onMouseOver={() => {
-          setStarSrc(animatedStar);
+          if (hoverTimer.current) clearTimeout(hoverTimer.current);
+          setHoverAnim(true);
           setHoveredStar(star);
         }}
         onMouseOut={() => {
-          setTimeout(() => {
-            if (!activeStar || activeStar.id !== star.id) {
-              setStarSrc(staticStar);
-            }
+          hoverTimer.current = setTimeout(() => {
+            setHoverAnim(false);
           }, 500);
           setHoveredStar(null);
         }}
         onClick={() => {
           setActiveStar({ ...star, completed: true });
-          setStarSrc(animatedStar);
+          setHoverAnim(true);
         }}
       >
         <Box>

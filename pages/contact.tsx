@@ -21,6 +21,7 @@ export default function ContactPage() {
             as="a"
             href={l.href}
             {...(l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            {...(!l.external ? { "data-track": "contact_click" } : {})}
             className="wow-coin"
             bg="marioRed.700"
             color="white"
