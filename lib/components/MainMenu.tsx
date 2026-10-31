@@ -54,7 +54,7 @@ export const MainMenu = (props: MainMenuProps) => {
         maxW="3xl"
         lineHeight="1.6"
       >
-        Senior Full-Stack .NET/React Engineer · Xperience by Kentico specialist · 10+ years
+        Full-stack .NET and React · Xperience by Kentico · 10+ years
       </Text>
       <Stack
         direction={{ base: "column", sm: "row" }}

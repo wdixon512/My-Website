@@ -12,7 +12,7 @@ export const getStaticProps: GetStaticProps = async () => ({
 
 export default function BlogIndex({ posts }: { posts: PostMeta[] }) {
   return (
-    <PageShell title="Blog" description="Posts by Will Dixon." intro="Notes on what I'm building.">
+    <PageShell title="Blog" description="Posts I write about what I'm building." intro="Notes on what I'm building.">
       {posts.length === 0 && <Text color="text.500" fontSize="1rem">No posts yet. Check back soon.</Text>}
       {posts.map((p, i) => (
         <Box

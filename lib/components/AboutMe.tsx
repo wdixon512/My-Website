@@ -40,10 +40,10 @@ export const AboutMe = () => {
         lineHeight="1.7"
         alignSelf="stretch"
       >
-        I&apos;m Will Dixon, a senior full-stack .NET and React engineer
-        specializing in Xperience by Kentico. I earned my B.S. in Computer
-        Science from Michigan State University in 2021 and have spent 10+ years
-        building web applications for enterprise teams.
+        I&apos;m Will Dixon. I&apos;m a senior full-stack .NET and React engineer,
+        mostly Xperience by Kentico. I got my B.S. in Computer Science from
+        Michigan State University in 2021, and I&apos;ve spent 10+ years building
+        web apps for enterprise teams.
       </Text>
       <Text
         fontSize={{ base: "1rem", md: "1.05rem" }}
@@ -51,8 +51,8 @@ export const AboutMe = () => {
         lineHeight="1.7"
         alignSelf="stretch"
       >
-        Outside of work I hike, explore new places, and stay involved in online
-        communities—always looking for meaningful projects and experiences.
+        Outside of work I hike, explore new places, and hang out in online
+        communities.
       </Text>
     </Stack>
   );

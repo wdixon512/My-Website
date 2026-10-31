@@ -11,7 +11,7 @@ export default function ContactPage() {
   return (
     <PageShell
       title="Contact"
-      description="Get in touch with Will Dixon."
+      description="How to reach me."
       intro="The best way to reach me is email. I'm open to remote roles."
     >
       <Flex gap={4} wrap="wrap">
