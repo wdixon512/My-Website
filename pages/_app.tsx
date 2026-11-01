@@ -15,6 +15,8 @@ import { initAnalytics } from '@lib/analytics/client';
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
+  const pagePath = (router.asPath || '/').split(/[?#]/)[0];
+  const pageUrl = `https://www.will-dixon.com${pagePath === '/' ? '/' : pagePath.replace(/\/+$/, '')}`;
   useEffect(() => {
     initAnalytics(router);
   }, [router]);
@@ -32,22 +34,24 @@ function MyApp({ Component, pageProps }) {
                 content="I'm a senior full-stack .NET/React engineer and Xperience by Kentico specialist with 10+ years building enterprise web apps."
               />
               <meta name="viewport" content="width=device-width, initial-scale=1" />
-              <link rel="canonical" href="https://www.will-dixon.com/" />
               <link rel="icon" href="/favicon.ico" sizes="any" />
               <meta property="og:type" content="website" />
-              <meta property="og:url" content="https://www.will-dixon.com/" />
               <meta
                 property="og:title"
                 content="Will Dixon | Senior Full-Stack Engineer (.NET, React, Kentico)"
+                key="og:title"
               />
               <meta
                 property="og:description"
                 content="I'm a senior full-stack .NET/React engineer and Xperience by Kentico specialist with 10+ years of experience."
+                key="og:description"
               />
               <meta
                 property="og:image"
                 content="https://www.will-dixon.com/images/will-about.jpg"
+                key="og:image"
               />
+              <meta property="og:url" content={pageUrl} key="og:url" />
               <meta name="twitter:card" content="summary" />
               <meta
                 name="twitter:title"
@@ -60,7 +64,9 @@ function MyApp({ Component, pageProps }) {
               <meta
                 name="twitter:image"
                 content="https://www.will-dixon.com/images/will-about.jpg"
+                key="twitter:image"
               />
+              <link rel="canonical" href={pageUrl} key="canonical" />
               <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{

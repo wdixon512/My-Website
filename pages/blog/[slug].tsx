@@ -109,11 +109,16 @@ export default function BlogPost({ meta, html }: { meta: PostMeta; html: string 
       <Head>
         <title>{`${meta.title} | Will Dixon`}</title>
         <meta name="description" content={meta.summary} />
-        <meta property="og:title" content={meta.title} />
-        <meta property="og:description" content={meta.summary} />
-        <meta property="og:url" content={url} />
-        {meta.cover && <meta property="og:image" content={`${SITE}${meta.cover.src}`} />}
-        {meta.cover && <meta name="twitter:image" content={`${SITE}${meta.cover.src}`} />}
+        <meta property="og:title" content={meta.title} key="og:title" />
+        <meta property="og:description" content={meta.summary} key="og:description" />
+        <meta property="og:url" content={url} key="og:url" />
+        {meta.cover && (
+          <meta property="og:image" content={`${SITE}${meta.cover.src}`} key="og:image" />
+        )}
+        {meta.cover && (
+          <meta name="twitter:image" content={`${SITE}${meta.cover.src}`} key="twitter:image" />
+        )}
+        <link rel="canonical" href={url} key="canonical" />
       </Head>
 
       <Box position="relative" w="full" className="wow-hero" bg="#1b2426">
