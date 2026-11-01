@@ -6,3 +6,5 @@ node_modules/
 serviceAccount.json
 .vercel
 .env*.local
+test-results/
+playwright-report/

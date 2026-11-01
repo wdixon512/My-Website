@@ -9,5 +9,8 @@ export default defineConfig([
     "build/**",
     "node_modules/**",
     "next-env.d.ts",
+    "test-results/**",
+    "playwright-report/**",
+    "tests/test-results/**",
   ]),
 ]);

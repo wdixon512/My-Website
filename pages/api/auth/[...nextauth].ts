@@ -2,7 +2,24 @@ import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth, { AuthOptions } from "next-auth";
 import SteamProvider, { PROVIDER_ID } from "next-auth-steam";
 
+function authConfigured(): boolean {
+  return Boolean(
+    process.env.NEXTAUTH_SECRET?.trim() &&
+      process.env.STEAM_API_KEY?.trim() &&
+      process.env.NEXT_PUBLIC_CALLBACK_URL?.trim()
+  );
+}
+
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Without Steam/auth env, SessionProvider still calls /api/auth/session on every
+  // page. Return an empty session instead of a 500 so the public site stays quiet.
+  if (!authConfigured()) {
+    const action = Array.isArray(req.query.nextauth) ? req.query.nextauth[0] : "";
+    if (action === "session") {
+      return res.status(200).json({});
+    }
+    return res.status(503).json({ error: "auth_not_configured" });
+  }
   return NextAuth(req, res, getAuthOptions(req));
 }
 
