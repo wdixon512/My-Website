@@ -3,6 +3,7 @@ import { authorizeStats } from "@lib/analytics/auth";
 import { demoStats } from "@lib/analytics/demo";
 import { buildStats } from "@lib/analytics/rollup";
 import { hasRedis } from "@lib/analytics/store";
+import { parseRange } from "@lib/analytics/range";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
@@ -18,8 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(404).json({ error: "not_found" });
   }
 
-  const rangeRaw = typeof req.query.range === "string" ? req.query.range : "7";
-  const range: 7 | 30 = rangeRaw === "30" ? 30 : 7;
+  const range = parseRange(req.query.range);
   const demo =
     req.query.demo === "1" &&
     !hasRedis() &&
@@ -28,8 +28,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const data = demo ? demoStats(range) : await buildStats(range);
     res.setHeader("Cache-Control", "private, no-store");
-    return res.status(200).json(data);
-  } catch {
+    // storage tells us whether hits persist (redis) or only live in one instance's memory.
+    return res.status(200).json({ ...data, storage: hasRedis() ? "redis" : "memory" });
+  } catch (err) {
+    console.error("[stats] buildStats failed:", (err as Error)?.message || err);
     return res.status(500).json({ error: "stats_failed" });
   }
 }

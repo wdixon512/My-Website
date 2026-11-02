@@ -22,7 +22,7 @@ export function dayPlus(day: string, days: number): string {
   return new Date(ms).toISOString().slice(0, 10);
 }
 
-export function daysInRange(range: 7 | 30, endDay = utcDay()): string[] {
+export function daysInRange(range: 1 | 7 | 30, endDay = utcDay()): string[] {
   const out: string[] = [];
   for (let i = range - 1; i >= 0; i--) {
     out.push(dayPlus(endDay, -i));

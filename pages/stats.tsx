@@ -19,6 +19,7 @@ import { authorizeStatsQuery } from "@lib/analytics/auth";
 import { demoStats } from "@lib/analytics/demo";
 import { buildStats } from "@lib/analytics/rollup";
 import { hasRedis } from "@lib/analytics/store";
+import { parseRange } from "@lib/analytics/range";
 import type { NamedCount, StatsPayload } from "@lib/analytics/types";
 
 type Props = {
@@ -237,7 +238,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   }
 
   const token = typeof ctx.query.token === "string" ? ctx.query.token : "";
-  const range: 7 | 30 = ctx.query.range === "30" ? 30 : 7;
+  const range = parseRange(ctx.query.range);
   const wantDemo =
     ctx.query.demo === "1" && !hasRedis() && process.env.NODE_ENV !== "production";
 
@@ -271,7 +272,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 };
 
 export default function AnalyticsStatsPage({ data, token }: Props) {
-  const q = (range: 7 | 30) => {
+  const q = (range: 1 | 7 | 30) => {
     const params = new URLSearchParams();
     params.set("token", token);
     params.set("range", String(range));
@@ -332,7 +333,7 @@ export default function AnalyticsStatsPage({ data, token }: Props) {
             </Text>
           </Box>
           <Flex gap={2} flexShrink={0} alignSelf={{ base: "flex-start", md: "flex-end" }}>
-            {([7, 30] as const).map((r) => {
+            {([1, 7, 30] as const).map((r) => {
               const active = data.range === r;
               return (
                 <Link

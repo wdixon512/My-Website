@@ -2,9 +2,9 @@ import { daysInRange } from "./keys";
 import type { StatsPayload } from "./types";
 
 /** Realistic sample dashboard for local screenshots (?demo=1). */
-export function demoStats(range: 7 | 30): StatsPayload {
+export function demoStats(range: 1 | 7 | 30): StatsPayload {
   const days = daysInRange(range);
-  const seed = range === 7 ? 3 : 1;
+  const seed = range === 30 ? 1 : 3;
 
   const dayBuckets = days.map((day, i) => {
     const wave = Math.sin((i + seed) * 0.7) * 0.35 + 1;
