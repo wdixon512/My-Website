@@ -41,8 +41,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     await recordHit(payload);
-  } catch {
-    // Soft-fail — never break the site for analytics.
+  } catch (err) {
+    // Soft-fail — never break the site for analytics, but leave a trace in the runtime logs.
+    console.error("[track] recordHit failed:", (err as Error)?.message || err);
     return res.status(204).end();
   }
 

@@ -43,7 +43,8 @@ export type RefRow = {
 };
 
 export type StatsPayload = {
-  range: 7 | 30;
+  range: 1 | 7 | 30;
+  storage?: "redis" | "memory";
   demo?: boolean;
   days: DayBucket[];
   totals: {

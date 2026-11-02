@@ -52,7 +52,7 @@ function conversionTotal(events: Record<string, number>): number {
   return CONV_KEYS.reduce((sum, k) => sum + num(events[k]), 0);
 }
 
-export async function buildStats(range: 7 | 30): Promise<StatsPayload> {
+export async function buildStats(range: 1 | 7 | 30): Promise<StatsPayload> {
   const days = daysInRange(range);
   const cmds: KvCommand[] = [];
 
