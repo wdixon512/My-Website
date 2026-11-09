@@ -10,7 +10,7 @@ export const PixelChip = ({ children, ...rest }: PixelChipProps) => {
       as="span"
       display="inline-flex"
       alignItems="center"
-      fontFamily="Pixel"
+      fontFamily="accent"
       fontSize={{ base: "0.65rem", md: "0.7rem" }}
       color="text.500"
       bg="primary.600"

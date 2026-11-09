@@ -58,7 +58,7 @@ export const Star = (props: StarsProps) => {
           />
         </Box>
       </Button>
-      <Text fontFamily="Pixel" fontSize={{ base: "0.7rem", md: "0.85rem" }}>
+      <Text fontFamily="accent" fontSize={{ base: "0.7rem", md: "0.8rem" }}>
         {star.title}
       </Text>
     </Flex>

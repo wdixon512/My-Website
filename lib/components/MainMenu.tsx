@@ -3,16 +3,10 @@ import { MarioSky } from "./wow/MarioSky";
 
 export type MainMenuProps = ChakraProps;
 
-const btn = {
+const heroButton = {
   w: { base: "full", sm: "auto" },
-  color: "white",
-  fontFamily: "Pixel",
-  fontSize: { base: "0.7rem", md: "0.8rem" },
-  border: "2px solid",
-  borderColor: "#1b2426",
-  boxShadow: "3px 3px 0 #1b2426",
-  className: "wow-coin",
-} as const;
+  whiteSpace: "nowrap" as const,
+};
 
 export const MainMenu = (props: MainMenuProps) => {
   return (
@@ -30,29 +24,19 @@ export const MainMenu = (props: MainMenuProps) => {
       {...props}
     >
       <MarioSky />
-      <Heading
-        as="h1"
-        className="wow-hero-title"
-        color="white"
-        fontFamily="var(--font-heading), system-ui, sans-serif"
-        fontWeight="800"
-        letterSpacing="-0.02em"
-        fontSize={{ base: "2.75rem", sm: "3.5rem", md: "5rem" }}
-        lineHeight="1.05"
-        px={1}
-      >
+      <Heading as="h1" className="wow-hero-title" textStyle="display" color="white" px={1}>
         Will Dixon
       </Heading>
       <Text
-        className="wow-hero-tag"
         mt="5"
-        px={{ base: 4, md: 5 }}
-        py={2}
         color="white"
-        fontFamily="Pixel"
-        fontSize={{ base: "0.7rem", md: "0.85rem" }}
-        maxW="3xl"
-        lineHeight="1.6"
+        fontFamily="body"
+        fontWeight="600"
+        fontSize={{ base: "1rem", md: "1.125rem" }}
+        maxW={{ base: "22rem", md: "46rem" }}
+        lineHeight="1.5"
+        textShadow="0 2px 0 #1a3f86"
+        sx={{ textWrap: "balance" }}
       >
         Senior full-stack .NET and React · Xperience by Kentico · 10+ years
       </Text>
@@ -64,31 +48,39 @@ export const MainMenu = (props: MainMenuProps) => {
         justify="center"
         align="center"
         w="full"
-        maxW="520px"
+        maxW="36rem"
       >
         <Button
           as="a"
           href="/William_Dixon_Resume.pdf"
           download
           data-track="resume_download"
-          {...btn}
-          maxW="100%"
-          bg="marioRed.700"
-          px={{ base: 4, md: 6 }}
-          whiteSpace="normal"
-          h="auto"
-          py={3}
-          _hover={{ bg: "marioRed.800" }}
+          variant="mario"
+          {...heroButton}
         >
           Download Resume
         </Button>
-        <Button as="a" href="https://www.linkedin.com/in/william-d-79529a138/" target="_blank" rel="noopener noreferrer" {...btn} bg="secondary.500" _hover={{ bg: "secondary.400" }}>
+        <Button
+          as="a"
+          href="https://www.linkedin.com/in/william-d-79529a138/"
+          target="_blank"
+          rel="noopener noreferrer"
+          variant="quiet"
+          {...heroButton}
+        >
           LinkedIn
         </Button>
-        <Button as="a" href="https://github.com/wdixon512" target="_blank" rel="noopener noreferrer" {...btn} bg="secondary.500" _hover={{ bg: "secondary.400" }}>
+        <Button
+          as="a"
+          href="https://github.com/wdixon512"
+          target="_blank"
+          rel="noopener noreferrer"
+          variant="quiet"
+          {...heroButton}
+        >
           GitHub
         </Button>
-        <Button as="a" href="mailto:wdixon@will-dixon.com" data-track="hire_cta" {...btn} bg="secondary.500" _hover={{ bg: "secondary.400" }}>
+        <Button as="a" href="mailto:wdixon@will-dixon.com" data-track="hire_cta" variant="quiet" {...heroButton}>
           Email
         </Button>
       </Stack>

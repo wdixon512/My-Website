@@ -15,16 +15,8 @@ export default function NotFoundPage() {
       <Button
         as={NextLink}
         href="/home"
-        className="wow-coin"
-        bg="marioRed.700"
-        color="white"
-        fontFamily="Pixel"
-        fontWeight="normal"
-        border="2px solid"
-        borderColor="marioRed.800"
-        boxShadow="2px 2px 0 #1b2426"
+        variant="mario"
         w="fit-content"
-        _hover={{ bg: "marioRed.800" }}
       >
         Back home
       </Button>

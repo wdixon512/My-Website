@@ -54,7 +54,7 @@ export const LevelCard = (props: LevelCardProps) => {
       {...rest}
     >
       <Text
-        fontFamily="Pixel"
+        fontFamily="accent"
         fontSize={{ base: "0.65rem", md: "0.75rem" }}
         color="marioRed.300"
         letterSpacing="0.04em"
@@ -86,7 +86,7 @@ export const LevelCard = (props: LevelCardProps) => {
             />
           ) : (
             <Text
-              fontFamily="Pixel"
+              fontFamily="accent"
               fontSize="xs"
               color="primary.700"
               textAlign="center"
@@ -106,13 +106,12 @@ export const LevelCard = (props: LevelCardProps) => {
           >
             <Heading
               as="h3"
-              fontFamily="Pixel"
-              fontSize={{ base: "1rem", md: "1.25rem" }}
+              fontFamily="body"
+              fontWeight="600"
+              fontSize={{ base: "1.05rem", md: "1.2rem" }}
               color="text.500"
-              fontWeight="normal"
+              letterSpacing="-0.01em"
               lineHeight="1.35"
-              textDecoration="none"
-              borderBottom="none"
             >
               {title}
             </Heading>
@@ -126,7 +125,7 @@ export const LevelCard = (props: LevelCardProps) => {
                 {...(projectSlug
                   ? { "data-track": "project_view", "data-project": projectSlug }
                   : {})}
-                fontFamily="Pixel"
+                fontFamily="accent"
                 fontSize={{ base: "0.65rem", md: "0.7rem" }}
                 color="text.500"
                 bg="marioRed.600"

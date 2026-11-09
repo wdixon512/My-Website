@@ -48,17 +48,8 @@ const ShareButton = ({ url, title }: { url: string; title: string }) => {
   return (
     <Button
       onClick={onClick}
-      className="wow-coin"
+      variant="mario"
       w="full"
-      bg="marioRed.700"
-      color="white"
-      fontFamily="Pixel"
-      fontWeight="normal"
-      fontSize="0.75rem"
-      border="2px solid"
-      borderColor="#1b2426"
-      boxShadow="3px 3px 0 #1b2426"
-      _hover={{ bg: "marioRed.800" }}
     >
       <span aria-live="polite">{copied ? "Link copied!" : "Share / copy link"}</span>
     </Button>
@@ -84,7 +75,7 @@ const Sidebar = ({ meta, url }: { meta: PostMeta; url: string }) => (
     <TagChips tags={meta.tags} />
     {meta.links.length > 0 && (
       <Box>
-        <Heading as="h2" fontFamily="var(--font-heading), system-ui, sans-serif" fontWeight="800" fontSize="1.15rem" mb={2}>
+        <Heading as="h2" fontFamily="heading" fontWeight="400" fontSize="1.15rem" lineHeight="1.3" mb={2}>
           Related links
         </Heading>
         <VStack as="ul" listStyleType="none" align="stretch" gap={2} m={0} p={0}>
@@ -136,17 +127,7 @@ export default function BlogPost({ meta, html }: { meta: PostMeta; html: string 
           pt={meta.cover ? 0 : 10}
           position="relative"
         >
-          <Heading
-            as="h1"
-            className="wow-hero-title"
-            color="white"
-            fontFamily="var(--font-heading), system-ui, sans-serif"
-            fontWeight="800"
-            letterSpacing="-0.01em"
-            fontSize={{ base: "2rem", md: "3rem" }}
-            lineHeight="1.12"
-            maxW="900px"
-          >
+          <Heading as="h1" textStyle="h1" color="white" maxW="900px">
             {meta.title}
           </Heading>
           {meta.summary && (
@@ -179,7 +160,7 @@ export default function BlogPost({ meta, html }: { meta: PostMeta; html: string 
               lineHeight="1.75"
               overflowWrap="anywhere"
               sx={{
-                "& h2, & h3": { fontFamily: "var(--font-heading), system-ui, sans-serif", fontWeight: 800, lineHeight: 1.25, mt: 8, mb: 3 },
+                "& h2, & h3": { fontFamily: "heading", fontWeight: 400, letterSpacing: "-0.015em", lineHeight: 1.25, mt: 8, mb: 3 },
                 "& h2": { fontSize: { base: "1.5rem", md: "1.75rem" } },
                 "& h3": { fontSize: "1.25rem" },
                 "& p": { mb: 4 },

@@ -11,13 +11,7 @@ export const AboutMe = () => {
       maxW="820px"
       mx="auto"
     >
-      <Heading
-        as="h2"
-        fontFamily="var(--font-heading), system-ui, sans-serif" fontWeight="800" letterSpacing="-0.01em" textAlign="center"
-        fontSize={{ base: "1.75rem", md: "2.25rem" }}
-        color="text.500"
-        alignSelf="center"
-      >
+      <Heading as="h2" textStyle="h2" textAlign="center" alignSelf="center">
         About
       </Heading>
       <Box

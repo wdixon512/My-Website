@@ -9,7 +9,7 @@ export const SteamLogout: React.FC = () => {
 
   return (
     <>
-      {authenticated && (<Button colorScheme="blue" fontFamily="Pixel" onClick={() => signOut()}>Logout</Button>)}
+      {authenticated && (<Button colorScheme="blue" fontFamily="body" fontWeight="600" onClick={() => signOut()}>Logout</Button>)}
     </>
   );
 };

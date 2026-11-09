@@ -22,15 +22,7 @@ export default function ContactPage() {
             href={l.href}
             {...(l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
             {...(!l.external ? { "data-track": "contact_click" } : {})}
-            className="wow-coin"
-            bg="marioRed.700"
-            color="white"
-            fontFamily="Pixel"
-            fontWeight="normal"
-            border="2px solid"
-            borderColor="marioRed.800"
-            boxShadow="2px 2px 0 #1b2426"
-            _hover={{ bg: "marioRed.800" }}
+            variant="mario"
           >
             {l.label}
           </Button>

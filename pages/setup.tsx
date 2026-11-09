@@ -42,20 +42,14 @@ const Section = ({ world, title, items }: { world: string; title: string; items:
     py={{ base: 5, md: 6 }}
     color="text.500"
   >
-    <Text fontFamily="Pixel" fontSize={{ base: "0.65rem", md: "0.75rem" }} color="marioRed.300" mb={2}>
+    <Text fontFamily="accent" fontSize={{ base: "0.65rem", md: "0.75rem" }} color="marioRed.300" mb={2}>
       {world}
     </Text>
     <Flex align="center" gap={3} mb={4}>
       <Box as="span" className="wow-qblock" position="static" aria-hidden="true" flexShrink={0} style={{ animation: "none" }}>
         ?
       </Box>
-      <Heading
-        as="h2"
-        fontFamily="var(--font-heading), system-ui, sans-serif"
-        fontWeight="800"
-        fontSize={{ base: "1.5rem", md: "1.75rem" }}
-        lineHeight="1.2"
-      >
+      <Heading as="h2" textStyle="h2">
         {title}
       </Heading>
     </Flex>

@@ -27,12 +27,7 @@ export const PageShell = ({ title, description, intro, children }: PageShellProp
       py={{ base: 8, md: 12 }}
       fontSize="1rem"
     >
-      <Heading
-        as="h1"
-        fontFamily="var(--font-heading), system-ui, sans-serif" fontWeight="800" letterSpacing="-0.01em"
-        fontSize={{ base: "1.875rem", md: "2.5rem" }} lineHeight="1.15"
-        color="text.500"
-      >
+      <Heading as="h1" textStyle="h1">
         {title}
       </Heading>
       {intro && (
