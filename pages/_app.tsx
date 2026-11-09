@@ -7,7 +7,7 @@ import { GameContextProvider } from '@lib/components/contexts/GameContext';
 import '@fontsource/rhodium-libre';
 import '../styles/global.css';
 import Head from 'next/head';
-import { headingFont } from '@lib/fonts';
+import { uiFont } from '@lib/fonts';
 import { CacheProvider } from '@lib/components/contexts/CacheContext';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -85,7 +85,7 @@ function MyApp({ Component, pageProps }) {
               />
             </Head>
             <Fonts />
-            <Container className={`${headingFont.variable} wow-page`} width="100%" maxW="100%" minW={0} px="0" mx="0" pb="20" minHeight="100vh" bgColor="primary.500" overflowX="clip">
+            <Container className={`${uiFont.variable} ${uiFont.className} wow-page`} width="100%" maxW="100%" minW={0} px="0" mx="0" pb="20" minHeight="100vh" bgColor="primary.500" overflowX="clip">
 
               <NavigationBar />
               <Component {...pageProps} />

@@ -33,17 +33,10 @@ export default function BlogIndex({ posts }: { posts: PostMeta[] }) {
             </Box>
           )}
           <Flex direction="column" gap={3} px={{ base: 4, md: 6 }} py={{ base: 4, md: 5 }}>
-            <Text fontFamily="Pixel" fontSize={{ base: "0.65rem", md: "0.75rem" }} color="marioRed.300">
+            <Text fontFamily="accent" fontSize={{ base: "0.65rem", md: "0.75rem" }} color="marioRed.300">
               {`POST ${i + 1}${p.date ? ` / ${p.date}` : ""} / ${p.readingTime} MIN${p.draft ? " / DRAFT" : ""}`}
             </Text>
-            <Heading
-              as="h2"
-              fontFamily="var(--font-heading), system-ui, sans-serif"
-              fontWeight="800"
-              fontSize={{ base: "1.4rem", md: "1.75rem" }}
-              lineHeight="1.2"
-              color="text.500"
-            >
+            <Heading as="h2" textStyle="h2">
               <NextLink href={`/blog/${p.slug}`} style={{ color: "inherit", textDecoration: "none" }}>
                 {/* stretched link: whole card is clickable */}
                 <Box as="span" position="absolute" inset={0} zIndex={1} aria-hidden="true" />

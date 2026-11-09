@@ -26,16 +26,7 @@ export const Resume = () => {
       minW={0}
     >
       <Box minW={0}>
-        <Heading
-          as="h2"
-          fontFamily="var(--font-heading), system-ui, sans-serif"
-          fontWeight="800"
-          letterSpacing="-0.01em"
-          textAlign="center"
-          fontSize={{ base: "1.75rem", md: "2.25rem" }}
-          mb={5}
-          color="text.500"
-        >
+        <Heading as="h2" textStyle="h2" textAlign="center" mb={5}>
           Certifications
         </Heading>
         <VStack align="center" gap={3} minW={0}>
@@ -46,16 +37,7 @@ export const Resume = () => {
       </Box>
 
       <Box minW={0}>
-        <Heading
-          as="h2"
-          fontFamily="var(--font-heading), system-ui, sans-serif"
-          fontWeight="800"
-          letterSpacing="-0.01em"
-          textAlign="center"
-          fontSize={{ base: "1.75rem", md: "2.25rem" }}
-          mb={5}
-          color="text.500"
-        >
+        <Heading as="h2" textStyle="h2" textAlign="center" mb={5}>
           Skills
         </Heading>
         <Flex flexWrap="wrap" gap={3} justify="center" minW={0}>
@@ -67,16 +49,7 @@ export const Resume = () => {
 
       {EXPERIENCE_GROUPS.map((group) => (
         <Box key={group.heading} minW={0}>
-          <Heading
-            as="h2"
-            fontFamily="var(--font-heading), system-ui, sans-serif"
-            fontWeight="800"
-            letterSpacing="-0.01em"
-            textAlign="center"
-            fontSize={{ base: "1.75rem", md: "2.25rem" }}
-            mb={5}
-            color="text.500"
-          >
+          <Heading as="h2" textStyle="h2" textAlign="center" mb={5}>
             {group.heading}
           </Heading>
           <VStack align="stretch" gap={6} minW={0}>

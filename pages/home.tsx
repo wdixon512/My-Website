@@ -55,12 +55,11 @@ export function Home() {
       <Flex direction="column" align="center" px={{ base: 4, md: 6 }}>
         <Heading
           as="h2"
-          fontFamily="var(--font-heading), system-ui, sans-serif" fontWeight="800" letterSpacing="-0.01em" textAlign="center"
-          fontSize={{ base: "1.5rem", md: "2.5rem", lg: "3rem" }}
+          textStyle="h2"
+          textAlign="center"
           mt={{ base: 8, md: 12 }}
           px={2}
-          lineHeight="1.3"
-          color="text.500"
+          sx={{ textWrap: "balance" }}
         >
           Select a section to learn more
         </Heading>

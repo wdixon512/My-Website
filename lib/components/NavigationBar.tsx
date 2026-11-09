@@ -1,4 +1,4 @@
-import { Button, Circle, Flex, Stack, Link } from "@chakra-ui/react";
+import { Button, Flex, Link } from "@chakra-ui/react";
 import Image from "next/image";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
@@ -6,58 +6,66 @@ import { PRIMARY_NAV_ITEMS, isActiveNav } from "@data/primary-nav-data";
 import HamburgerMenu from "./HamburgerMenu";
 import SteamLogout from "./steam/SteamLogout";
 
-type NavigationBarProps = {};
-
-export const NavigationBar = (props: NavigationBarProps) => {
+export const NavigationBar = () => {
   const { asPath } = useRouter();
   const path = asPath.split(/[?#]/)[0];
   return (
     <Flex
       as="header"
-      className="wow-header"
+      className="site-header"
       w="full"
       maxW="100%"
       minW={0}
-      h={{ base: "72px", md: "80px" }}
-      bg="rgba(28, 40, 51, 0.82)"
-      borderBottom="2px solid rgba(255,255,255,0.08)"
-      boxShadow="0 6px 20px rgba(0,0,0,0.25)"
-      px={{ base: 3, md: 6 }}
-      gap={{ base: 4, md: 10 }}
+      h={{ base: "64px", md: "68px" }}
+      bg="#0b1020"
+      borderBottom="1px solid"
+      borderColor="rgba(255, 215, 92, 0.45)"
+      px={{ base: 4, md: 8 }}
+      gap={{ base: 3, md: 8 }}
       alignItems="center"
       justifyContent="space-between"
       position="sticky"
       top="0"
       zIndex="1100"
-      overflowX="clip"
     >
-      <Circle
+      <Link
+        as={NextLink}
+        href="/home"
+        aria-label="Home"
         flexShrink={0}
+        display="block"
         overflow="hidden"
-        size={{ base: "52px", md: "56px" }}
+        borderRadius="full"
+        border="1px solid"
+        borderColor="rgba(255, 215, 92, 0.75)"
+        w={{ base: "44px", md: "48px" }}
+        h={{ base: "44px", md: "48px" }}
         position="relative"
-        border="2px solid rgba(255,255,255,0.6)"
+        _hover={{ textDecoration: "none" }}
+        _focusVisible={{
+          outline: "2px solid",
+          outlineColor: "coin",
+          outlineOffset: "3px",
+        }}
       >
-        <Link as={NextLink} href="/home" aria-label="Home">
-          <Image
-            src="/static/images/agios-nikolaos.jpg"
-            alt="Will Dixon and fiancée in Agios Nikolaos, Crete"
-            width="128"
-            height="234"
-            priority
-            style={{ objectFit: "cover" }}
-          />
-        </Link>
-      </Circle>
+        <Image
+          src="/static/images/agios-nikolaos.jpg"
+          alt="Will Dixon and fiancée in Agios Nikolaos, Crete"
+          width={96}
+          height={96}
+          priority
+          style={{ objectFit: "cover", width: "100%", height: "100%" }}
+        />
+      </Link>
 
-      <Stack
+      <Flex
         as="nav"
         display={{ base: "none", md: "flex" }}
-        direction="row"
         flex="1"
         align="center"
         aria-label="Primary"
-        gap="10"
+        gap="7"
+        minW={0}
       >
         {PRIMARY_NAV_ITEMS.map((item) => {
           const active = isActiveNav(item.href, path);
@@ -67,29 +75,31 @@ export const NavigationBar = (props: NavigationBarProps) => {
               as={NextLink}
               href={item.href}
               className="wow-navlink"
+              variant="nav"
+              textStyle="nav"
               aria-current={active ? "page" : undefined}
-              fontFamily="Pixel"
-              color={active ? "#ffd75c" : "white"}
-              _hover={{ textDecoration: "none", color: "#ffd75c" }}
+              color={active ? "coin" : "text.600"}
             >
               {item.label}
             </Link>
           );
         })}
-      </Stack>
-      <Flex display={{ base: "none", md: "flex" }} justify="flex-end" gap="6" align="center">
+      </Flex>
+      <Flex display={{ base: "none", md: "flex" }} justify="flex-end" align="center" flexShrink={0}>
         <Button
           as="a"
           href="mailto:wdixon@will-dixon.com"
           data-track="hire_cta"
-          className="wow-coin"
-          bg="marioRed.700"
-          color="white"
-          fontFamily="Pixel"
-          border="2px solid"
-          borderColor="#1b2426"
-          boxShadow="3px 3px 0 #1b2426"
-          _hover={{ bg: "marioRed.800" }}
+          variant="mario"
+          textDecoration="none"
+          _hover={{ bg: "marioRed.600", textDecoration: "none" }}
+          _focusVisible={{
+            outline: "2px solid",
+            outlineColor: "coin",
+            outlineOffset: "3px",
+            boxShadow: "2px 2px 0 #1b120c",
+            textDecoration: "none",
+          }}
         >
           Contact Me
         </Button>

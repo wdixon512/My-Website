@@ -1,4 +1,22 @@
-import { background, extendTheme } from '@chakra-ui/react';
+import { extendTheme } from '@chakra-ui/react';
+
+/**
+ * Type roles:
+ * - display / heading: Rhodium Libre (one weight; size is the hierarchy)
+ * - body: Nunito, via --font-ui (nav, buttons, paragraphs)
+ * - accent: Public Pixel, for chips and tiny labels only
+ * - mario: SM64, same job as accent when a mark needs the game face
+ */
+const displayStack = `'Rhodium Libre', 'Iowan Old Style', Georgia, serif`;
+const bodyStack = `var(--font-ui), 'Nunito', system-ui, sans-serif`;
+const accentStack = `'Pixel', ui-monospace, monospace`;
+
+const focusRing = {
+  outline: '2px solid',
+  outlineColor: 'coin',
+  outlineOffset: '3px',
+  boxShadow: 'none',
+};
 
 const theme = extendTheme({
   colors: {
@@ -83,19 +101,70 @@ const theme = extendTheme({
       700: '#aaaaaa3d',
       800: '#9e9e9e29',
     },
+    coin: '#ffd75c',
   },
   fonts: {
-    heading: `'Rhodium Libre', sans-serif`,
-    body: `'Rhodium Libre', sans-serif`,
+    display: displayStack,
+    heading: displayStack,
+    body: bodyStack,
+    accent: accentStack,
+    mario: `'SM64', ${accentStack}`,
+  },
+  textStyles: {
+    display: {
+      fontFamily: 'display',
+      fontWeight: 400,
+      fontSize: { base: '2.75rem', md: '4.75rem' },
+      lineHeight: 1.02,
+      letterSpacing: '-0.02em',
+    },
+    h1: {
+      fontFamily: 'heading',
+      fontWeight: 400,
+      fontSize: { base: '1.875rem', md: '2.5rem' },
+      lineHeight: 1.15,
+      letterSpacing: '-0.02em',
+    },
+    h2: {
+      fontFamily: 'heading',
+      fontWeight: 400,
+      fontSize: { base: '1.5rem', md: '1.875rem' },
+      lineHeight: 1.22,
+      letterSpacing: '-0.015em',
+    },
+    nav: {
+      fontFamily: 'body',
+      fontWeight: 600,
+      fontSize: '0.9375rem',
+      lineHeight: 1,
+      letterSpacing: '0.012em',
+    },
+    accent: {
+      fontFamily: 'accent',
+      fontWeight: 400,
+      fontSize: '0.6875rem',
+      lineHeight: 1.4,
+      letterSpacing: '0.04em',
+    },
   },
 
   components: {
     Heading: {
       baseStyle: {
+        fontFamily: 'heading',
+        fontWeight: 400,
         color: 'text.500',
+        lineHeight: 1.2,
+        letterSpacing: '-0.015em',
+      },
+      sizes: {
+        unset: {},
+      },
+      defaultProps: {
+        size: 'unset',
       },
       variants: {
-        dark: (props) => ({
+        dark: () => ({
           color: 'blackAlpha.700',
         }),
       },
@@ -116,6 +185,21 @@ const theme = extendTheme({
         _hover: {
           color: 'interactive.500',
           textDecoration: 'none',
+        },
+        _focusVisible: focusRing,
+      },
+      variants: {
+        nav: {
+          color: 'text.600',
+          textDecoration: 'none',
+          _hover: {
+            color: 'coin',
+            textDecoration: 'none',
+          },
+          _focusVisible: focusRing,
+          '&[aria-current="page"]': {
+            color: 'coin',
+          },
         },
       },
     },
@@ -170,6 +254,62 @@ const theme = extendTheme({
             bg: 'transparent',
           },
         }),
+        mario: {
+          bg: 'marioRed.700',
+          color: 'white',
+          fontFamily: 'body',
+          fontWeight: 600,
+          fontSize: '0.9375rem',
+          letterSpacing: '0.01em',
+          lineHeight: 1.2,
+          borderRadius: '2px',
+          border: '1px solid',
+          borderColor: 'marioRed.800',
+          boxShadow: '2px 2px 0 #1b120c',
+          h: '40px',
+          px: 4,
+          textDecoration: 'none',
+          _hover: {
+            bg: 'marioRed.600',
+            textDecoration: 'none',
+          },
+          _active: {
+            bg: 'marioRed.800',
+            boxShadow: 'none',
+            transform: 'translateY(1px)',
+            textDecoration: 'none',
+          },
+          _focus: { textDecoration: 'none' },
+          _focusVisible: { ...focusRing, textDecoration: 'none' },
+          _visited: { textDecoration: 'none' },
+        },
+        quiet: {
+          bg: '#10172a',
+          color: 'white',
+          fontFamily: 'body',
+          fontWeight: 600,
+          fontSize: '0.9375rem',
+          letterSpacing: '0.01em',
+          lineHeight: 1.2,
+          borderRadius: '2px',
+          border: '1px solid',
+          borderColor: 'rgba(255,255,255,0.18)',
+          h: '40px',
+          px: 4,
+          textDecoration: 'none',
+          _hover: {
+            bg: '#1a2438',
+            borderColor: 'rgba(255, 215, 92, 0.55)',
+            textDecoration: 'none',
+          },
+          _active: {
+            bg: '#0b1020',
+            textDecoration: 'none',
+          },
+          _focus: { textDecoration: 'none' },
+          _focusVisible: { ...focusRing, textDecoration: 'none' },
+          _visited: { textDecoration: 'none' },
+        },
         subtle: (props) => ({
           bg: props.colorMode === 'dark' ? 'gray.700' : 'gray.200',
           color: props.colorMode === 'dark' ? 'whiteAlpha.900' : 'blackAlpha.900',
@@ -195,7 +335,9 @@ const theme = extendTheme({
       body: {
         bg: 'primary.600',
         color: 'text.500',
-        fontSize: '16px',
+        fontFamily: 'body',
+        fontSize: '1rem',
+        fontWeight: 400,
         lineHeight: '1.7',
         overflowX: 'clip',
       },
@@ -204,6 +346,7 @@ const theme = extendTheme({
         _hover: {
           textDecoration: 'underline',
         },
+        _focusVisible: focusRing,
       },
     },
   },

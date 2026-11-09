@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
-const Cloud = ({ className, style }: { className: string; style: React.CSSProperties }) => (
-  <svg className={className} style={style} viewBox="0 0 120 60" aria-hidden="true" focusable="false">
+const Cloud = ({ className }: { className: string }) => (
+  <svg className={className} viewBox="0 0 120 60" aria-hidden="true" focusable="false">
     <g fill="#fff" opacity="0.9">
       <circle cx="35" cy="35" r="20" />
       <circle cx="60" cy="25" r="24" />
@@ -11,8 +11,8 @@ const Cloud = ({ className, style }: { className: string; style: React.CSSProper
   </svg>
 );
 
-const QBlock = ({ style }: { style: React.CSSProperties }) => (
-  <span className="wow-qblock" style={style} aria-hidden="true">?</span>
+const QBlock = ({ className }: { className: string }) => (
+  <span className={className} aria-hidden="true">?</span>
 );
 
 /** Decorative parallax sky: clouds, hills and floating ?-blocks. */
@@ -39,14 +39,14 @@ export const MarioSky = () => {
   return (
     <div ref={ref} className="wow-sky" aria-hidden="true">
       <div className="wow-layer wow-layer-far">
-        <Cloud className="wow-cloud" style={{ top: "12%", left: "6%", width: 110 }} />
-        <Cloud className="wow-cloud wow-cloud-slow" style={{ top: "22%", right: "8%", width: 150 }} />
-        <Cloud className="wow-cloud" style={{ top: "55%", left: "62%", width: 90 }} />
+        <Cloud className="wow-cloud wow-cloud-a" />
+        <Cloud className="wow-cloud wow-cloud-slow wow-cloud-b" />
+        <Cloud className="wow-cloud wow-cloud-c" />
       </div>
       <div className="wow-layer wow-layer-mid">
-        <QBlock style={{ top: "18%", left: "18%" }} />
-        <QBlock style={{ top: "30%", right: "16%", animationDelay: "1.2s" }} />
-        <QBlock style={{ top: "62%", left: "8%", animationDelay: "0.6s" }} />
+        <QBlock className="wow-qblock wow-qblock-a" />
+        <QBlock className="wow-qblock wow-qblock-b" />
+        <QBlock className="wow-qblock wow-qblock-c" />
       </div>
       <div className="wow-layer wow-layer-near">
         <svg className="wow-hills" viewBox="0 0 1440 160" preserveAspectRatio="none" focusable="false">

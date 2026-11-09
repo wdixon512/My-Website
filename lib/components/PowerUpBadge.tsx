@@ -42,8 +42,9 @@ export const PowerUpBadge = ({ label, ...rest }: PowerUpBadgeProps) => {
         }}
       />
       <Text
-        fontFamily="Pixel"
-        fontSize={{ base: "0.7rem", md: "0.8rem" }}
+        fontFamily="body"
+        fontWeight="600"
+        fontSize={{ base: "0.95rem", md: "1rem" }}
         color="text.500"
         lineHeight="1.45"
       >
