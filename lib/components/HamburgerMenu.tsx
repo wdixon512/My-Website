@@ -103,6 +103,8 @@ const HamburgerMenu = () => {
             variant="mario"
             mt={3}
             w="full"
+            textDecoration="none"
+            _hover={{ bg: "marioRed.600", textDecoration: "none" }}
           >
             Contact Me
           </Button>

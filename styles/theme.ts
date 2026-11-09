@@ -268,15 +268,20 @@ const theme = extendTheme({
           boxShadow: '2px 2px 0 #1b120c',
           h: '40px',
           px: 4,
+          textDecoration: 'none',
           _hover: {
             bg: 'marioRed.600',
+            textDecoration: 'none',
           },
           _active: {
             bg: 'marioRed.800',
             boxShadow: 'none',
             transform: 'translateY(1px)',
+            textDecoration: 'none',
           },
-          _focusVisible: focusRing,
+          _focus: { textDecoration: 'none' },
+          _focusVisible: { ...focusRing, textDecoration: 'none' },
+          _visited: { textDecoration: 'none' },
         },
         quiet: {
           bg: '#10172a',
@@ -291,14 +296,19 @@ const theme = extendTheme({
           borderColor: 'rgba(255,255,255,0.18)',
           h: '40px',
           px: 4,
+          textDecoration: 'none',
           _hover: {
             bg: '#1a2438',
             borderColor: 'rgba(255, 215, 92, 0.55)',
+            textDecoration: 'none',
           },
           _active: {
             bg: '#0b1020',
+            textDecoration: 'none',
           },
-          _focusVisible: focusRing,
+          _focus: { textDecoration: 'none' },
+          _focusVisible: { ...focusRing, textDecoration: 'none' },
+          _visited: { textDecoration: 'none' },
         },
         subtle: (props) => ({
           bg: props.colorMode === 'dark' ? 'gray.700' : 'gray.200',

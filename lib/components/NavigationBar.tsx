@@ -91,6 +91,15 @@ export const NavigationBar = () => {
           href="mailto:wdixon@will-dixon.com"
           data-track="hire_cta"
           variant="mario"
+          textDecoration="none"
+          _hover={{ bg: "marioRed.600", textDecoration: "none" }}
+          _focusVisible={{
+            outline: "2px solid",
+            outlineColor: "coin",
+            outlineOffset: "3px",
+            boxShadow: "2px 2px 0 #1b120c",
+            textDecoration: "none",
+          }}
         >
           Contact Me
         </Button>

@@ -64,6 +64,13 @@ html { scroll-behavior: smooth; }
 .wow-layer-near { transform: translate3d(0, calc(var(--sy) * 0.05px), 0); }
 .wow-cloud { position: absolute; height: auto; animation: wow-drift 18s ease-in-out infinite alternate; }
 .wow-cloud-slow { animation-duration: 26s; }
+.wow-cloud-a { top: 12%; left: 6%; width: 110px; }
+.wow-cloud-b { top: 18%; right: 7%; width: 140px; }
+.wow-cloud-c { top: 70%; right: 4%; width: 96px; }
+.wow-qblock-a { top: 16%; left: 14%; }
+.wow-qblock-b { top: 24%; right: 15%; animation-delay: 1.2s; }
+.wow-qblock-c { top: 68%; left: 6%; animation-delay: 0.6s; }
+.wow-hero-copy { position: relative; z-index: 1; }
 .wow-hills { position: absolute; bottom: 0; left: 0; width: 100%; height: 90px; }
 .wow-glow {
   position: absolute; inset: 0;
@@ -112,6 +119,14 @@ html { scroll-behavior: smooth; }
 
 /* Header */
 .site-header { background-color: #0b1020; }
+a.chakra-button,
+a.chakra-button:hover,
+a.chakra-button:focus,
+a.chakra-button:focus-visible,
+a.chakra-button:active,
+a.chakra-button:visited {
+  text-decoration: none;
+}
 .wow-navlink { position: relative; padding: 8px 2px; }
 .wow-navlink::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; border-radius: 1px;
@@ -133,9 +148,19 @@ html { scroll-behavior: smooth; }
   100% { opacity: 0; transform: scale(0.6) rotate(180deg) translateY(-6px); }
 }
 
-@media (max-width: 480px) {
-  .wow-qblock { width: 28px; height: 28px; font-size: 17px; }
+@media (max-width: 767px) {
+  .wow-cloud { animation-name: wow-drift-tight; }
+  .wow-qblock { animation-name: wow-float-tight; width: 26px; height: 26px; font-size: 16px; }
+  .wow-cloud-a { top: 8px; left: 8px; right: auto; width: 68px; }
+  .wow-cloud-b { top: 12px; right: 8px; left: auto; width: 58px; }
+  .wow-cloud-c { display: none; }
+  .wow-qblock-a { top: auto; bottom: 78px; left: 16px; right: auto; }
+  .wow-qblock-b { top: auto; bottom: 78px; right: 16px; left: auto; }
+  .wow-qblock-c { top: auto; bottom: 86px; left: 50%; right: auto; margin-left: -13px; }
 }
+
+@keyframes wow-drift-tight { from { transform: translateX(-4px); } to { transform: translateX(6px); } }
+@keyframes wow-float-tight { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
