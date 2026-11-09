@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
-const Cloud = ({ className, style }: { className: string; style: React.CSSProperties }) => (
-  <svg className={className} style={style} viewBox="0 0 120 60" aria-hidden="true" focusable="false">
+const Cloud = ({ className }: { className: string }) => (
+  <svg className={className} viewBox="0 0 120 60" aria-hidden="true" focusable="false">
     <g fill="#fff" opacity="0.9">
       <circle cx="35" cy="35" r="20" />
       <circle cx="60" cy="25" r="24" />
